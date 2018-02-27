@@ -1,4 +1,7 @@
-
+/*
+* This is the original CSS file
+* Slight edits have been made to prevent css preprocessor errors.
+*/
 body, button, ol, ul, li, th, td, h1, input, textarea, img, p {
 
     padding: 0;
@@ -696,7 +699,7 @@ input.field:-ms-input-placeholder { text-indent: 10px!important; }
     /* previous syntax */
     display: -webkit-box;
     display:    -moz-box;
-    display:         box;
+    display:         flex;
 
     -webkit-box-orient: vertical;
     -moz-box-orient: vertical;
@@ -721,7 +724,7 @@ input.field:-ms-input-placeholder { text-indent: 10px!important; }
     display: -webkit-box;
     display:    -moz-box;
     display:     -ms-box;
-    display:         box;
+    display:         flex;
 
     -webkit-box-orient: horizontal;
     -moz-box-orient: horizontal;

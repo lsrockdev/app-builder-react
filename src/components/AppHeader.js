@@ -6,7 +6,7 @@ class AppHeader extends Component{
     return(
       <div className="app-bar">
         <div className="menu">
-          <img src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/logo_small.png" className="menu-logo"></img>
+          <img src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/logo_small.png" className="menu-logo" alt=""></img>
           <div className="right">
             <button className="">
               <span style={{marginLeft: 10+'px'}}>Library</span>
