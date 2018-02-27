@@ -6,6 +6,9 @@ import './FAQ.css';
 class FAQ extends Component{
   constructor(){
     super();
+    this.state = {
+      searchTerm:""
+    }
     this.faqs = [
       {
           title:"What is a content block?",
@@ -33,9 +36,20 @@ class FAQ extends Component{
       },
     ]
   }
+  handleSearchTermInput = (event)=>{
+    this.setState({
+      searchTerm:event.target.value
+    });
+  }
   render(){
-    let faqComponents = this.faqs.map(function(el){
+    //This filters FAQ items based on the input search query
+    //it then maps the maps each item to a react Component
+    //the collection of components can then be rendered all at once
+    let faqComponents = this.faqs.filter((el)=>{
+      return el.title.toLowerCase().includes(this.state.searchTerm.toLowerCase());
+    }).map(function(el, pos){
       return (<FAQItem
+        key={pos}
         title={el.title}
         text={el.text}/>
       )
@@ -45,7 +59,11 @@ class FAQ extends Component{
         <div className="content-container-2">
           <h1 className="content-header">FAQ</h1>
           <div className="faq-input-container">
-            <input type="text" placeholder="Search for Frequently Asked Questions" className="faq-input"/>
+            <input type="text"
+              placeholder="Search for Frequently Asked Questions"
+              value={this.state.searchTerm}
+              onChange={this.handleSearchTermInput}
+              className="faq-input"/>
               <i className="faq-input-icon">
             </i>
           </div>
@@ -58,22 +76,38 @@ class FAQ extends Component{
 
 export default FAQ;
 
-function FAQItem(props){
-  return (
-    <div className="faq-item-container">
-      <div className="faq-item-container-inner">
-        <button className="faq-item-button">
-          <span className="faq-item-title">{props.title}</span>
-          <i className="faq-chevron-icon">
-          </i>
-        </button>
-        <div className="faq-content-container">
-          <div className="faq-content-container-inner">
-            <div className="faq-content-title">Answer:</div>
-            <div className="faq-content-text">{props.text}</div>
+class FAQItem extends Component{
+  constructor(){
+    super();
+    this.state = {
+      displayed:false
+    };
+  }
+  toggleDisplayed = ()=>{
+    this.setState({
+      displayed:!this.state.displayed
+    });
+  }
+  render(){
+    let hiddenClass = "faq-content-container-hidden";
+    if(this.state.displayed) hiddenClass = "";
+    return (
+      <div className="faq-item-container">
+        <div className="faq-item-container-inner">
+          <button className="faq-item-button" onClick={this.toggleDisplayed}>
+            <span className="faq-item-title">{this.props.title}</span>
+            <i className="faq-chevron-icon">
+            </i>
+          </button>
+          <div className={"faq-content-container "+hiddenClass}>
+            <div className="faq-content-container-inner">
+              <div className="faq-content-title">Answer:</div>
+              <div className="faq-content-text">{this.props.text}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
 }
