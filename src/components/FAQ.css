@@ -27,17 +27,15 @@
 }
 .faq-items-container{
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
 }
-.faq-items-col{
-  display: flex;
-  flex-wrap: wrap;
-  width: 50%;
-  padding-right: 20px;
-}
 .faq-item-container{
-  width:100%;
+  flex:0 0 1;
+  width:50%;
+  box-sizing: border-box;
+  padding-right: 20px;
 }
 .faq-item-container-inner{
   width: 100%;
