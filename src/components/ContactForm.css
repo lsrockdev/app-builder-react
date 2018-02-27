@@ -65,12 +65,12 @@
   margin-bottom: 15px;
   margin-right: 6px;
 }
-.contact-form-radio-input-label-selected{
+input[type="radio"]:checked+label{
   color: rgb(55, 109, 114);
   font-weight: bold;
   vertical-align: top;
 }
-.contact-form-radio-input-label-deselected{
+.contact-form-radio-input-label{
   color: rgb(186, 186, 186);
   vertical-align: top;
 }

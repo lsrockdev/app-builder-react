@@ -85,31 +85,31 @@ class ContactForm extends Component{
                 <div className="contact-form-radio-col">
                   <div>
                     <input type="radio" name="issue" tabIndex="10" id="support-technical-issue-input-login-difficulties" value="login-difficulties" defaultChecked="onchange" className="contact-form-radio-input"/>
-                    <label htmlFor="support-technical-issue-input-login-difficulties" className="contact-form-radio-input-label-selected">Login difficulties</label>
+                    <label htmlFor="support-technical-issue-input-login-difficulties" className="contact-form-radio-input-label">Login difficulties</label>
                   </div>
                   <div>
                     <input type="radio" name="issue" tabIndex="-1" id="support-technical-issue-input-document-creation" value="document-creation" className="contact-form-radio-input"/>
-                    <label htmlFor="support-technical-issue-input-document-creation" className="contact-form-radio-input-label-deselected">Document creation</label>
+                    <label htmlFor="support-technical-issue-input-document-creation" className="contact-form-radio-input-label">Document creation</label>
                   </div>
                 </div>
                 <div className="contact-form-radio-col">
                   <div>
                     <input type="radio" name="issue" tabIndex="-1" id="support-technical-issue-input-library-creation" value="library-creation" className="contact-form-radio-input"/>
-                    <label htmlFor="support-technical-issue-input-library-creation" className="contact-form-radio-input-label-deselected">Library creation</label>
+                    <label htmlFor="support-technical-issue-input-library-creation" className="contact-form-radio-input-label">Library creation</label>
                   </div>
                   <div>
                     <input type="radio" name="issue" tabIndex="-1" id="support-technical-issue-input-document-preview" value="document-preview" className="contact-form-radio-input"/>
-                    <label htmlFor="support-technical-issue-input-document-preview" className="contact-form-radio-input-label-deselected">Document preview</label>
+                    <label htmlFor="support-technical-issue-input-document-preview" className="contact-form-radio-input-label">Document preview</label>
                   </div>
                 </div>
                 <div className="contact-form-radio-col">
                   <div>
                     <input type="radio" name="issue" tabIndex="-1" id="support-technical-issue-input-content-variables" value="content-variables" className="contact-form-radio-input"/>
-                    <label htmlFor="support-technical-issue-input-content-variables" className="contact-form-radio-input-label-deselected">Content variables</label>
+                    <label htmlFor="support-technical-issue-input-content-variables" className="contact-form-radio-input-label">Content variables</label>
                   </div>
                   <div>
                     <input type="radio" name="issue" tabIndex="-1" id="support-technical-issue-input-document-export" value="document-export" className="contact-form-radio-input"/>
-                    <label htmlFor="support-technical-issue-input-document-export" className="contact-form-radio-input-label-deselected">Document export</label>
+                    <label htmlFor="support-technical-issue-input-document-export" className="contact-form-radio-input-label">Document export</label>
                   </div>
                 </div>
               </div>
