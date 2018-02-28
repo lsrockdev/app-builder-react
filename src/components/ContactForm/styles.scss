@@ -1,39 +1,39 @@
-#support-contact-form{
+#support-contact-form {
   margin-bottom: 64px;
   padding-bottom: 40px;
   box-shadow: lightgrey 8px 19px 74px 3px;
 }
-.contact-form-header{
+.contact-form-header {
   background-color: rgb(16, 71, 71);
   color: rgb(255, 255, 255);
   display: flex;
   justify-content: space-between;
 }
-.contact-form-header-title{
+.contact-form-header-title {
   margin: 0px;
   padding: 15px 20px;
   font-size: 15px;
   font-weight: bold;
 }
-.contact-form-header-subtitle{
+.contact-form-header-subtitle {
   margin: 0px;
   padding: 15px 20px;
   font-size: 10px;
   color: rgb(100, 146, 146);
   align-self: flex-end;
 }
-.contact-form-container{
+.contact-form-container {
   display: flex;
   padding: 40px 20px 20px;
 }
-.contact-form-subsection{
+.contact-form-subsection {
   display: flex;
   padding: 0px 20px;
 }
-.contact-form-subsection-body{
+.contact-form-subsection-body {
   width: 50%;
 }
-.contact-form-subsection-radio-body{
+.contact-form-subsection-radio-body {
   width: 50%;
   padding-top: 3px;
   padding-right: 20px;
@@ -41,7 +41,7 @@
   display: flex;
   font-size: 11px;
 }
-.cfhead1{
+.cfhead1 {
   width: 50%;
   font-size: 11px;
   font-style: italic;
@@ -49,7 +49,7 @@
   color: rgb(55, 109, 114);
   padding: 11px 0px;
 }
-.cfhead2{
+.cfhead2 {
   width: 50%;
   font-size: 11px;
   font-weight: 600;
@@ -57,20 +57,19 @@
   padding: 11px 0px;
 }
 
-
-.contact-form-radio-col{
+.contact-form-radio-col {
   flex: 1 1 0%;
 }
-.contact-form-radio-input{
+.contact-form-radio-input {
   margin-bottom: 15px;
   margin-right: 6px;
 }
-input[type="radio"]:checked+label{
+input[type='radio']:checked + label {
   color: rgb(55, 109, 114);
   font-weight: bold;
   vertical-align: top;
 }
-.contact-form-radio-input-label{
+.contact-form-radio-input-label {
   color: rgb(186, 186, 186);
   vertical-align: top;
 }
