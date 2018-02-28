@@ -45,7 +45,7 @@ class LogIn extends Component {
             <div className="loginForm__content">
               <form onSubmit={this.handleSubmit}>
                 <div>
-                  <input className="field" placeholder="Email" type="email" onChange={evt => this.handleChange('email', evt)} value={email} required />
+                  <input className="field" placeholder="Email" type="email" onChange={evt => this.handleChange('email', evt)} value={email} required autoFocus />
                 </div>
                 <div>
                   <input className="field" placeholder="Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} required />
