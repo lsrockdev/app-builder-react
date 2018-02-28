@@ -33,6 +33,10 @@ class ContactForm extends Component{
 
   handleFormSubmit = (e)=>{
     e.preventDefault();
+<<<<<<< HEAD
+=======
+    console.log(this.state);
+>>>>>>> e99d878cfefa46f49d56c63dc281d5806a889e28
     axios.post('/support/contact',
       this.state
     ).then(function (response) {
