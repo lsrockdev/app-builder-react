@@ -54,6 +54,10 @@ class FAQ extends Component{
         text={el.text}/>
       )
     });
+    //split into two groups, for two columns
+    const splitPoint = Math.ceil(faqComponents.length/2);
+    let faqComponentsLeft = faqComponents.slice(0,splitPoint);
+    let faqComponentsRight = faqComponents.slice(splitPoint);
     return (
       <div className="content-container-1">
         <div className="content-container-2">
@@ -68,7 +72,12 @@ class FAQ extends Component{
             </i>
           </div>
           <div className="faq-items-container">
-            {faqComponents}
+            <div className="faq-items-container-col">
+              {faqComponentsLeft}
+            </div>
+            <div className="faq-items-container-col">
+              {faqComponentsRight}
+            </div>
             </div>
           </div>
         </div>
