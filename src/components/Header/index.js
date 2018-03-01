@@ -23,6 +23,9 @@ class Header extends Component {
       case 'documents':
         this.props.history.push('/documents')
         return
+      case 'support':
+        this.props.history.push('/support')
+        return
       default:
         this.props.history.push('/')
         return
@@ -39,7 +42,7 @@ class Header extends Component {
           <div className="right">
             <button>Library</button>
             <button className={location.pathname=== '/documents' ? 'selected' : ''} onClick={() => this.handleMenuClick('documents')}>Documents</button>
-            <button>Support</button>
+            <button className={location.pathname=== '/support' ? 'selected' : ''} onClick={() => this.handleMenuClick('support')}>Support</button>
             {authenticated && <button onClick={logOut}>Log out</button>}
           </div>
           <div className="clear" />
