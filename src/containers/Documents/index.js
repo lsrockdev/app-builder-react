@@ -4,7 +4,7 @@ import Header from 'components/Header'
 import DocumentManageModal from './DocumentManageModal';
 import DocumentDeleteModal from './DocumentDeleteModal';
 import { connect } from 'react-redux'
-import { getDocuments, createDocument, updateDocument, deleteDocument } from '../../api/modules/document'
+import { getDocuments, createDocument, updateDocument, deleteDocument, searchDocument} from '../../api/modules/document'
 import { epochToString } from '../../utils/timeHelper';
 import './styles.scss'
 
@@ -20,6 +20,7 @@ class Documents extends Component {
       showDocumentDeleteModal: false,
       isEdit: false,
       documents: [],
+      searchValue: '',
     }
   }
 
@@ -28,7 +29,16 @@ class Documents extends Component {
   }
 
   componentWillMount() {
-    this.props.getDocuments();
+    this.retrieveDocuments();
+  }
+
+  retrieveDocuments() {
+    const { searchValue } = this.state;
+    if (searchValue)
+      this.props.searchDocument({searchValue});
+    else
+      this.props.getDocuments();
+
   }
   handleDocumentClick(index) {
     this.setState({selectedDocumentIndex: index});
@@ -52,7 +62,7 @@ class Documents extends Component {
     let payload = data;
 
     const success = (res, action) => {
-      this.props.getDocuments();
+      this.retrieveDocuments();
       this.closeDocumentManageModal();
     };
 
@@ -84,9 +94,9 @@ class Documents extends Component {
 
   deleteDocument() {
     this.props.deleteDocument({
-      url: 'document/' + this.state.documents[this.state.selectedDocumentIndex].id,
+      id: this.state.documents[this.state.selectedDocumentIndex].id,
       success: (res, action) => {
-        this.props.getDocuments();
+        this.retrieveDocuments();
         this.closeDocumentDeleteModal();
         this.setState({
           selectedDocumentIndex: -1
@@ -121,6 +131,15 @@ class Documents extends Component {
     this.setState({documents});
   }
 
+  handleSearch(e) {
+    const searchValue = e.target.value;
+    this.setState({searchValue});
+    if (searchValue)
+      this.props.searchDocument({searchValue});
+    else
+      this.props.getDocuments();
+  }
+
   renderTable(selectedDocumentIndex) {
     const { documents } = this.state;
 
@@ -143,7 +162,7 @@ class Documents extends Component {
   }
 
   renderMainContent() {
-    const { selectedDocumentIndex } =  this.state;
+    const { selectedDocumentIndex, searchValue } =  this.state;
 
     return (
       <div className="document-page">
@@ -194,7 +213,7 @@ class Documents extends Component {
         <div className="top-section-border search-document-bar">
           <div>
             <i className="material-icons">search</i>
-            <input placeholder="Search Document" className="inline-input"/>
+            <input placeholder="Search Document" className="inline-input" value={searchValue} onChange={this.handleSearch.bind(this)}/>
           </div>
           <button className="bottom-navigation-button disabled" disabled="disabled">Build Document</button>
         </div>
@@ -242,6 +261,7 @@ Documents.propTypes = {
   createDocument: PropTypes.func,
   updateDocument: PropTypes.func,
   deleteDocument: PropTypes.func,
+  searchDocument: PropTypes.func,
 };
 
 const mapStateToProps = ({document}) => {
@@ -254,6 +274,7 @@ const mapActionToProps = {
   createDocument,
   updateDocument,
   deleteDocument,
+  searchDocument
 };
 
 export default connect(mapStateToProps, mapActionToProps)(Documents)
