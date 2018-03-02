@@ -40,9 +40,7 @@ class Library extends Component {
               <div style={{ flex: '1 1 0%', overflowY: 'auto' }} />
 
               <div className="search-container">
-                <i className="material-icons" title="Add content">
-                  search
-                </i>
+                <i className="pro icon-search" ></i>
                 <input placeholder="Search Content Blocks" className="inline-input" />
               </div>
             </div>

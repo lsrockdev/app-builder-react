@@ -26,8 +26,7 @@ export default styled.div`
     .search-container {
       i {
         margin-right: 10px;
-        font-size: 20px;
-        color: #7a7a7a;
+        font-size: 16px;
       }
 
       input {
