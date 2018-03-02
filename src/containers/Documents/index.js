@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Header from 'components/Header'
 import DocumentManageModal from './DocumentManageModal';
 import { connect } from 'react-redux'
-import { getDocuments } from '../../api/modules/document'
+import { getDocuments, createDocument, updateDocument, deleteDocument } from '../../api/modules/document'
 import { epochToString } from '../../utils/timeHelper';
 import './styles.scss'
 
@@ -40,6 +40,30 @@ class Documents extends Component {
     });
   }
 
+  updateDocument(data) {
+    console.log(data);
+    let payload = data;
+
+    const success = (res, action) => {
+      this.props.getDocuments();
+    };
+
+    if (this.state.isEdit) {
+      payload.id = this.props.documents[this.state.selectedDocumentIndex].id;
+      this.props.updateDocument({
+        body: payload,
+        success
+      });
+    } else {
+      this.props.createDocument({
+        body: payload,
+        success
+      });
+    }
+
+    this.closeDocumentManageModal();
+  }
+
   renderTable(selectedDocumentIndex) {
     const { documents } = this.props;
 
@@ -52,7 +76,7 @@ class Documents extends Component {
               <div className={"overview-body flex0 " + className}>{doc.title}</div>
               <div className={"overview-body flex0 " + className}>{doc.client}</div>
               <div className={"overview-body flex0 " + className}>{doc.type}</div>
-              <div className={"overview-body " + className} style={{width: 180}}>{epochToString(doc.dueDate, 'MM/DD/YY')}</div>
+              <div className={"overview-body " + className} style={{width: 180}}>{doc.dueDate ? epochToString(doc.dueDate, 'MM/DD/YY') : ''}</div>
               <div className={"overview-body " + className} style={{width: 180}}>{epochToString(doc.lastModified, 'MM/DD/YY')}</div>
             </div>
           )
@@ -126,7 +150,7 @@ class Documents extends Component {
     const { showDocumentManageModal, isEdit, selectedDocumentIndex} = this.state;
     const { documents } = this.props;
     return (
-      <div className="viewport vbox">
+      <div>
         <Header/>
         {this.renderMainContent()}
         {showDocumentManageModal &&
@@ -138,6 +162,7 @@ class Documents extends Component {
             dueDate={isEdit ? documents[selectedDocumentIndex].dueDate: ''}
             isEdit={isEdit}
             onHide={this.closeDocumentManageModal.bind(this)}
+            onSubmit={this.updateDocument.bind(this)}
           />
         }
         <button className="general-help-button">?</button>
@@ -148,16 +173,20 @@ class Documents extends Component {
 
 Documents.propTypes = {
   documents: PropTypes.array,
-  getDocuments: PropTypes.func
-}
+  getDocuments: PropTypes.func,
+  createDocument: PropTypes.func,
+};
 
 const mapStateToProps = ({document}) => {
   const { documents } = document
   return {documents}
-}
+};
 
 const mapActionToProps = {
-  getDocuments
-}
+  getDocuments,
+  createDocument,
+  updateDocument,
+  deleteDocument,
+};
 
 export default connect(mapStateToProps, mapActionToProps)(Documents)
