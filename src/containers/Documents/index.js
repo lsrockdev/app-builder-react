@@ -1,9 +1,34 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import Header from 'components/Header'
+import { connect } from 'react-redux'
+import { getDocuments } from '../../api/modules/document'
+import { epochToString } from '../../utils/timeHelper';
 import './styles.scss'
 
-
 class Documents extends Component {
+
+  componentWillMount() {
+    this.props.getDocuments();
+  }
+
+  renderTable() {
+    const { documents } = this.props
+    return (
+      <React.Fragment>
+        {documents.map((doc, i) =>
+          <div className="overview-row" style={{cursor: 'pointer'}} key={i}>
+            <div className="overview-body flex0">{doc.title}</div>
+            <div className="overview-body flex0">{doc.client}</div>
+            <div className="overview-body flex0">{doc.type}</div>
+            <div className="overview-body" style={{width: 180}}>{epochToString(doc.dueDate, 'MM/DD/YY')}</div>
+            <div className="overview-body" style={{width: 180}}>{epochToString(doc.lastModified, 'MM/DD/YY')}</div>
+          </div>
+        )}
+      </React.Fragment>
+    )
+  }
+
   render() {
     return (
       <div className="App">
@@ -13,15 +38,15 @@ class Documents extends Component {
             <div className="overview">
 
               <div className="overview-row">
-                <div className="overview-header" style={{flex: '1 1 0%'}}>
+                <div className="overview-header flex0">
                   <span>Document Title</span>
                   <i className="fas fa-sort sort"/>
                 </div>
-                <div className="overview-header" style={{flex: '1 1 0%'}}>
+                <div className="overview-header flex0" >
                   <span>Customer</span>
                   <i className="fas fa-sort sort"/>
                 </div>
-                <div className="overview-header" style={{flex: '1 1 0%'}}>
+                <div className="overview-header flex0">
                   <span>Type</span>
                   <i className="fas fa-sort sort"/>
                 </div>
@@ -43,6 +68,7 @@ class Documents extends Component {
                 </div>
               </div>
 
+              {this.renderTable()}
 
             </div>
           </div>
@@ -62,4 +88,18 @@ class Documents extends Component {
   }
 }
 
-export default Documents
+Documents.propTypes = {
+  documents: PropTypes.array,
+  getDocuments: PropTypes.func
+}
+
+const mapStateToProps = ({document}) => {
+  const { documents } = document
+  return {documents}
+}
+
+const mapActionToProps = {
+  getDocuments
+}
+
+export default connect(mapStateToProps, mapActionToProps)(Documents)

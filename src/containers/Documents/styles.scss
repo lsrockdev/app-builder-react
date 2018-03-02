@@ -4,6 +4,10 @@
   flex-direction: column;
   height: 100%;
 
+  .flex0 {
+    flex: 1 1 0%;
+  }
+
   .document-table {
     flex: 1 1 0%;
     display: flex;
