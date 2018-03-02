@@ -11,19 +11,25 @@ import './styles.scss'
 class Documents extends Component {
 
   constructor(props) {
-    super(props)
+    super(props);
+    this.sortBy = 'title';
+    this.sortType = 1;
     this.state = {
       selectedDocumentIndex: -1,
       showDocumentManageModal: false,
       showDocumentDeleteModal: false,
       isEdit: false,
+      documents: [],
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.sortDocuments(nextProps.documents);
   }
 
   componentWillMount() {
     this.props.getDocuments();
   }
-
   handleDocumentClick(index) {
     this.setState({selectedDocumentIndex: index});
   }
@@ -51,7 +57,7 @@ class Documents extends Component {
     };
 
     if (this.state.isEdit) {
-      payload.id = this.props.documents[this.state.selectedDocumentIndex].id;
+      payload.id = this.state.documents[this.state.selectedDocumentIndex].id;
       this.props.updateDocument({
         body: payload,
         success
@@ -78,7 +84,7 @@ class Documents extends Component {
 
   deleteDocument() {
     this.props.deleteDocument({
-      url: 'document/' + this.props.documents[this.state.selectedDocumentIndex].id,
+      url: 'document/' + this.state.documents[this.state.selectedDocumentIndex].id,
       success: (res, action) => {
         this.props.getDocuments();
         this.closeDocumentDeleteModal();
@@ -89,8 +95,34 @@ class Documents extends Component {
     });
   }
 
+  changeSortBy(sortBy) {
+    if (this.sortBy === sortBy) {
+      this.sortType = -this.sortType;
+    }
+    else {
+      this.sortBy = sortBy;
+      this.sortType = 1;
+    }
+    this.sortDocuments(this.state.documents);
+
+  }
+
+  sortDocuments(data) {
+    let documents = data.slice();
+    const compare = (a,b) => {
+      if (a[this.sortBy] < b[this.sortBy])
+        return this.sortType;
+      if (a[this.sortBy] > b[this.sortBy])
+        return -this.sortType;
+      return 0;
+    };
+
+    documents.sort(compare);
+    this.setState({documents});
+  }
+
   renderTable(selectedDocumentIndex) {
-    const { documents } = this.props;
+    const { documents } = this.state;
 
     return (
       <React.Fragment>
@@ -121,23 +153,23 @@ class Documents extends Component {
             <div className="overview-row">
               <div className="overview-header flex0">
                 <span>Document Title</span>
-                <i className="fas fa-sort sort"/>
+                <i className="fas fa-sort sort" onClick={() => this.changeSortBy('title')}/>
               </div>
               <div className="overview-header flex0" >
                 <span>Customer</span>
-                <i className="fas fa-sort sort"/>
+                <i className="fas fa-sort sort" onClick={() => this.changeSortBy('client')}/>
               </div>
               <div className="overview-header flex0">
                 <span>Type</span>
-                <i className="fas fa-sort sort"/>
+                <i className="fas fa-sort sort" onClick={() => this.changeSortBy('type')}/>
               </div>
               <div className="overview-header" style={{width: 180}}>
                 <span>Due</span>
-                <i className="fas fa-sort sort"/>
+                <i className="fas fa-sort sort" onClick={() => this.changeSortBy('dueDate')}/>
               </div>
               <div className="overview-header" style={{width: 180}}>
                 <span>Changed</span>
-                <i className="fas fa-sort sort"/>
+                <i className="fas fa-sort sort" onClick={() => this.changeSortBy('lastModified')}/>
               </div>
             </div>
 
@@ -173,7 +205,7 @@ class Documents extends Component {
 
   render() {
     const { showDocumentManageModal, showDocumentDeleteModal, isEdit, selectedDocumentIndex} = this.state;
-    const { documents } = this.props;
+    const { documents } = this.state;
     return (
       <div>
         <Header/>
