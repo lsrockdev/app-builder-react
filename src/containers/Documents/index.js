@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Header from 'components/Header'
 import DocumentManageModal from './DocumentManageModal';
+import DocumentDeleteModal from './DocumentDeleteModal';
 import { connect } from 'react-redux'
 import { getDocuments, createDocument, updateDocument, deleteDocument } from '../../api/modules/document'
 import { epochToString } from '../../utils/timeHelper';
@@ -14,6 +15,7 @@ class Documents extends Component {
     this.state = {
       selectedDocumentIndex: -1,
       showDocumentManageModal: false,
+      showDocumentDeleteModal: false,
       isEdit: false,
     }
   }
@@ -41,11 +43,11 @@ class Documents extends Component {
   }
 
   updateDocument(data) {
-    console.log(data);
     let payload = data;
 
     const success = (res, action) => {
       this.props.getDocuments();
+      this.closeDocumentManageModal();
     };
 
     if (this.state.isEdit) {
@@ -60,8 +62,31 @@ class Documents extends Component {
         success
       });
     }
+  }
 
-    this.closeDocumentManageModal();
+  openDocumentDeleteModal() {
+    this.setState({
+      showDocumentDeleteModal: true,
+    });
+  }
+
+  closeDocumentDeleteModal() {
+    this.setState({
+      showDocumentDeleteModal: false,
+    });
+  }
+
+  deleteDocument() {
+    this.props.deleteDocument({
+      url: 'document/' + this.props.documents[this.state.selectedDocumentIndex].id,
+      success: (res, action) => {
+        this.props.getDocuments();
+        this.closeDocumentDeleteModal();
+        this.setState({
+          selectedDocumentIndex: -1
+        });
+      }
+    });
   }
 
   renderTable(selectedDocumentIndex) {
@@ -123,7 +148,7 @@ class Documents extends Component {
                 {selectedDocumentIndex !== -1 &&
                 <React.Fragment>
                   <i className="material-icons" style={{paddingRight: 10}} onClick={() => this.openDocumentManageModal(true)}>edit</i>
-                  <i className="material-icons" style={{paddingRight: 10}}>close</i>
+                  <i className="material-icons" style={{paddingRight: 10}} onClick={ () => this.openDocumentDeleteModal()}>close</i>
                 </React.Fragment>
                 }
               </div>
@@ -147,7 +172,7 @@ class Documents extends Component {
   }
 
   render() {
-    const { showDocumentManageModal, isEdit, selectedDocumentIndex} = this.state;
+    const { showDocumentManageModal, showDocumentDeleteModal, isEdit, selectedDocumentIndex} = this.state;
     const { documents } = this.props;
     return (
       <div>
@@ -165,6 +190,14 @@ class Documents extends Component {
             onSubmit={this.updateDocument.bind(this)}
           />
         }
+        {showDocumentDeleteModal &&
+        <DocumentDeleteModal
+          show={showDocumentDeleteModal}
+          title={documents[selectedDocumentIndex].title}
+          onHide={this.closeDocumentDeleteModal.bind(this)}
+          onDelete={this.deleteDocument.bind(this)}
+        />
+        }
         <button className="general-help-button">?</button>
       </div>
     )
@@ -175,6 +208,8 @@ Documents.propTypes = {
   documents: PropTypes.array,
   getDocuments: PropTypes.func,
   createDocument: PropTypes.func,
+  updateDocument: PropTypes.func,
+  deleteDocument: PropTypes.func,
 };
 
 const mapStateToProps = ({document}) => {
