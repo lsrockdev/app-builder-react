@@ -8,30 +8,47 @@ import './styles.scss'
 
 class Documents extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectedDocumentIndex: -1,
+    }
+  }
+
   componentWillMount() {
     this.props.getDocuments();
   }
 
-  renderTable() {
-    const { documents } = this.props
+  handleDocumentClick(index) {
+    this.setState({selectedDocumentIndex: index});
+  }
+
+  renderTable(selectedDocumentIndex) {
+    const { documents } = this.props;
+
     return (
       <React.Fragment>
-        {documents.map((doc, i) =>
-          <div className="overview-row" style={{cursor: 'pointer'}} key={i}>
-            <div className="overview-body flex0">{doc.title}</div>
-            <div className="overview-body flex0">{doc.client}</div>
-            <div className="overview-body flex0">{doc.type}</div>
-            <div className="overview-body" style={{width: 180}}>{epochToString(doc.dueDate, 'MM/DD/YY')}</div>
-            <div className="overview-body" style={{width: 180}}>{epochToString(doc.lastModified, 'MM/DD/YY')}</div>
-          </div>
-        )}
+        {documents.map((doc, i) => {
+          let className = i === selectedDocumentIndex ? 'selected' : i === selectedDocumentIndex - 1 ? 'before-selected' : '';
+          return (
+            <div className="overview-row" style={{cursor: 'pointer'}} key={i} onClick={() => this.handleDocumentClick(i)}>
+              <div className={"overview-body flex0 " + className}>{doc.title}</div>
+              <div className={"overview-body flex0 " + className}>{doc.client}</div>
+              <div className={"overview-body flex0 " + className}>{doc.type}</div>
+              <div className={"overview-body " + className} style={{width: 180}}>{epochToString(doc.dueDate, 'MM/DD/YY')}</div>
+              <div className={"overview-body " + className} style={{width: 180}}>{epochToString(doc.lastModified, 'MM/DD/YY')}</div>
+            </div>
+          )
+        })}
       </React.Fragment>
     )
   }
 
   render() {
+    const { selectedDocumentIndex } =  this.state;
+    console.log(selectedDocumentIndex);
     return (
-      <div className="App">
+      <div className="viewport vbox">
         <Header/>
         <div className="document-page">
           <div className="document-table">
@@ -61,14 +78,19 @@ class Documents extends Component {
               </div>
 
               <div className="overview-row">
-                <div className="overview-body" style={{flex: '1 1 0%', color: 'rgb(175, 175, 175)'}}>
+                <div className={"overview-body flex0 " + (selectedDocumentIndex === 0 ? "before-selected" : "")}
+                     style={{color: 'rgb(175, 175, 175)'}}>
                   <i className="material-icons" style={{paddingRight: 10}}>add</i>
-                  <i className="material-icons" style={{paddingRight: 10}}>edit</i>
-                  <i className="material-icons" style={{paddingRight: 10}}>close</i>
+                  {selectedDocumentIndex !== -1 &&
+                    <React.Fragment>
+                      <i className="material-icons" style={{paddingRight: 10}}>edit</i>
+                      <i className="material-icons" style={{paddingRight: 10}}>close</i>
+                    </React.Fragment>
+                  }
                 </div>
               </div>
 
-              {this.renderTable()}
+              {this.renderTable(selectedDocumentIndex)}
 
             </div>
           </div>
