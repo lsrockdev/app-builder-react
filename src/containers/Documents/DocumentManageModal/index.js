@@ -33,7 +33,7 @@ class DocumentManageModal extends React.Component {
   render() {
     const { onHide, show, title, client, dueDate, type, isEdit} = this.props;
     return (
-      <Modal open={show} onClose={onHide} little>
+      <Modal open={show} onClose={onHide} little showCloseIcon={false}>
         <div className="wizard">
           <div className="wizard-content">
             <form onSubmit={this.handleSubmit.bind(this)}>
