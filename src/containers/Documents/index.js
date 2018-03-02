@@ -22,6 +22,7 @@ class Documents extends Component {
       documents: [],
       searchValue: '',
     }
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,6 +50,7 @@ class Documents extends Component {
       showDocumentManageModal: true,
       isEdit
     });
+
   }
 
   closeDocumentManageModal() {
@@ -226,12 +228,11 @@ class Documents extends Component {
     const { showDocumentManageModal, showDocumentDeleteModal, isEdit, selectedDocumentIndex} = this.state;
     const { documents } = this.state;
     return (
-      <div>
+      <div className="viewport vbox">
         <Header/>
         {this.renderMainContent()}
         {showDocumentManageModal &&
           <DocumentManageModal
-            show={showDocumentManageModal}
             title={isEdit ? documents[selectedDocumentIndex].title : ''}
             client={isEdit ? documents[selectedDocumentIndex].client : ''}
             type={isEdit ? documents[selectedDocumentIndex].type : ''}
@@ -243,7 +244,6 @@ class Documents extends Component {
         }
         {showDocumentDeleteModal &&
         <DocumentDeleteModal
-          show={showDocumentDeleteModal}
           title={documents[selectedDocumentIndex].title}
           onHide={this.closeDocumentDeleteModal.bind(this)}
           onDelete={this.deleteDocument.bind(this)}
