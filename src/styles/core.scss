@@ -4,6 +4,7 @@
 */
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300, 300i, 400, 600, 700');
+@import url('./icons.scss');
 
 body,
 button,
@@ -450,7 +451,7 @@ a.variable:hover {
   cursor: pointer;
 }
 
-.menu button {
+.menu a {
   color: #afafaf;
   background-color: #ffffff;
   font-weight: 700;
@@ -466,12 +467,12 @@ a.variable:hover {
   transition: 0.3s;
 }
 
-.menu button i {
+.menu a i {
   font-size: 16px;
 }
 
-.menu button.selected,
-.menu button:hover {
+.menu a.selected,
+.menu a:hover {
   color: #376d72;
 }
 .password-recovery-title {
