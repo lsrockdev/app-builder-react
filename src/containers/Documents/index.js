@@ -214,7 +214,7 @@ class Documents extends Component {
 
         <div className="top-section-border search-document-bar">
           <div>
-            <i className="material-icons">search</i>
+            <i className="pro icon-search" style={{marginRight: 10, fontSize: 16}}/>
             <input placeholder="Search Document" className="inline-input" value={searchValue} onChange={this.handleSearch.bind(this)}/>
           </div>
           <button className="bottom-navigation-button disabled" disabled="disabled">Build Document</button>
@@ -229,7 +229,7 @@ class Documents extends Component {
     const { documents } = this.state;
     return (
       <div className="viewport vbox">
-        <Header/>
+        <Header showBuilder={(selectedDocumentIndex !== -1)}/>
         {this.renderMainContent()}
         {showDocumentManageModal &&
           <DocumentManageModal

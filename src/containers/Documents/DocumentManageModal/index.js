@@ -73,7 +73,7 @@ class DocumentManageModal extends React.Component {
                 <DatePicker
                   dateFormat="dddd MMM DD YYYY"
                   className="field"
-                  placeholderText="Due Date"
+                  placeholderText="Due date"
                   selected={this.state.dueDate}
                   onChange={this.handleDateChange.bind(this)}
                   />
