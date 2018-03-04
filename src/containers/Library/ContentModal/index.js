@@ -65,8 +65,13 @@ class ContentModal extends Component {
                   <Editor
                     initialValue={item.text}
                     init={{
-                      plugins: 'link image code table',
-                      toolbar: 'bold italic | alignleft aligncenter alignright | table'
+                      selector: 'textarea',
+                      height: 250,
+                      plugins: ['textcolor lists table'],
+                      toolbar: 'bold italic underline forecolor bullist numlist table',
+                      menubar: false,
+                      statusbar: false,
+                      toolbar_items_size: 'small'
                     }}
                     onChange={this.handleEditorChange}
                   />
