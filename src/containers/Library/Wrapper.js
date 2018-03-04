@@ -5,4 +5,16 @@ export default styled.div`
   > div {
     display: flex;
   }
+
+  > div:first-child {
+    > span {
+      > div {
+        cursor: initial !important;
+
+        &:nth-child(2) {
+          cursor: ew-resize !important;
+        }
+      }
+    }
+  }
 `;
