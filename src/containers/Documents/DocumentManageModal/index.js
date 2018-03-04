@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import Modal from 'react-responsive-modal';
 import {Link} from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import './styles.scss';
 
 class DocumentManageModal extends React.Component {
   constructor(props) {
@@ -12,6 +12,14 @@ class DocumentManageModal extends React.Component {
     this.state = {
       dueDate: this.props.dueDate ? moment(this.props.dueDate) : null
     }
+  }
+
+  componentWillMount() {
+    document.addEventListener('click', this.handleOutsideClick, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleOutsideClick, false);
   }
 
   handleDateChange(date) {
@@ -30,12 +38,19 @@ class DocumentManageModal extends React.Component {
     })
   }
 
+  handleOutsideClick = e => {
+    if (this.node.contains(e.target)) {
+      return;
+    }
+    this.props.onHide();
+  }
+
   render() {
-    const { onHide, show, title, client, dueDate, type, isEdit} = this.props;
+    const { title, client, dueDate, type, isEdit} = this.props;
     return (
-      <Modal open={show} onClose={onHide} little>
+      <div className="wizard-container">
         <div className="wizard">
-          <div className="wizard-content">
+          <div className="wizard-content" ref={node => { this.node = node; }}>
             <form onSubmit={this.handleSubmit.bind(this)}>
               <div>
                 <input placeholder="Title" className="field" required defaultValue={title} name="title"/>
@@ -58,7 +73,7 @@ class DocumentManageModal extends React.Component {
                 <DatePicker
                   dateFormat="dddd MMM DD YYYY"
                   className="field"
-                  placeholderText="Due Date"
+                  placeholderText="Due date"
                   selected={this.state.dueDate}
                   onChange={this.handleDateChange.bind(this)}
                   />
@@ -71,7 +86,7 @@ class DocumentManageModal extends React.Component {
             </form>
           </div>
         </div>
-      </Modal>
+      </div>
     )
   }
 }
@@ -81,7 +96,6 @@ DocumentManageModal.defaultProps = {
 };
 
 DocumentManageModal.propsTypes = {
-  show: PropTypes.bool,
   isEdit: PropTypes.bool,
   title: PropTypes.string,
   client: PropTypes.string,

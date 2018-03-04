@@ -12,7 +12,7 @@ const MenuItem = ({ to, label }) => (
     path={to}
     children={({ match }) => (
       <Link to={to} className={match ? 'selected' : ''}>
-        {label}
+        <span style={{marginLeft: 10}}> {label}</span>
       </Link>
     )}
   />
@@ -21,11 +21,12 @@ const MenuItem = ({ to, label }) => (
 class Header extends Component {
   static propTypes = {
     authenticated: PropTypes.bool,
-    logOut: PropTypes.func
+    logOut: PropTypes.func,
+    showBuilder: PropTypes.bool
   };
 
   render() {
-    const { authenticated, logOut } = this.props;
+    const { authenticated, logOut, showBuilder } = this.props;
 
     return (
       <div className="app-bar">
@@ -34,8 +35,14 @@ class Header extends Component {
           <div className="right">
             <MenuItem to="/library" label="Library" />
             <MenuItem to="/documents" label="Documents" />
+            {showBuilder &&
+              <React.Fragment>
+                <MenuItem to="#" label="Builder" />
+                <MenuItem to="#" label="Preview" />
+              </React.Fragment>
+            }
             <MenuItem to="/support" label="Support" />
-            {authenticated && <a onClick={logOut}>Log out</a>}
+            {authenticated && <a onClick={logOut} ><span style={{marginLeft: 10}}>Log out</span></a>}
           </div>
         </div>
       </div>

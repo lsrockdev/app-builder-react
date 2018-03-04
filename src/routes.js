@@ -9,7 +9,7 @@ import { userIsNotAuthenticatedRedir, userIsAuthenticatedRedir } from 'utils/aut
 const Routes = () => (
   <Router>
     <Switch>
-      <Redirect exact from="/" to="support" />
+      <Redirect exact from="/" to="documents" />
       <Route exact path="/library" component={userIsAuthenticatedRedir(Library)} />
       <Route exact path="/documents" component={userIsAuthenticatedRedir(Documents)} />
       <Route exact path="/support" component={userIsAuthenticatedRedir(Dashboard)} />
