@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Resizable from 're-resizable';
 
 import { getTemplates, openFolder, moveTemplate } from 'api/modules/template';
 import Header from 'components/Header';
@@ -46,7 +47,7 @@ class Library extends Component {
       <Fragment>
         <Header />
         <Wrapper className="main hbox space-between">
-          <div>
+          <Resizable defaultSize={{ width: 356 }} minWidth="356">
             <Templates
               data={templates}
               opens={opens}
@@ -61,7 +62,7 @@ class Library extends Component {
             {kind === 'folder' && <FolderModal item={item} onClose={this.hideDialog} />}
             {kind === 'content' && <ContentModal item={item} onClose={this.hideDialog} />}
             {kind === 'delete' && <DeleteModal item={item} onClose={this.hideDialog} />}
-          </div>
+          </Resizable>
 
           <div className="main left-section-border">
             <div className="template-preview">

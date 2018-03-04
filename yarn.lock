@@ -5396,6 +5396,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+re-resizable@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-4.4.0.tgz#f8909e9335bd1bd30e38c4fc1a06d30c8ecdab87"
+
 react-datepicker@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-1.2.1.tgz#95866b2bb9691abb2dd7f8b141c348c1401b1f02"

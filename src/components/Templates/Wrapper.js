@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default styled.div`
-  width: 356px;
+  width: 100%;
 
   .section-header-block {
     .header1 {
