@@ -14,6 +14,8 @@ export const UPDATE_CONTENT = 'UPDATE_CONTENT';
 
 export const DELETE_TEMPLATE = 'DELETE_TEMPLATE';
 
+export const MOVE_TEMPLATE = 'MOVE_TEMPLATE';
+
 export const OPEN_FOLDER = 'OPEN_FOLDER';
 
 // ------------------------------------
@@ -27,6 +29,8 @@ export const updateFolder = createAction(UPDATE_FOLDER);
 
 export const addContent = createAction(ADD_CONTENT);
 export const updateContent = createAction(UPDATE_CONTENT);
+
+export const moveTemplate = createAction(MOVE_TEMPLATE);
 
 export const deleteTemplate = createAction(DELETE_TEMPLATE);
 

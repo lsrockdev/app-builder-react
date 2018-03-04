@@ -1,46 +1,129 @@
 import React, { Component, Fragment } from 'react';
+
 import Wrapper from './Wrapper';
 
 class Templates extends Component {
   state = {};
 
-  onFilter = e => this.setState({ filterStr: e.target.value });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data !== this.props.data) {
+      const { data } = nextProps;
+      this.setState({ tempaltes: getChildren(null) });
+      this.onFilter(null, data);
 
-  checkFilter = item => {
-    const { filterStr } = this.state;
-    const { title, text } = item;
-    const { children } = item;
-
-    if (title && title.indexOf(filterStr) !== -1) {
-      return true;
-    }
-    
-    if (text && text.indexOf(filterStr) !== -1) {
-      return true;
-    }
-    
-    if (children) {
-      for (let i = 0; i < children.length; i++) {
-        if (this.checkFilter(children[i])) return true;
+      function getChildren(parentId) {
+        const nodes = [];
+        const items = data.filter(item => item.parentId === parentId);
+        let node = items.filter(item => item.prevId === null)[0];
+        while (node) {
+          nodes.push(node);
+          const children = getChildren(node.id);
+          if (children.length) {
+            node.children = children;
+          }
+          node = data.filter(item => item.id === node.nextId)[0];
+        }
+        return nodes;
       }
     }
+  }
 
-    return false;
+  onFilter = (e, data) => {
+    const str = e && e.target.value;
+    let visibleNodeIds;
+    if (str) {
+      visibleNodeIds = {};
+      data = data || this.props.data;
+      data.forEach(item => {
+        const { id, title, text } = item;
+        if (!visibleNodeIds[id]) {
+          if (title.indexOf(str) !== -1 || (text || '').indexOf(str) !== -1) {
+            visibleNodeIds[id] = 1;
+            while (item.parentId) {
+              item = data.filter(({ id }) => id === item.parentId)[0];
+              visibleNodeIds[item.id] = 2;
+            }
+          }
+        }
+      });
+    }
+    this.setState({ visibleNodeIds });
+  };
+
+  onDragStart = dragSource => this.setState({ dragSource });
+  onDragEnd = () => {
+    const { selectedDropMenu, dragSource, dropTagetInfo } = this.state;
+    if (selectedDropMenu) {
+      this.props.moveTemplate({
+        where: selectedDropMenu,
+        from: dragSource.id,
+        to: dropTagetInfo.id
+      });
+    }
+    this.setState({ dragSource: null, dropTagetInfo: null, selectedDropMenu: null });
+  };
+
+  onShowDropMenu = dropTaget => {
+    let item = dropTaget;
+    while (item) {
+      if (item.id === this.state.dragSource.id) return;
+      item = this.props.data.filter(({ id }) => id === item.parentId)[0];
+    }
+
+    const { dragSource } = this.state;
+    this.setState({
+      dropTagetInfo: {
+        id: dropTaget.id,
+        before: dropTaget.prevId !== dragSource.id,
+        into: dropTaget.folder && dropTaget.id !== dragSource.parentId
+      }
+    });
   };
 
   renderNode = item => {
-    const { id, title, folder, children } = item;
     const { opens, onEdit, onDelete, onAddContent, onAddFolder, openFolder } = this.props;
+    const { dropTagetInfo, visibleNodeIds, selectedDropMenu } = this.state;
+    const { id, title, folder } = item;
+    let children = item.children;
     let open = opens[id];
 
-    if (this.state.filterStr) {
-      if (!this.checkFilter(item)) return null;
-      open = true;
+    if (visibleNodeIds) {
+      if (!visibleNodeIds[id]) return null;
+      if (visibleNodeIds[id] === 1) {
+        children = null;
+      } else {
+        open = true;
+      }
     }
 
     return (
       <li key={id}>
-        <div className="actionable tree-element">
+        {(dropTagetInfo || {}).id === id && (
+          <div>
+            {dropTagetInfo.before && (
+              <span
+                className={`drop-here-area ${selectedDropMenu === 'before' ? 'selected' : ''}`}
+                onDragEnter={() => this.setState({ selectedDropMenu: 'before' })}
+                onDragLeave={() => this.setState({ selectedDropMenu: null })}
+                onDragOver={e => {e.preventDefault();}}
+              >
+                Drop here to move before {title}
+              </span>
+            )}
+            {dropTagetInfo.into && (
+              <span
+                className={`drop-here-area ${selectedDropMenu === 'into' ? 'selected' : ''}`}
+                onDragEnter={() => this.setState({ selectedDropMenu: 'into' })}
+                onDragLeave={() => this.setState({ selectedDropMenu: null })}
+                onDragOver={e => e.preventDefault()}
+              >
+                Drop here to move into {title}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="actionable tree-element" onDragEnter={() => this.onShowDropMenu(item)}>
           <span className="arrow">
             {children && (
               <div onClick={() => openFolder({ id, open: !open })}>
@@ -49,7 +132,12 @@ class Templates extends Component {
             )}
           </span>
 
-          <div draggable="true" className="content">
+          <div
+            className="content"
+            draggable
+            onDragStart={() => this.onDragStart(item)}
+            onDragEnd={() => this.onDragEnd()}
+          >
             <div>
               <i className={`pro ${folder ? 'icon-folder' : 'icon-document'}`}>
                 <span className="path1" />
@@ -99,9 +187,10 @@ class Templates extends Component {
   };
 
   render() {
-    const { data, onAddContent, onAddFolder } = this.props;
+    const { onAddContent, onAddFolder } = this.props;
+    const { tempaltes } = this.state;
 
-    if (!data) return null;
+    if (!tempaltes) return null;
 
     return (
       <Wrapper className="library-overview">
@@ -117,10 +206,10 @@ class Templates extends Component {
 
         <div className="tree-container">
           <div className="top-level-tree">
-            {data.length === 0 ? (
+            {tempaltes.length === 0 ? (
               <div className="empty">Start by adding your first content block or folder.</div>
             ) : (
-              <ul>{data.map(node => this.renderNode(node))}</ul>
+              <ul>{tempaltes.map(node => this.renderNode(node))}</ul>
             )}
           </div>
         </div>

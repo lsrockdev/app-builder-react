@@ -78,6 +78,10 @@ export default styled.div`
         }
       }
     }
+
+    .drop-here-area.selected {
+      background-color: #eee;
+    }
   }
 
   .search-container {

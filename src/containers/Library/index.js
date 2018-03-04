@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getTemplates, openFolder } from 'api/modules/template';
+import { getTemplates, openFolder, moveTemplate } from 'api/modules/template';
 import Header from 'components/Header';
 import Templates from 'components/Templates';
 import FolderModal from './FolderModal';
@@ -38,7 +38,7 @@ class Library extends Component {
   };
 
   render() {
-    const { templates, opens, openFolder } = this.props;
+    const { templates, opens, openFolder, moveTemplate } = this.props;
     const { dialog } = this.state;
     const { kind, item } = dialog || {};
 
@@ -55,6 +55,7 @@ class Library extends Component {
               onAddContent={this.showAddContentDialog}
               onAddFolder={this.showAddFolderDialog}
               openFolder={openFolder}
+              moveTemplate={moveTemplate}
             />
 
             {kind === 'folder' && <FolderModal item={item} onClose={this.hideDialog} />}
@@ -82,5 +83,5 @@ export default connect(
     templates: template.templates,
     opens: template.opens
   }),
-  { getTemplates, openFolder }
+  { getTemplates, openFolder, moveTemplate }
 )(Library);

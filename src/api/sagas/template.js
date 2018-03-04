@@ -5,6 +5,7 @@ import {
   UPDATE_FOLDER,
   ADD_CONTENT,
   UPDATE_CONTENT,
+  MOVE_TEMPLATE,
   DELETE_TEMPLATE,
   OPEN_FOLDER
 } from 'api/modules/template';
@@ -14,23 +15,6 @@ const getTemplates = request({
   type: GET_TEMPLATES,
   method: 'GET',
   url: 'templates',
-  payloadOnSuccess: (data, action) => {
-    function getChildren(parentId) {
-      const nodes = [];
-      const items = data.filter(item => item.parentId === parentId);
-      let node = items.filter(item => item.prevId === null)[0];
-      while (node) {
-        nodes.push(node);
-        const children = getChildren(node.id);
-        if (children.length) {
-          node.children = children;
-        }
-        node = data.filter(item => item.id === node.nextId)[0];
-      }
-      return nodes;
-    }
-    return getChildren(null);
-  }
 });
 
 function* addFolder(action) {
@@ -97,6 +81,18 @@ function* updateContent(action) {
   yield call(getTemplates, { type: GET_TEMPLATES });
 }
 
+function* moveTemplate(action) {
+  yield call(
+    request({
+      type: MOVE_TEMPLATE,
+      method: 'POST',
+      url: `/move/template/${action.payload.from}/${action.payload.where}/${action.payload.to}`
+    }),
+    action
+  );
+  yield call(getTemplates, { type: GET_TEMPLATES });
+}
+
 function* deleteTemplate(action) {
   yield call(
     request({
@@ -115,5 +111,6 @@ export default function* rootSaga() {
   yield takeLatest(UPDATE_FOLDER, updateFolder);
   yield takeLatest(ADD_CONTENT, addContent);
   yield takeLatest(UPDATE_CONTENT, updateContent);
+  yield takeLatest(MOVE_TEMPLATE, moveTemplate);
   yield takeLatest(DELETE_TEMPLATE, deleteTemplate);
 }
