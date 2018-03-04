@@ -8,6 +8,7 @@ import Wrapper from './Wrapper';
 class ContentModal extends Component {
   componentDidMount() {
     this.refTitle.focus();
+    this.text = this.props.item.text;
   }
 
   onSave = () => {
