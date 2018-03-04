@@ -50,8 +50,13 @@ class Templates extends Component {
     this.setState({ visibleNodeIds });
   };
 
-  onDragStart = dragSource => this.setState({ dragSource });
-  onDragEnd = () => {
+  onDragStart = (dragSource, e) => {
+    e.dataTransfer.setData('text/plain', e.target.id);
+    this.setState({ dragSource });
+  };
+
+  onDragEnd = e => {
+    e.preventDefault();
     const { selectedDropMenu, dragSource, dropTagetInfo } = this.state;
     if (selectedDropMenu) {
       this.props.moveTemplate({
@@ -105,7 +110,9 @@ class Templates extends Component {
                 className={`drop-here-area ${selectedDropMenu === 'before' ? 'selected' : ''}`}
                 onDragEnter={() => this.setState({ selectedDropMenu: 'before' })}
                 onDragLeave={() => this.setState({ selectedDropMenu: null })}
-                onDragOver={e => {e.preventDefault();}}
+                onDragOver={e => {
+                  e.preventDefault();
+                }}
               >
                 Drop here to move before {title}
               </span>
@@ -135,8 +142,8 @@ class Templates extends Component {
           <div
             className="content"
             draggable
-            onDragStart={() => this.onDragStart(item)}
-            onDragEnd={() => this.onDragEnd()}
+            onDragStart={e => this.onDragStart(item, e)}
+            onDragEnd={e => this.onDragEnd(e)}
           >
             <div>
               <i className={`pro ${folder ? 'icon-folder' : 'icon-document'}`}>

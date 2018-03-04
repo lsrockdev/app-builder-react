@@ -14,7 +14,7 @@ import request from 'utils/request';
 const getTemplates = request({
   type: GET_TEMPLATES,
   method: 'GET',
-  url: 'templates',
+  url: 'templates'
 });
 
 function* addFolder(action) {
@@ -91,6 +91,11 @@ function* moveTemplate(action) {
     action
   );
   yield call(getTemplates, { type: GET_TEMPLATES });
+
+  yield put({
+    type: OPEN_FOLDER,
+    payload: { id: action.payload.to, open: true }
+  });
 }
 
 function* deleteTemplate(action) {
