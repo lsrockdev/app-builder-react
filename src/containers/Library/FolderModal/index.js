@@ -5,6 +5,10 @@ import { addFolder, updateFolder } from 'api/modules/template';
 import Wrapper from './Wrapper';
 
 class FolderModal extends Component {
+  componentDidMount() {
+    this.refTitle.focus();
+  }
+
   onSave = () => {
     const { item, addFolder, updateFolder, onClose } = this.props;
     const title = this.refTitle.value;

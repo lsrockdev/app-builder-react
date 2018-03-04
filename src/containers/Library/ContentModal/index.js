@@ -6,6 +6,10 @@ import { addContent, updateContent } from 'api/modules/template';
 import Wrapper from './Wrapper';
 
 class ContentModal extends Component {
+  componentDidMount() {
+    this.refTitle.focus();
+  }
+
   onSave = () => {
     const { item, addContent, updateContent, onClose } = this.props;
     const title = this.refTitle.value;

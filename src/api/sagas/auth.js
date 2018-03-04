@@ -7,7 +7,6 @@ const doLogin = request({
   method: 'POST',
   url: 'login',
   success: (res, action) => {
-    console.log(action);
     localStorage.setItem('token', JSON.stringify(res.data))
   },
 })

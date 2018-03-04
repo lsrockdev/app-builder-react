@@ -21,7 +21,11 @@ class Templates extends Component {
           if (children.length) {
             node.children = children;
           }
-          node = data.filter(item => item.id === node.nextId)[0];
+          node = getNextNode(node);
+        }
+
+        function getNextNode(node) {
+          return data.filter(({ id }) => id === node.nextId)[0];
         }
         return nodes;
       }
@@ -40,7 +44,7 @@ class Templates extends Component {
           if (title.indexOf(str) !== -1 || (text || '').indexOf(str) !== -1) {
             visibleNodeIds[id] = 1;
             while (item.parentId) {
-              item = data.filter(({ id }) => id === item.parentId)[0];
+              item = this.getParentNode(item, data);
               visibleNodeIds[item.id] = 2;
             }
           }
@@ -72,7 +76,7 @@ class Templates extends Component {
     let item = dropTaget;
     while (item) {
       if (item.id === this.state.dragSource.id) return;
-      item = this.props.data.filter(({ id }) => id === item.parentId)[0];
+      item = this.getParentNode(item, this.props.data);
     }
 
     const { dragSource } = this.state;
@@ -84,6 +88,10 @@ class Templates extends Component {
       }
     });
   };
+
+  getParentNode = (node, data) => {
+    return data.filter(({ id }) => id === node.parentId)[0];
+  }
 
   renderNode = item => {
     const { opens, onEdit, onDelete, onAddContent, onAddFolder, openFolder } = this.props;
