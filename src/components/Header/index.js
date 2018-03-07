@@ -38,7 +38,7 @@ class Header extends Component {
             {showBuilder &&
               <React.Fragment>
                 <MenuItem to="#" label="Builder" />
-                <MenuItem to="#" label="Preview" />
+                <MenuItem to="/preview" label="Preview" />
               </React.Fragment>
             }
             <MenuItem to="/support" label="Support" />
