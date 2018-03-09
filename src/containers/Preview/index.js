@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import Header from 'components/Header'
 import { connect } from 'react-redux'
@@ -206,7 +207,7 @@ class Preview extends Component {
       <div className="viewport vbox">
         <Header showBuilder={true}/>
         {this.renderMainContent()}
-        <button className="general-help-button">?</button>
+        <Link to="/support" className="general-help-button">?</Link>
       </div>
     )
   }
