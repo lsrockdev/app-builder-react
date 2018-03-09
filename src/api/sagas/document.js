@@ -9,9 +9,11 @@ import {
   UPDATE_SETTINGS,
   IMPORT_FIELDS,
   EXPORT_FIELDS,
+  EXPORT_DOCUMENT,
 } from 'api/modules/document';
 
 import request from 'utils/request';
+// import { exportDocument } from '../modules/document';
 
 const getDocuments = request({
   type: GET_DOCUMENTS,
@@ -90,6 +92,16 @@ const exportFields = function* (action) {
   yield call(apiRequest, action.payload)
 };
 
+const exportDocument = function* (action) {
+  const token = JSON.parse(localStorage.getItem('token'))
+  const apiRequest = request({
+    type: EXPORT_DOCUMENT,
+    method: 'GET',
+    url: `export/document/${action.payload.format}?token=${token}`,
+  });
+  yield call(apiRequest, action.payload)
+};
+
 export default function* rootSaga() {
   yield takeLatest(GET_DOCUMENTS, getDocuments);
   yield takeLatest(GET_DOCUMENT, getDocument);
@@ -100,4 +112,5 @@ export default function* rootSaga() {
   yield takeEvery(UPDATE_SETTINGS, updateSettings);
   yield takeEvery(IMPORT_FIELDS, importFields);
   yield takeEvery(EXPORT_FIELDS, exportFields);
+  yield takeEvery(EXPORT_DOCUMENT, exportDocument);
 }

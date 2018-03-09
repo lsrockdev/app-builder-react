@@ -13,6 +13,7 @@ export const SEARCH_DOCUMENT = 'SEARCH_DOCUMENT';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 export const IMPORT_FIELDS = 'IMPORT_FIELDS';
 export const EXPORT_FIELDS = 'EXPORT_FIELDS';
+export const EXPORT_DOCUMENT = 'EXPORT_DOCUMENT';
 
 // ------------------------------------
 // Actions
@@ -27,6 +28,7 @@ export const searchDocument = createAction(SEARCH_DOCUMENT);
 export const updateSettings = createAction(UPDATE_SETTINGS);
 export const importFields   = createAction(IMPORT_FIELDS);
 export const exportFields   = createAction(EXPORT_FIELDS);
+export const exportDocument = createAction(EXPORT_DOCUMENT);
 
 const initialState = {
   document: {},
@@ -139,6 +141,17 @@ export default handleActions(
     [requestFail(EXPORT_FIELDS)]: (state, { payload }) => ({
       ...state,
       status: requestFail(EXPORT_FIELDS),
+      error: payload,
+    }),
+
+    [requestSuccess(EXPORT_DOCUMENT)]: (state, { payload }) => ({
+      ...state,
+      status: requestSuccess(EXPORT_DOCUMENT),
+    }),
+
+    [requestFail(EXPORT_DOCUMENT)]: (state, { payload }) => ({
+      ...state,
+      status: requestFail(EXPORT_DOCUMENT),
       error: payload,
     }),
   },

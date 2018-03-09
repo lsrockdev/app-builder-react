@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Header from 'components/Header'
 import { connect } from 'react-redux'
-import { getDocument, updateSettings, searchDocument, importFields, exportFields } from '../../api/modules/document'
+import { getDocument, updateSettings, searchDocument, importFields, exportFields, exportDocument } from '../../api/modules/document'
 import './styles.scss'
 import PreviewSidebar from './PreviewSidebar';
 import PreviewSettingsForm from './PreviewSettingsForm';
@@ -86,6 +86,20 @@ class Preview extends Component {
     this.props.exportFields({ id: this.state.documentId });
   }
 
+  exportDocx = (e) => {
+    this.props.exportDocument({
+      id: this.state.documentId,
+      format: 'docx'
+    });
+  }
+
+  exportPdf = (e) => {
+    this.props.exportDocument({
+      id: this.state.documentId,
+      format: 'pdf'
+    });
+  }
+
   updateAnchor = (selection) => {
     const anchor = this.makeAnchor(selection.level);
     this.setState({anchor});
@@ -155,8 +169,8 @@ class Preview extends Component {
           <div style={{backgroundColor: 'rgb(16, 71, 71)', padding: '0px 90px'}}>
             <div className="bottom-navigation-button" style={{textAlign: 'center', display: 'flex', alignItems: 'center'}}>
               <span style={{marginRight: '20px'}}>Export Document:</span>
-              <span style={{marginRight: '20px', cursor: 'pointer'}}>DOCX</span>
-              <span style={{marginRight: '20px', cursor: 'pointer'}}>PDF</span>
+              <span style={{marginRight: '20px', cursor: 'pointer'}} onClick={this.exportDocx}>DOCX</span>
+              <span style={{marginRight: '20px', cursor: 'pointer'}} onClick={this.exportPdf}>PDF</span>
             </div>
           </div>
         </div>
@@ -202,7 +216,8 @@ Preview.propTypes = {
   searchDocument: PropTypes.func,
   updateSettings: PropTypes.func,
   importFields: PropTypes.func,
-  exportFields: PropTypes.func
+  exportFields: PropTypes.func,
+  exportDocument: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -215,7 +230,8 @@ const mapActionToProps = {
   updateSettings,
   searchDocument,
   importFields,
-  exportFields
+  exportFields,
+  exportDocument
 };
 
 export default connect(mapStateToProps, mapActionToProps)(Preview)
