@@ -6,6 +6,7 @@ import { getDocument, updateSettings, searchDocument, importFields, exportFields
 import './styles.scss'
 import PreviewSidebar from './PreviewSidebar';
 import PreviewSettingsForm from './PreviewSettingsForm';
+import PreviewDocument from './PreviewDocument';
 
 class Preview extends Component {
 
@@ -57,6 +58,10 @@ class Preview extends Component {
       this.props.getDocument();
   }
 
+  makeAnchor(level) {
+    return level.join('.');
+  }
+
   importFields = (e) => {
     this.props.importFields({
       id: this.state.documentId,
@@ -69,21 +74,26 @@ class Preview extends Component {
     this.props.exportFields({ id: this.state.documentId });
   }
 
+  updateAnchor = (selection) => {
+    const anchor = this.makeAnchor(selection.level);
+    this.setState({anchor});
+  }
+
   renderMainContent() {
-    const { searchValue } =  this.state;
+    const { searchValue, anchor } =  this.state;
     const { document } = this.props;
     const { settings } = document;
 
     return (
       <div className="main hbox space-between preview-page">
         <div style={{display: 'flex'}}>
-          <PreviewSidebar {...document} />
+          <PreviewSidebar {...document} onClick={this.updateAnchor} />
         </div>
         <div className="left-section-border" style={{"display":"flex","flexDirection":"column","flex":"1 1 0%"}}>
           <div style={{"display":"flex","flexDirection":"column","flex":"1 1 0%"}}>
             <div id="document-preview-node" style={{"display":"flex","flex":"1 1 0%","position":"relative","overflowX":"hidden","backgroundColor":"rgb(16, 71, 71)"}}>
               <div id="document-preview-node-inner" style={{"position":"absolute","top":"0px","left":"0px","right":"-20px","bottom":"0px","paddingLeft":"10px"}}>
-                <iframe frameBorder="0" style={{"display":"block","width":"100%","height":"100%","position":"relative"}}></iframe>
+                <PreviewDocument document={document} anchor={anchor} />
                 <div style={{"position":"absolute","right":"70px","top":"90px","height":"300px","width":"7px","borderRadius":"7px","backgroundColor":"rgb(25, 91, 91)","display":"inline"}}>
                   <div className="scroll-thumb" style={{"cursor":"default","position":"absolute","left":"0px","height":"20px","width":"7px","borderRadius":"7px","backgroundColor":"rgb(94, 144, 144)","top":"0px"}}
                     data-scroll-thumb-factor="12.632142857142858">

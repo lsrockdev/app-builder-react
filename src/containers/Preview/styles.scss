@@ -41,6 +41,13 @@
   .autofill-function-button {
     cursor: pointer;
   }
+  
+  iframe {
+    display: block;
+    width:100%;
+    height: 100%;
+    position: relative;
+  }
 
   // .flex0 {
   //   flex: 1 1 0%;
