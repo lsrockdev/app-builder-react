@@ -2,23 +2,11 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-
-// <html>
-// <head>
-//   <style type='text/css'></style>
-//   {this.renderStyles()}
-// </head>
-// <body className='html-preview' style={bodyStyle}>
-
-
-// </body>
-// </html>
-
 class PreviewDocument extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      freezeScroll: false
     }
   }
 
@@ -42,13 +30,13 @@ class PreviewDocument extends Component {
 
   componentWillReceiveProps(newProps) {
     if (this.iframe) {
-      if (newProps.anchor) {
-        this.iframe.contentWindow.location.hash = `#section-${newProps.anchor}`;
-      }
-
-      if (newProps.scrollPercent) {
-        const height = this.iframe.contentDocument.documentElement.clientHeight;
-        this.iframe.contentDocument.scrollingElement.scrollTop = (newProps.scrollPercent / 100) * height;
+      if (newProps.anchor !== this.props.anchor) {
+        this.setState({ freezeScroll: true }, () => this.iframe.contentWindow.location.hash = `#section-${newProps.anchor}`);
+      } else {
+        if (newProps.scrollPercent) {
+          const height = this.iframe.contentDocument.documentElement.clientHeight;
+          this.iframe.contentDocument.scrollingElement.scrollTop = (newProps.scrollPercent / 100) * height;
+        }
       }
     }
   }
@@ -120,7 +108,11 @@ class PreviewDocument extends Component {
     return pages;
   }
 
-  handleScroll = (e) => {    
+  handleScroll = (e) => {
+    if (this.state.freezeScroll) {
+      this.setState({ freezeScroll: false });
+    }
+
     const height = this.iframe.contentDocument.documentElement.clientHeight;
     const percent = (this.iframe.contentDocument.scrollingElement.scrollTop / height) * 100;
     this.props.onScroll(percent);
@@ -169,7 +161,7 @@ class PreviewDocument extends Component {
                 {selection.children.map(child => (
                   <React.Fragment key={child.index}>
                     <br /><br />
-                    <p id={`section-${selection.index}`}><strong>{this.makeTitle(child)}</strong></p>
+                    <p id={`section-${child.index}`}><strong>{this.makeTitle(child)}</strong></p>
                     {child.textBlocks.map((textBlock, childIndex) => (
                       <div dangerouslySetInnerHTML={{ __html: textBlock }} key={childIndex} />
                     ))}

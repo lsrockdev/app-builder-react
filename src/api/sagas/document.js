@@ -84,12 +84,13 @@ const importFields = function* (action) {
 };
 
 const exportFields = function* (action) {
+  const token = JSON.parse(localStorage.getItem('token'))
   const apiRequest = request({
     type: EXPORT_FIELDS,
-    method: 'POST',
-    url: 'request/document/' + action.payload.id,
+    method: 'GET',
+    url: `autofill/export?token=${token}`,
   });
-  yield call(apiRequest, action.payload)
+  yield call(apiRequest, action.payload);
 };
 
 const exportDocument = function* (action) {
@@ -99,7 +100,7 @@ const exportDocument = function* (action) {
     method: 'GET',
     url: `export/document/${action.payload.format}?token=${token}`,
   });
-  yield call(apiRequest, action.payload)
+  yield call(apiRequest, action.payload);
 };
 
 export default function* rootSaga() {

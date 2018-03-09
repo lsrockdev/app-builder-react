@@ -56,12 +56,12 @@ class PreviewSidebar extends Component {
   }
 
   render() {
-    const { title } = this.props;
+    const { id, title } = this.props;
     const items = this.parseSelections(_.values(this.props.selections), this.state.searchValue);
 
     return (
       <div className="sidebar">
-        <Link to={`/builder/12795503-7b26-4484-8d7a-033ea42c68b4`} className="bottom-navigation-button">
+        <Link to={`/builder/${id}`} className="bottom-navigation-button">
           <h1 className="header1" style={{color: 'rgb(255, 255, 255)'}}>Back to Builder</h1>
         </Link>
         <div className="section-header-block">
@@ -86,7 +86,8 @@ class PreviewSidebar extends Component {
 PreviewSidebar.propTypes = {
   title: PropTypes.string,
   selections: PropTypes.object,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  id: PropTypes.string
 };
 
 export default PreviewSidebar;
