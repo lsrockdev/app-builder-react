@@ -2,100 +2,10 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Header from 'components/Header'
 import { connect } from 'react-redux'
-import { getDocument, updateSettings, searchDocument} from '../../api/modules/document'
+import { getDocument, updateSettings, searchDocument, importFields, exportFields } from '../../api/modules/document'
 import './styles.scss'
-
-class SidebarGroup extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    debugger;
-    return (
-      <div>
-        <div className="bottom-section-border" style={{padding: '15px 12px 15px 22px', cursor: 'pointer'}}>
-          <div className="actionable" style={{paddingRight: '16px', display: 'flex', alignItems: 'center'}}>
-            <div className="tree-text" style={{display: 'inline-block', color: 'rgb(129, 129, 129)', paddingLeft: '8px'}}>1. Section</div>
-          </div>
-        </div>
-        <div>
-          <div>
-            <div className="bottom-section-border" style={{padding: '15px 12px 15px 43px', cursor: 'pointer'}}>
-              <div className="actionable" style={{paddingRight: '16px', display: 'flex', alignItems: 'center'}}>
-                <div className="tree-text" style={{"display":"inline-block","color":"rgb(129, 129, 129)","paddingLeft":"8px"}}>1.1. Another section</div>
-              </div>
-            </div>
-            <div></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-SidebarGroup.propTypes = {
-  depth: PropTypes.number,
-  groups: PropTypes.array,
-  selections: PropTypes.object
-};
-
-class PreviewSidebar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      groups: []
-    }
-  }
-
-  parseGroups(selections, level = 0) {
-    const levels = selections.reduce((previousValue, selection) => {
-      return { ...previousValue, [selection.level[level]]: true };
-    }, {});
-    return Object.keys(levels).sort();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const groups = this.parseGroups(Object.values(nextProps.selections));
-    this.setState({groups});
-  }
-
-  render() {
-    const { title, selections } = this.props;
-    const { groups } = this.state;
-
-    return (
-      <div style={{width: '300px', display: 'flex', flexDirection: 'column'}}>
-        <div className="bottom-navigation-button" style={{cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', padding: '0px 40px'}}>
-          <h1 className="header1" style={{color: 'rgb(255, 255, 255)'}}>Back to Builder</h1>
-        </div>
-        <div className="section-header-block">
-          <h1 className="header1">{title}</h1>
-        </div>
-        <div style={{display: 'flex', flexDirection: 'column', flex: '1 1 0%'}}>
-          <div style={{flex: '1 1 0%', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
-            <div>
-              <div>
-                {groups.map(group => <SidebarGroup group={group} selections={selections} key={group} />)}
-              </div>
-            </div>
-          </div>
-          <div className="search-container">
-            <i className="pro icon-search" style={{"marginRight":"10px","fontSize":"16px"}}></i>
-            <input placeholder="Search Sections" className="inline-input" style={{"color":"rgb(124, 124, 124)","width":"80%"}} />
-          </div>
-        </div>
-        <div className="splitter" id="document-preview-selection-tree-splitter" data-min-width="300" data-max-width="2147483647"
-          style={{display: 'none'}}></div>
-      </div>
-    );
-  }
-}
-
-PreviewSidebar.propTypes = {
-  title: PropTypes.string,
-  selections: PropTypes.object
-};
+import PreviewSidebar from './PreviewSidebar';
+import PreviewSettingsForm from './PreviewSettingsForm';
 
 class Preview extends Component {
 
@@ -106,7 +16,6 @@ class Preview extends Component {
       documentId,
       searchValue: '',
     }
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -127,16 +36,14 @@ class Preview extends Component {
     }
   }
 
-  updateSettings(data) {
-    let payload = data;
-
+  updateSettings = (settings) => {
     const success = (res, action) => {
       this.retrieveDocument();
     };
 
-    payload.id = this.state.document.id;
     this.props.updateSettings({
-      body: payload,
+      id : this.state.documentId,
+      body: { ...settings },
       success
     });
   }
@@ -150,12 +57,25 @@ class Preview extends Component {
       this.props.getDocument();
   }
 
+  importFields = (e) => {
+    this.props.importFields({
+      id: this.state.documentId,
+      file: e.target.files[0],
+      success: () => this.retrieveDocument()
+    });
+  }
+
+  exportFields = () => {
+    this.props.exportFields({ id: this.state.documentId });
+  }
+
   renderMainContent() {
     const { searchValue } =  this.state;
     const { document } = this.props;
+    const { settings } = document;
 
     return (
-      <div className="main hbox space-between">
+      <div className="main hbox space-between preview-page">
         <div style={{display: 'flex'}}>
           <PreviewSidebar {...document} />
         </div>
@@ -190,29 +110,14 @@ class Preview extends Component {
                 </div>
                 <div className="bottom-section-border" style={{"padding":"40px 50px","fontSize":"14px","lineHeight":"1.3"}}>Use the Field Autofill tool below to quickly fill placeholders with content relevant to your proposal. If fields
                   are not readily available, you can export this list and share with other team members who have that missing content.</div>
-                <div
-                  style={{padding: '40px 50px'}}>
-                  <div style={{"display":"flex","flexWrap":"wrap","marginBottom":"30px","paddingLeft":"10px"}}>
-                    <button className="autofill-button disabled" style={{marginRight: '10px'}}>Undo</button>
-                    <button className="autofill-button disabled" style={{marginRight: '10px'}}>Redo</button>
-                    <button className="autofill-button disabled" style={{paddingRight: '10px', marginLeft: 'auto'}}>Save</button>
-                  </div>
-                  <div>
-                    <div style={{marginBottom: '30px'}}>
-                      <div style={{display: 'flex', paddingLeft: '10px', marginBottom: '10px'}}>
-                        <label style={{"color":"rgb(55, 109, 114)","fontSize":"16px"}}>Variable</label>
-                      </div>
-                      <input type="text" className="autofill-input" data-variable-name="Variable" />
-                    </div>
-                  </div>
-              </div>
+                <PreviewSettingsForm settings={settings} onSave={this.updateSettings} />
             </div>
             <div style={{display: 'flex', width: '100%'}}>
               <form id="autofill-import-file-form">
-                <input id="autofill-import-file-input" type="file" accept=".xlsx" style={{display: 'none'}} />
+                <input id="autofill-import-file-input" type="file" accept=".xlsx" style={{display: 'none'}} onChange={this.importFields} />
               </form>
-              <button className="autofill-function-button right-section-border">Import Fields</button>
-              <button className="autofill-function-button">Export Fields</button>
+              <label className="autofill-function-button right-section-border" htmlFor="autofill-import-file-input">Import Fields</label>
+              <button className="autofill-function-button" onClick={this.exportFields}>Export Fields</button>
             </div>
           </div>
         </div>
@@ -236,7 +141,9 @@ Preview.propTypes = {
   document: PropTypes.object,
   getDocument: PropTypes.func,
   searchDocument: PropTypes.func,
-  updateSettings: PropTypes.func
+  updateSettings: PropTypes.func,
+  importFields: PropTypes.func,
+  exportFields: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -247,7 +154,9 @@ const mapStateToProps = (state) => {
 const mapActionToProps = {
   getDocument,
   updateSettings,
-  searchDocument
+  searchDocument,
+  importFields,
+  exportFields
 };
 
 export default connect(mapStateToProps, mapActionToProps)(Preview)

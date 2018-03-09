@@ -7,6 +7,8 @@ import {
   DELETE_DOCUMENT,
   SEARCH_DOCUMENT,
   UPDATE_SETTINGS,
+  IMPORT_FIELDS,
+  EXPORT_FIELDS,
 } from 'api/modules/document';
 
 import request from 'utils/request';
@@ -63,6 +65,28 @@ const updateSettings = function* (action) {
     method: 'PUT',
     url: 'document/' + action.payload.id + '/settings',
   });
+  yield call(apiRequest, action);
+};
+
+const importFields = function* (action) {
+  const data = new FormData();
+  const apiRequest = request({
+    type: IMPORT_FIELDS,
+    method: 'POST',
+    url: 'autofill/import/' + action.payload.id,
+  });
+
+  data.append('file', action.payload.file);
+  
+  yield call(apiRequest, { ...action, payload: { ...action.payload, body: data }});
+};
+
+const exportFields = function* (action) {
+  const apiRequest = request({
+    type: EXPORT_FIELDS,
+    method: 'POST',
+    url: 'request/document/' + action.payload.id,
+  });
   yield call(apiRequest, action.payload)
 };
 
@@ -74,4 +98,6 @@ export default function* rootSaga() {
   yield takeEvery(UPDATE_DOCUMENT, updateDocument);
   yield takeEvery(DELETE_DOCUMENT, deleteDocument);
   yield takeEvery(UPDATE_SETTINGS, updateSettings);
+  yield takeEvery(IMPORT_FIELDS, importFields);
+  yield takeEvery(EXPORT_FIELDS, exportFields);
 }
