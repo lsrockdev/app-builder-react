@@ -49,6 +49,17 @@
     position: relative;
   }
 
+  .scroll-thumb {
+    cursor: default;
+    position: absolute;
+    left: 0;
+    height: 20px;
+    width: 7px;
+    border-radius: 7px;
+    background-color: rgb(94, 144, 144);
+    top: 0;
+  }
+
   // .flex0 {
   //   flex: 1 1 0%;
   // }

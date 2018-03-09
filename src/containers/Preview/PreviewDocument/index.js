@@ -30,6 +30,8 @@ class PreviewDocument extends Component {
     
     frameBody.appendChild(el);
 
+    this.iframe.contentDocument.addEventListener('scroll', this.handleScroll);
+
     this.el = el;
     this.renderContentDocument();
   }
@@ -39,8 +41,15 @@ class PreviewDocument extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.anchor && this.iframe) {
-      this.iframe.contentWindow.location.hash = `#section-${newProps.anchor}`;
+    if (this.iframe) {
+      if (newProps.anchor) {
+        this.iframe.contentWindow.location.hash = `#section-${newProps.anchor}`;
+      }
+
+      if (newProps.scrollPercent) {
+        const height = this.iframe.contentDocument.documentElement.clientHeight;
+        this.iframe.contentDocument.scrollingElement.scrollTop = (newProps.scrollPercent / 100) * height;
+      }
     }
   }
 
@@ -109,6 +118,12 @@ class PreviewDocument extends Component {
     }
 
     return pages;
+  }
+
+  handleScroll = (e) => {    
+    const height = this.iframe.contentDocument.documentElement.clientHeight;
+    const percent = (this.iframe.contentDocument.scrollingElement.scrollTop / height) * 100;
+    this.props.onScroll(percent);
   }
 
   renderStyles = () => {
@@ -186,7 +201,9 @@ PreviewDocument.propTypes = {
   htmlPreviewBackgroundColor: PropTypes.string,
   cdnUrl: PropTypes.string,
   document: PropTypes.object,
-  anchor: PropTypes.string
+  anchor: PropTypes.string,
+  scrollPercent: PropTypes.number,
+  onScroll: PropTypes.func
 };
 
 export default PreviewDocument;

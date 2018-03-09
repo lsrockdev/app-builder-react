@@ -16,10 +16,17 @@ class Preview extends Component {
     this.state = {
       documentId,
       searchValue: '',
+      scrolling: false,
+      scrollbarOffset: 0,
+      scrollPercent: 0,
+      totalPages: 0
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.document.selections) {
+      this.setState({ totalPages: this.getPageCount(nextProps.document.selections) });
+    }
   }
 
   componentWillMount() {
@@ -58,6 +65,11 @@ class Preview extends Component {
       this.props.getDocument();
   }
 
+  getPageCount(selections) {
+    const pages = Object.keys(selections).filter(key => selections[key].level.length === 1);
+    return pages.length;
+  }
+
   makeAnchor(level) {
     return level.join('.');
   }
@@ -79,13 +91,51 @@ class Preview extends Component {
     this.setState({anchor});
   }
 
+  handleScroll = (scrollPercent) => {
+    this.setState({scrollPercent});
+  }
+
+  startScroll = (e) => {
+    if (this.scrollbar) {
+      let scrollbarOffset = this.scrollbar.offsetTop;
+      let offsetParent = this.scrollbar.offsetParent;
+      const mouseY = e.clientY;
+
+      while (offsetParent) {
+        scrollbarOffset += offsetParent.offsetTop;
+        offsetParent = offsetParent.offsetParent;
+      }
+
+      this.setState({ scrolling: true, scrollbarOffset }, this.updateScroll(mouseY));
+    }
+  }
+
+  updateScroll = (mouseY) => {
+    if (this.scrollbar) {
+      const position = Math.max(0, Math.min(this.scrollbar.clientHeight, mouseY - this.state.scrollbarOffset));
+      const scrollPercent = Math.max(0, Math.min(100, (position / this.scrollbar.clientHeight) * 100));
+      this.setState({scrollPercent});
+    }
+  }
+
+  stopScroll = (e) => {
+    this.setState({ scrolling: false });
+  }
+
+  handleMouseMove = (e) => {
+    if (this.state.scrolling) {
+      this.updateScroll(e.clientY);
+    }
+  }
+
   renderMainContent() {
-    const { searchValue, anchor } =  this.state;
+    const { searchValue, anchor, scrollPercent, totalPages } =  this.state;
     const { document } = this.props;
     const { settings } = document;
+    const currentPage = scrollPercent < 100 ? Math.floor((scrollPercent / 100) * totalPages) + 1 : totalPages;
 
     return (
-      <div className="main hbox space-between preview-page">
+      <div className="main hbox space-between preview-page" onMouseUp={this.stopScroll}>
         <div style={{display: 'flex'}}>
           <PreviewSidebar {...document} onClick={this.updateAnchor} />
         </div>
@@ -93,11 +143,10 @@ class Preview extends Component {
           <div style={{"display":"flex","flexDirection":"column","flex":"1 1 0%"}}>
             <div id="document-preview-node" style={{"display":"flex","flex":"1 1 0%","position":"relative","overflowX":"hidden","backgroundColor":"rgb(16, 71, 71)"}}>
               <div id="document-preview-node-inner" style={{"position":"absolute","top":"0px","left":"0px","right":"-20px","bottom":"0px","paddingLeft":"10px"}}>
-                <PreviewDocument document={document} anchor={anchor} />
-                <div style={{"position":"absolute","right":"70px","top":"90px","height":"300px","width":"7px","borderRadius":"7px","backgroundColor":"rgb(25, 91, 91)","display":"inline"}}>
-                  <div className="scroll-thumb" style={{"cursor":"default","position":"absolute","left":"0px","height":"20px","width":"7px","borderRadius":"7px","backgroundColor":"rgb(94, 144, 144)","top":"0px"}}
-                    data-scroll-thumb-factor="12.632142857142858">
-                    <div className="scroll-indicator" style={{"position":"absolute","left":"15px","top":"3px","fontSize":".75rem","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}}>1/3</div>
+                <PreviewDocument document={document} anchor={anchor} scrollPercent={scrollPercent} onScroll={this.handleScroll} />
+                <div ref={(element) => this.scrollbar = element} onMouseDown={this.startScroll} onMouseMove={this.handleMouseMove} style={{"position":"absolute","right":"70px","top":"90px","height":"300px","width":"7px","borderRadius":"7px","backgroundColor":"rgb(25, 91, 91)","display":"inline"}}>
+                  <div className="scroll-thumb" style={{ top: `${scrollPercent}%`}}>
+                    <div className="scroll-indicator" style={{"position":"absolute","left":"15px","top":"3px","fontSize":".75rem","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}}>{currentPage}/{totalPages}</div>
                   </div>
                 </div>
               </div>
