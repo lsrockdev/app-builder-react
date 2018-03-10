@@ -122,6 +122,14 @@ class PreviewDocument extends Component {
     this.props.onScroll(percent);
   }
 
+  handleMouseMove = (e) => {
+    this.props.onMouseMove(e.clientY);
+  }
+
+  handleMouseUp = (e) => {
+    this.props.onMouseUp(e);
+  }
+
   renderStyles = () => {
     if (this.props.isDevelopmentMode) {
       return (
@@ -170,16 +178,15 @@ class PreviewDocument extends Component {
     const { document } = this.props;
     const dueDate = this.formatDate(document.dueDate);
     const selections = this.parseSelections();
-    console.log(this.iframe.clientWidth);
 
     ReactDOM.render((
       <React.Fragment>
-        <div style={{"position":"absolute","left":"0","right":"20px","height":"60px","top":"0","display":"flex","alignItems":"center","justifyContent":"center","paddingLeft":"140px","paddingRight":"150px","fontSize":"10px","lineHeight":"1.3","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}}>
+        <div style={{"position":"absolute","left":"0","right":"20px","height":"60px","top":"0","display":"flex","alignItems":"center","justifyContent":"center","paddingLeft":"140px","paddingRight":"150px","fontSize":"10px","lineHeight":"1.3","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}>
           <div style={{ textAlign: 'center' }}>
             Preview mode is designed to represent a document's appearance in Microsoft Word but may result in formatting that is different in appearance when exported.
           </div>
         </div>
-        <div style={{ marginBottom: '60px' }}>
+        <div style={{ marginBottom: '60px' }} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}>
           {selections.map(selection => (
             <div style={selection === selections[0] ? firstPageStyles: subsequentPageStyles} key={selection.index}>
               <div className="page" style={pageStyles}>
@@ -224,7 +231,8 @@ PreviewDocument.propTypes = {
   document: PropTypes.object,
   anchor: PropTypes.string,
   scrollPercent: PropTypes.number,
-  onScroll: PropTypes.func
+  onScroll: PropTypes.func,
+  onMouseMove: PropTypes.func
 };
 
 export default PreviewDocument;
