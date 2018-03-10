@@ -18,11 +18,13 @@ class PreviewDocument extends Component {
   componentDidUpdate(props) {
     if (!this.iframe) {
       this.iframe = ReactDOM.findDOMNode(this);
+      this.iframe.contentDocument.head.innerHTML = this.renderStyles();
   
       const frameBody = this.iframe.contentDocument.body;
       const el = document.createElement('div');
       
-      frameBody.style.margin = '0';
+      frameBody.className = 'html-preview';
+      frameBody.style = `font-family: 'Times New Roman', serif; font-size: 21.478771699861046px; line-height: 1.25; margin: 0; position: relative; -ms-overflow-style: none; background-color: #104747;`;
       frameBody.appendChild(el);
   
       this.iframe.contentDocument.addEventListener('scroll', _.throttle(this.handleScroll, 25));
@@ -151,17 +153,9 @@ class PreviewDocument extends Component {
   }
 
   renderStyles = () => {
-    if (this.props.isDevelopmentMode) {
-      return (
-        <React.Fragment>
-          <link type='text/css' rel='stylesheet' href='css/reset/reset.css'/>
-          <link type='text/css' rel='stylesheet' href='css/html-preview/html-preview.css'/>
-        </React.Fragment>
-      );
-    } else {
-      const { cdnUrl } = this.props;
-      return <link type='text/css' rel='stylesheet' href={`${cdnUrl}/for-html-preview.css`} />;
-    }
+    return `
+      <style type="text/css">@import 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600,700';::-webkit-scrollbar { display: none; }html, body {  height: auto !important;}ol, ul {  margin-left: 55.349698934691986px !important;}ul, ul li {  list-style: disc inside !important;}ul li {  list-style-type: disc !important;}ul ul li {  list-style-type: circle !important;}ul ul ul li {  list-style-type: square !important;}ol, ol li {  list-style: none !important;}ol {  counter-reset: level1;}ol li {  display: block;}ol li::before {  content: counter(level1) '.';  counter-increment: level1;  margin-right: 22.139879573876794px;}ol ol {  counter-reset: level2;}ol ol li::before {  content: counter(level2) '.';  counter-increment: level2;}ol ol ol {  counter-reset: level3;}ol ol ol li::before {  content: counter(level3) '.';  counter-increment: level3;}ol ol ol ol {  counter-reset: level4;}ol ol ol ol li::before {  content: counter(level4) '.';  counter-increment: level4;}ol ol ol ol ol {  counter-reset: level5;}ol ol ol ol ol li::before {  content: counter(level5) '.';  counter-increment: level5;}</style>  <link type="text/css" rel="stylesheet" href="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/for-html-preview.css">
+    `;
   }
 
   renderContentDocument = () => {
@@ -201,7 +195,7 @@ class PreviewDocument extends Component {
 
     ReactDOM.render((
       <React.Fragment>
-        <div style={{"position":"absolute","left":"0","right":"20px","height":"60px","top":"0","display":"flex","alignItems":"center","justifyContent":"center","paddingLeft":"140px","paddingRight":"150px","fontSize":"10px","lineHeight":"1.3","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}>
+        <div style={{"position":"absolute","left":"0","right":"20px","height":"60px","top":"-60px","display":"flex","alignItems":"center","justifyContent":"center","paddingLeft":"140px","paddingRight":"150px","fontSize":"10px","lineHeight":"1.3","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}>
           <div style={{ textAlign: 'center' }}>
             Preview mode is designed to represent a document's appearance in Microsoft Word but may result in formatting that is different in appearance when exported.
           </div>
