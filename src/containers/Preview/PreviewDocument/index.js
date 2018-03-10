@@ -24,7 +24,7 @@ class PreviewDocument extends Component {
       const el = document.createElement('div');
       
       frameBody.className = 'html-preview';
-      frameBody.style = `font-family: 'Times New Roman', serif; font-size: 21.478771699861046px; line-height: 1.25; margin: 0; position: relative; -ms-overflow-style: none; background-color: #104747;`;
+      frameBody.style.cssText = `font-family: 'Times New Roman', serif; font-size: 21.478771699861046px; line-height: 1.25; margin: 0; position: relative; -ms-overflow-style: none; background-color: #104747;`;
       frameBody.appendChild(el);
   
       this.iframe.contentDocument.addEventListener('scroll', _.throttle(this.handleScroll, 50));
