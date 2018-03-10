@@ -22,6 +22,7 @@ class PreviewDocument extends Component {
       const frameBody = this.iframe.contentDocument.body;
       const el = document.createElement('div');
       
+      frameBody.style.margin = '0';
       frameBody.appendChild(el);
   
       this.iframe.contentDocument.addEventListener('scroll', _.throttle(this.handleScroll, 25));
@@ -38,10 +39,9 @@ class PreviewDocument extends Component {
   componentWillReceiveProps(newProps) {
     if (this.iframe) {
       if (newProps.anchor !== this.props.anchor) {
-        this.setState({ freezeScroll: true }, () => {
-          const anchor = `#selection-header-${newProps.anchor}`;
-          return this.iframe.contentWindow.location.hash = anchor;
-        });
+        if (newProps.anchor) {
+          this.iframe.contentDocument.scrollingElement.scrollTop = this.getOffsetTop(`selection-header-${newProps.anchor}`);
+        }
       } else {
         if (newProps.scrollPercent != this.props.scrollPercent) {
           const height = this.iframe.contentDocument.scrollingElement.scrollHeight;
@@ -49,6 +49,24 @@ class PreviewDocument extends Component {
         }
       }
     }
+  }
+
+  getOffsetTop = (id) => {
+    const anchor = this.iframe.contentDocument.getElementById(id);
+
+    if (anchor) {
+      let offsetTop = anchor.offsetTop - 20;
+      let offsetParent = anchor.offsetParent;
+
+      while (offsetParent) {
+        offsetTop += offsetParent.offsetTop;
+        offsetParent = offsetParent.offsetParent;
+      }
+      
+      return offsetTop;
+    }
+
+    return this.iframe.contentDocument.scrollingElement.scrollTop;
   }
 
   makeIndex(level) {
@@ -119,10 +137,6 @@ class PreviewDocument extends Component {
   }
 
   handleScroll = (e) => {
-    if (this.state.freezeScroll) {
-      this.setState({ freezeScroll: false });
-    }
-
     const height = this.iframe.contentDocument.scrollingElement.scrollHeight;
     const percent = (this.iframe.contentDocument.scrollingElement.scrollTop / height) * 100;
     this.props.onScroll(percent);
@@ -161,7 +175,7 @@ class PreviewDocument extends Component {
     const pageHeightMm = 279.4;
     const pagePaddingMm = 25.4;
 
-    const width = this.iframe.contentDocument.scrollingElement.clientWidth - pageLeftMarginPx - pageRightMarginPx - scrollbarIndentPx;
+    const width = this.iframe.contentDocument.scrollingElement.clientWidth - pageLeftMarginPx - pageRightMarginPx - scrollbarIndentPx * 2;
     const height = (width / pageWidthMm) * pageHeightMm;
     const padding = (width / pageWidthMm) * pagePaddingMm;
 
