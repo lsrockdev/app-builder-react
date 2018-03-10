@@ -103,7 +103,7 @@ class Preview extends Component {
   }
 
   updateAnchor = (selection) => {
-    const anchor = this.makeAnchor(selection.level);
+    const anchor = selection.id;
     this.setState({anchor});
   }
 

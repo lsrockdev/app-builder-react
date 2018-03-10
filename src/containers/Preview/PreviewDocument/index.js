@@ -12,7 +12,7 @@ class PreviewDocument extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.document !== this.props.document;
+    return !this.iframe;
   }
 
   componentDidUpdate(props) {
@@ -29,13 +29,18 @@ class PreviewDocument extends Component {
       this.el = el;
     }
 
-    this.renderContentDocument();
+    if (props.document !== this.props.document) {
+      this.renderContentDocument();
+    }
   }
 
   componentWillReceiveProps(newProps) {
     if (this.iframe) {
       if (newProps.anchor !== this.props.anchor) {
-        this.setState({ freezeScroll: true }, () => this.iframe.contentWindow.location.hash = `#section-${newProps.anchor}`);
+        this.setState({ freezeScroll: true }, () => {
+          const anchor = `#selection-header-${newProps.anchor}`;
+          return this.iframe.contentWindow.location.hash = anchor;
+        });
       } else {
         if (newProps.scrollPercent != this.props.scrollPercent) {
           const height = this.iframe.contentDocument.scrollingElement.scrollHeight;
@@ -123,7 +128,7 @@ class PreviewDocument extends Component {
   }
 
   handleMouseMove = (e) => {
-    this.props.onMouseMove(e.clientY);
+    this.props.onMouseMove(e.clientY + 80);
   }
 
   handleMouseUp = (e) => {
@@ -190,14 +195,14 @@ class PreviewDocument extends Component {
           {selections.map(selection => (
             <div style={selection === selections[0] ? firstPageStyles: subsequentPageStyles} key={selection.index}>
               <div className="page" style={pageStyles}>
-                <p id={`section-${selection.index}`}><strong>{this.makeTitle(selection)}</strong></p>
+                <p id={`selection-header-${selection.id}`}><strong>{this.makeTitle(selection)}</strong></p>
                 {selection.textBlocks.map((textBlock, index) => (
                   <div dangerouslySetInnerHTML={{ __html: textBlock }} key={index} />
                 ))}
                 {selection.children.map(child => (
                   <React.Fragment key={child.index}>
                     <br /><br />
-                    <p id={`section-${child.index}`}><strong>{this.makeTitle(child)}</strong></p>
+                    <p id={`selection-header-${child.id}`}><strong>{this.makeTitle(child)}</strong></p>
                     {child.textBlocks.map((textBlock, childIndex) => (
                       <div dangerouslySetInnerHTML={{ __html: textBlock }} key={childIndex} />
                     ))}
