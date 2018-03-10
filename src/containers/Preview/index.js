@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import Header from 'components/Header'
 import { connect } from 'react-redux'
-import { getDocument, updateSettings, searchDocument, importFields, exportFields, requestDocument } from '../../api/modules/document'
+import { getDocument, updateSettings, searchDocument, importFields, requestDocument } from '../../api/modules/document'
 import './styles.scss'
 import PreviewSidebar from './PreviewSidebar';
 import PreviewSettingsForm from './PreviewSettingsForm';
@@ -30,7 +30,11 @@ class Preview extends Component {
     if (nextProps.documentToken && this.state.documentFormat) {
       const { documentFormat } = this.state;
       this.setState({ documentFormat: '' }, () => {
-        window.location.href = `${process.env.API_ROOT}/export/document/${documentFormat}?token=${nextProps.documentToken}`;
+        if (documentFormat === 'autofill') {
+          window.location.href = `${process.env.API_ROOT}/autofill/export?token=${nextProps.documentToken}`;
+        } else {
+          window.location.href = `${process.env.API_ROOT}/export/document/${documentFormat}?token=${nextProps.documentToken}`;
+        }
       });
     }
 
@@ -93,7 +97,13 @@ class Preview extends Component {
   }
 
   exportFields = () => {
-    this.props.exportFields({ id: this.state.documentId });
+    this.setState({
+      documentFormat: 'autofill'
+    }, () => {
+      this.props.requestDocument({
+        id: this.state.documentId
+      });
+    });
   }
 
   exportDocx = (e) => {
@@ -241,7 +251,6 @@ Preview.propTypes = {
   searchDocument: PropTypes.func,
   updateSettings: PropTypes.func,
   importFields: PropTypes.func,
-  exportFields: PropTypes.func,
   requestDocument: PropTypes.func
 };
 
@@ -255,7 +264,6 @@ const mapActionToProps = {
   updateSettings,
   searchDocument,
   importFields,
-  exportFields,
   requestDocument
 };
 

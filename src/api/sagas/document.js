@@ -8,7 +8,6 @@ import {
   SEARCH_DOCUMENT,
   UPDATE_SETTINGS,
   IMPORT_FIELDS,
-  EXPORT_FIELDS,
   REQUEST_DOCUMENT,
 } from 'api/modules/document';
 
@@ -83,16 +82,6 @@ const importFields = function* (action) {
   yield call(apiRequest, { ...action, payload: { ...action.payload, body: data }});
 };
 
-const exportFields = function* (action) {
-  const token = JSON.parse(localStorage.getItem('token'))
-  const apiRequest = request({
-    type: EXPORT_FIELDS,
-    method: 'GET',
-    url: `autofill/export?token=${token}`,
-  });
-  yield call(apiRequest, action.payload);
-};
-
 const requestDocument = function* (action) {
   const apiRequest = request({
     type: REQUEST_DOCUMENT,
@@ -111,6 +100,5 @@ export default function* rootSaga() {
   yield takeEvery(DELETE_DOCUMENT, deleteDocument);
   yield takeEvery(UPDATE_SETTINGS, updateSettings);
   yield takeEvery(IMPORT_FIELDS, importFields);
-  yield takeEvery(EXPORT_FIELDS, exportFields);
   yield takeEvery(REQUEST_DOCUMENT, requestDocument);
 }
