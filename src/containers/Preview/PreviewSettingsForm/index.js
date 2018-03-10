@@ -37,6 +37,10 @@ class PreviewSettingsForm extends Component {
     };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.settings !== this.props.settings || nextState.settings !== this.state.settings;
+  }
+
   componentWillReceiveProps(newProps) {
     const { settings } = newProps;
     this.setState({settings});
@@ -45,7 +49,7 @@ class PreviewSettingsForm extends Component {
   changeHandler = (setting) => {
     const settings = { ...this.state.settings, [setting.setting]: setting.newValue };
     let undoStack = [setting];
-
+    console.log(settings);
     if (this.state.undoStack.length > 0) {
       const lastIndex = this.state.undoStack.length - 1;
       const last = this.state.undoStack[lastIndex];

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 class PreviewDocument extends Component {
   constructor(props) {
@@ -10,22 +11,25 @@ class PreviewDocument extends Component {
     }
   }
 
-  componentDidMount() {
-    this.iframe = ReactDOM.findDOMNode(this);
-
-    const frameBody = this.iframe.contentDocument.body;
-    const el = document.createElement('div');
-    
-    frameBody.appendChild(el);
-
-    this.iframe.contentDocument.addEventListener('scroll', this.handleScroll);
-
-    this.el = el;
-    this.renderContentDocument();
+  shouldComponentUpdate(nextProps) {
+    return nextProps.document !== this.props.document;
   }
 
-  componentDidUpdate() {
-      this.renderContentDocument();
+  componentDidUpdate(props) {
+    if (!this.iframe) {
+      this.iframe = ReactDOM.findDOMNode(this);
+  
+      const frameBody = this.iframe.contentDocument.body;
+      const el = document.createElement('div');
+      
+      frameBody.appendChild(el);
+  
+      this.iframe.contentDocument.addEventListener('scroll', _.throttle(this.handleScroll, 25));
+  
+      this.el = el;
+    }
+
+    this.renderContentDocument();
   }
 
   componentWillReceiveProps(newProps) {
@@ -183,7 +187,7 @@ class PreviewDocument extends Component {
   }
 
   render() {
-    return <iframe frameBorder="0" title="preview-document"></iframe>;
+    return <iframe frameBorder="0" style={{"display":"block","width":"100%","height":"100%","position":"relative","overflow":"hidden"}} title="preview-document"></iframe>;
   }
 }
 

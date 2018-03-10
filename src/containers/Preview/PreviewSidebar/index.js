@@ -14,6 +14,18 @@ class PreviewSidebar extends Component {
     };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.id !== this.props.id || nextProps.title !== this.props.title || nextProps.selections !== this.props.selections) {
+      return true;
+    }
+
+    if (nextState.searchValue !== this.state.searchValue) {
+      return true;
+    }
+
+    return false;
+  }
+
   matchText(text) {
     return text.toLocaleLowerCase().indexOf(this.state.searchValue) > -1;
   }
