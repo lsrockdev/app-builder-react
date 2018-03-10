@@ -138,8 +138,32 @@ class PreviewDocument extends Component {
 
   renderContentDocument() {
     // const bodyStyle = this.props.onPage ? { backgroundColor: this.props.htmlPreviewBackgroundColor } : {};
+    const pageVMarginPx = 60;
+    const pageLeftMarginPx = 70;
+    const pageRightMarginPx = 90;
+    const marginBetweenPagesPx = 10;
+    const scrollbarIndentPx = 20;
+    const pageWidthMm = 215.9;
+    const pageHeightMm = 279.4;
+    const pagePaddingMm = 25.4;
+
+    const width = this.iframe.contentDocument.scrollingElement.clientWidth - pageLeftMarginPx - pageRightMarginPx - scrollbarIndentPx;
+    const height = (width / pageWidthMm) * pageHeightMm;
+    const padding = (width / pageWidthMm) * pagePaddingMm;
+
     const footerStyles = {"position":"absolute","left":"130.11764705882354px","bottom":"130.11764705882354px","fontSize":"16.26471612783696px","color":"#afafaf","lineHeight":"2","paddingTop":"51.22742010189903px","boxSizing":"border-box"};
-    const pageStyles = {"position":"relative","backgroundColor":"#fff","marginLeft":"80px","width":"1106px","height":"1431.2941176470588px","padding":"130.11764705882354px","boxSizing":"border-box","overflow":"hidden"};
+
+    const pageStyles = {
+      position: "relative",
+      backgroundColor: "#fff",
+      marginLeft: `${pageLeftMarginPx}px`,
+      width: `${width}px`,
+      height: `${height}px`,
+      padding: `${padding}px`,
+      boxSizing: "border-box",
+      overflow: "hidden"
+    };
+
     const pageNumberStyles = {"textAlign":"center","position":"absolute","bottom":"92.61764705882354px","left":"0","right":"0"};
     const firstPageStyles = { margin: '60px 0 0', display: 'flex', flexDirection: 'row' };
     const subsequentPageStyles = {"margin":"10px 0 0","display":"flex","flexDirection":"row"};
@@ -150,7 +174,7 @@ class PreviewDocument extends Component {
 
     ReactDOM.render((
       <React.Fragment>
-        <div style={{"position":"absolute","left":"0","right":"20px","height":"60px","display":"flex","alignItems":"center","justifyContent":"center","paddingLeft":"140px","paddingRight":"150px","fontSize":"10px","lineHeight":"1.3","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}}>
+        <div style={{"position":"absolute","left":"0","right":"20px","height":"60px","top":"0","display":"flex","alignItems":"center","justifyContent":"center","paddingLeft":"140px","paddingRight":"150px","fontSize":"10px","lineHeight":"1.3","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}}>
           <div style={{ textAlign: 'center' }}>
             Preview mode is designed to represent a document's appearance in Microsoft Word but may result in formatting that is different in appearance when exported.
           </div>
