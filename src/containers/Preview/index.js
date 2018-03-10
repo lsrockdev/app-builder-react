@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import Header from 'components/Header'
 import { connect } from 'react-redux'
-import { getDocument, updateSettings, searchDocument, importFields, exportFields, exportDocument } from '../../api/modules/document'
+import { getDocument, updateSettings, searchDocument, importFields, exportFields, requestDocument } from '../../api/modules/document'
 import './styles.scss'
 import PreviewSidebar from './PreviewSidebar';
 import PreviewSettingsForm from './PreviewSettingsForm';
@@ -21,11 +21,19 @@ class Preview extends Component {
       scrollbarOffset: 0,
       scrollbarPercent: 0,
       iframeScrollPercent: 0,
-      totalPages: 0
+      totalPages: 0,
+      documentFormat: ''
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.documentToken && this.state.documentFormat) {
+      const { documentFormat } = this.state;
+      this.setState({ documentFormat: '' }, () => {
+        window.location.href = `${process.env.API_ROOT}/export/document/${documentFormat}?token=${nextProps.documentToken}`;
+      });
+    }
+
     if (nextProps.document.selections) {
       this.setState({ totalPages: this.getPageCount(nextProps.document.selections) });
     }
@@ -89,16 +97,22 @@ class Preview extends Component {
   }
 
   exportDocx = (e) => {
-    this.props.exportDocument({
-      id: this.state.documentId,
-      format: 'docx'
+    this.setState({
+      documentFormat: 'docx'
+    }, () => {
+      this.props.requestDocument({
+        id: this.state.documentId
+      });
     });
   }
 
   exportPdf = (e) => {
-    this.props.exportDocument({
-      id: this.state.documentId,
-      format: 'pdf'
+    this.setState({
+      documentFormat: 'pdf'
+    }, () => {
+      this.props.requestDocument({
+        id: this.state.documentId
+      });
     });
   }
 
@@ -228,12 +242,12 @@ Preview.propTypes = {
   updateSettings: PropTypes.func,
   importFields: PropTypes.func,
   exportFields: PropTypes.func,
-  exportDocument: PropTypes.func
+  requestDocument: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
-  const { document } = state.document;
-  return { document };
+  const { document, documentToken } = state.document;
+  return { document, documentToken };
 };
 
 const mapActionToProps = {
@@ -242,7 +256,7 @@ const mapActionToProps = {
   searchDocument,
   importFields,
   exportFields,
-  exportDocument
+  requestDocument
 };
 
 export default connect(mapStateToProps, mapActionToProps)(Preview)

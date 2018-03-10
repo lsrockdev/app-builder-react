@@ -9,11 +9,11 @@ import {
   UPDATE_SETTINGS,
   IMPORT_FIELDS,
   EXPORT_FIELDS,
-  EXPORT_DOCUMENT,
+  REQUEST_DOCUMENT,
 } from 'api/modules/document';
 
 import request from 'utils/request';
-// import { exportDocument } from '../modules/document';
+import { exportDocument } from '../modules/document';
 
 const getDocuments = request({
   type: GET_DOCUMENTS,
@@ -93,12 +93,11 @@ const exportFields = function* (action) {
   yield call(apiRequest, action.payload);
 };
 
-const exportDocument = function* (action) {
-  const token = JSON.parse(localStorage.getItem('token'))
+const requestDocument = function* (action) {
   const apiRequest = request({
-    type: EXPORT_DOCUMENT,
-    method: 'GET',
-    url: `export/document/${action.payload.format}?token=${token}`,
+    type: REQUEST_DOCUMENT,
+    method: 'POST',
+    url: `request/document/${action.payload.id}`,
   });
   yield call(apiRequest, action.payload);
 };
@@ -113,5 +112,5 @@ export default function* rootSaga() {
   yield takeEvery(UPDATE_SETTINGS, updateSettings);
   yield takeEvery(IMPORT_FIELDS, importFields);
   yield takeEvery(EXPORT_FIELDS, exportFields);
-  yield takeEvery(EXPORT_DOCUMENT, exportDocument);
+  yield takeEvery(REQUEST_DOCUMENT, requestDocument);
 }
