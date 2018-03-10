@@ -1,0 +1,10 @@
+.modal-content {
+    position: fixed;
+    top: 162px;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    width: 350px;
+    margin: 0 auto;
+    background: white;
+}
