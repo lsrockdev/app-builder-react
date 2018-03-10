@@ -37,8 +37,8 @@ class PreviewDocument extends Component {
       if (newProps.anchor !== this.props.anchor) {
         this.setState({ freezeScroll: true }, () => this.iframe.contentWindow.location.hash = `#section-${newProps.anchor}`);
       } else {
-        if (newProps.scrollPercent) {
-          const height = this.iframe.contentDocument.documentElement.clientHeight;
+        if (newProps.scrollPercent != this.props.scrollPercent) {
+          const height = this.iframe.contentDocument.scrollingElement.scrollHeight;
           this.iframe.contentDocument.scrollingElement.scrollTop = (newProps.scrollPercent / 100) * height;
         }
       }
@@ -117,7 +117,7 @@ class PreviewDocument extends Component {
       this.setState({ freezeScroll: false });
     }
 
-    const height = this.iframe.contentDocument.documentElement.clientHeight;
+    const height = this.iframe.contentDocument.scrollingElement.scrollHeight;
     const percent = (this.iframe.contentDocument.scrollingElement.scrollTop / height) * 100;
     this.props.onScroll(percent);
   }
@@ -146,6 +146,7 @@ class PreviewDocument extends Component {
     const { document } = this.props;
     const dueDate = this.formatDate(document.dueDate);
     const selections = this.parseSelections();
+    console.log(this.iframe.clientWidth);
 
     ReactDOM.render((
       <React.Fragment>

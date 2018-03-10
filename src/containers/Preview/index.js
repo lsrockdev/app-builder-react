@@ -19,7 +19,8 @@ class Preview extends Component {
       searchValue: '',
       scrolling: false,
       scrollbarOffset: 0,
-      scrollPercent: 0,
+      scrollbarPercent: 0,
+      iframeScrollPercent: 0,
       totalPages: 0
     }
   }
@@ -106,8 +107,8 @@ class Preview extends Component {
     this.setState({anchor});
   }
 
-  handleScroll = (scrollPercent) => {
-    this.setState({scrollPercent});
+  handleScroll = (scrollbarPercent) => {
+    this.setState({scrollbarPercent});
   }
 
   startScroll = (e) => {
@@ -128,8 +129,9 @@ class Preview extends Component {
   updateScroll = (mouseY) => {
     if (this.scrollbar) {
       const position = Math.max(0, Math.min(this.scrollbar.clientHeight, mouseY - this.state.scrollbarOffset));
-      const scrollPercent = Math.max(0, Math.min(100, (position / this.scrollbar.clientHeight) * 100));
-      this.setState({scrollPercent});
+      const scrollbarPercent = Math.max(0, Math.min(100, (position / this.scrollbar.clientHeight) * 100));
+      const iframeScrollPercent = scrollbarPercent;
+      this.setState({scrollbarPercent, iframeScrollPercent});
     }
   }
 
@@ -146,10 +148,10 @@ class Preview extends Component {
   }
 
   renderMainContent() {
-    const { searchValue, anchor, scrollPercent, totalPages } =  this.state;
+    const { searchValue, anchor, scrollbarPercent, iframeScrollPercent, totalPages } =  this.state;
     const { document } = this.props;
     const { settings } = document;
-    const currentPage = scrollPercent < 100 ? Math.floor((scrollPercent / 100) * totalPages) + 1 : totalPages;
+    const currentPage = scrollbarPercent < 100 ? Math.floor((scrollbarPercent / 100) * totalPages) + 1 : totalPages;
 
     return (
       <div className="main hbox space-between preview-page" onMouseMove={this.handleMouseMove} onMouseUp={this.stopScroll}>
@@ -160,9 +162,9 @@ class Preview extends Component {
           <div style={{"display":"flex","flexDirection":"column","flex":"1 1 0%"}}>
             <div id="document-preview-node" style={{"display":"flex","flex":"1 1 0%","position":"relative","overflowX":"hidden","backgroundColor":"rgb(16, 71, 71)"}}>
               <div id="document-preview-node-inner" style={{"position":"absolute","top":"0px","left":"0px","right":"-20px","bottom":"0px","paddingLeft":"10px"}}>
-                <PreviewDocument document={document} anchor={anchor} scrollPercent={scrollPercent} onScroll={this.handleScroll} />
+                <PreviewDocument document={document} anchor={anchor} scrollPercent={iframeScrollPercent} onScroll={this.handleScroll} />
                 <div ref={(element) => this.scrollbar = element} onMouseDown={this.startScroll} style={{"position":"absolute","right":"70px","top":"90px","height":"300px","width":"7px","borderRadius":"7px","backgroundColor":"rgb(25, 91, 91)","display":"inline"}}>
-                  <div className="scroll-thumb" style={{ top: `${scrollPercent}%`}}>
+                  <div className="scroll-thumb" style={{ top: `${scrollbarPercent}%`}}>
                     <div className="scroll-indicator" style={{"position":"absolute","left":"15px","top":"3px","fontSize":".75rem","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}}>{currentPage}/{totalPages}</div>
                   </div>
                 </div>
