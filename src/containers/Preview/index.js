@@ -116,19 +116,19 @@ class Preview extends Component {
       let scrollbarOffset = this.scrollbar.offsetTop;
       let offsetParent = this.scrollbar.offsetParent;
       const mouseY = e.clientY;
-
+      
       while (offsetParent) {
         scrollbarOffset += offsetParent.offsetTop;
         offsetParent = offsetParent.offsetParent;
       }
 
-      this.setState({ scrolling: true, scrollbarOffset, anchor: '' }, this.updateScroll(mouseY));
+      this.setState({ scrolling: true, scrollbarOffset, anchor: '' }, this.updateScroll(mouseY, scrollbarOffset));
     }
   }
 
-  updateScroll = (mouseY) => {
-    if (this.scrollbar && this.state.scrolling) {
-      const position = Math.max(0, Math.min(this.scrollbar.clientHeight, mouseY - this.state.scrollbarOffset));
+  updateScroll = (mouseY, scrollbarOffset) => {
+    if (this.scrollbar) {
+      const position = Math.max(0, Math.min(this.scrollbar.clientHeight, mouseY - scrollbarOffset));
       const scrollbarPercent = Math.max(0, Math.min(100, (position / this.scrollbar.clientHeight) * 100));
       const iframeScrollPercent = scrollbarPercent;
       this.setState({scrollbarPercent, iframeScrollPercent});
@@ -143,7 +143,13 @@ class Preview extends Component {
 
   handleMouseMove = (e) => {
     if (this.state.scrolling) {
-      this.updateScroll(e.clientY);
+      this.updateScroll(e.clientY, this.state.scrollbarOffset);
+    }
+  }
+
+  handleIframeMouseMove = (mouseY) => {
+    if (this.state.scrolling) {
+      this.updateScroll(mouseY, this.state.scrollbarOffset);
     }
   }
 
@@ -162,7 +168,7 @@ class Preview extends Component {
           <div style={{"display":"flex","flexDirection":"column","flex":"1 1 0%"}}>
             <div id="document-preview-node" style={{"display":"flex","flex":"1 1 0%","position":"relative","overflowX":"hidden","backgroundColor":"rgb(16, 71, 71)"}}>
               <div id="document-preview-node-inner" style={{"position":"absolute","top":"0px","left":"0px","right":"-20px","bottom":"0px","paddingLeft":"10px"}}>
-                <PreviewDocument document={document} anchor={anchor} scrollPercent={iframeScrollPercent} onScroll={this.handleScroll} onMouseMove={this.updateScroll} onMouseUp={this.stopScroll} />
+                <PreviewDocument document={document} anchor={anchor} scrollPercent={iframeScrollPercent} onScroll={this.handleScroll} onMouseMove={this.handleIframeMouseMove} onMouseUp={this.stopScroll} />
                 <div ref={(element) => this.scrollbar = element} onMouseDown={this.startScroll} style={{"position":"absolute","right":"70px","top":"90px","height":"300px","width":"7px","borderRadius":"7px","backgroundColor":"rgb(25, 91, 91)","display":"inline"}}>
                   <div className="scroll-thumb" style={{ top: `${scrollbarPercent}%`}}>
                     <div className="scroll-indicator" style={{"position":"absolute","left":"15px","top":"3px","fontSize":".75rem","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}}>{currentPage}/{totalPages}</div>

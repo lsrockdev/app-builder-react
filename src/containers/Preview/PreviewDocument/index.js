@@ -12,7 +12,7 @@ class PreviewDocument extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return !this.iframe;
+    return nextProps.document !== this.props.document;
   }
 
   componentDidUpdate(props) {
@@ -43,7 +43,7 @@ class PreviewDocument extends Component {
           this.iframe.contentDocument.scrollingElement.scrollTop = this.getOffsetTop(`selection-header-${newProps.anchor}`);
         }
       } else {
-        if (newProps.scrollPercent != this.props.scrollPercent) {
+        if (newProps.scrollPercent !== this.props.scrollPercent) {
           const height = this.iframe.contentDocument.scrollingElement.scrollHeight;
           this.iframe.contentDocument.scrollingElement.scrollTop = (newProps.scrollPercent / 100) * height;
         }

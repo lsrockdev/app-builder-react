@@ -33,7 +33,7 @@ class PreviewSettingsForm extends Component {
       undoStack: [],
       redoStack: [],
       settings: {},
-      dirty: false
+      savedSettings: {}
     };
   }
 
@@ -43,7 +43,7 @@ class PreviewSettingsForm extends Component {
 
   componentWillReceiveProps(newProps) {
     const { settings } = newProps;
-    this.setState({settings});
+    this.setState({ settings, savedSettings: settings });
   }
 
   changeHandler = (setting) => {
@@ -66,6 +66,16 @@ class PreviewSettingsForm extends Component {
 
   makeSettingsArray() {
     return Object.keys(this.state.settings).map(key => ({ setting: key, value: this.state.settings[key] }));
+  }
+
+  checkSavedSettings() {
+    for (let setting in this.state.settings) {
+      if (this.state.settings[setting] !== this.state.savedSettings[setting]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   undoHandler = () => {
@@ -95,21 +105,21 @@ class PreviewSettingsForm extends Component {
 
   saveHandler = () => {
     this.props.onSave(this.state.settings);
-    this.setState({ dirty: false });
+    this.setState({ dirty: false, savedSettings: this.state.settings });
   }
 
   render() {
     const settings = this.makeSettingsArray();
-    const { dirty } = this.state;
     const undoDisabled = this.state.undoStack.length === 0;
     const redoDisabled = this.state.redoStack.length === 0;
+    const saveDisabled = this.checkSavedSettings();
 
     return (
       <div style={{padding: '40px 50px'}}>
         <div style={{"display":"flex","flexWrap":"wrap","marginBottom":"30px","paddingLeft":"10px"}}>
           <button className="autofill-button" disabled={undoDisabled} onClick={this.undoHandler} style={{marginRight: '10px'}}>Undo</button>
           <button className="autofill-button" disabled={redoDisabled} onClick={this.redoHandler} style={{marginRight: '10px'}}>Redo</button>
-          <button className="autofill-button" disabled={!dirty} onClick={this.saveHandler} style={{paddingRight: '10px', marginLeft: 'auto'}}>Save</button>
+          <button className="autofill-button" disabled={saveDisabled} onClick={this.saveHandler} style={{paddingRight: '10px', marginLeft: 'auto'}}>Save</button>
         </div>
         <div>
           {settings.map(setting => <PreviewSetting { ...setting }  key={setting.setting} onChange={this.changeHandler} />)}
