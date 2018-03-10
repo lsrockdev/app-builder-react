@@ -16,6 +16,7 @@ class Preview extends Component {
     super(props);
     this.state = {
       documentId,
+      anchor: '',
       searchValue: '',
       scrolling: false,
       scrollbarOffset: 0,

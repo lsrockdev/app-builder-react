@@ -27,7 +27,7 @@ class PreviewDocument extends Component {
       frameBody.style = `font-family: 'Times New Roman', serif; font-size: 21.478771699861046px; line-height: 1.25; margin: 0; position: relative; -ms-overflow-style: none; background-color: #104747;`;
       frameBody.appendChild(el);
   
-      this.iframe.contentDocument.addEventListener('scroll', _.throttle(this.handleScroll, 25));
+      this.iframe.contentDocument.addEventListener('scroll', _.throttle(this.handleScroll, 50));
       this.iframe.contentWindow.addEventListener('resize', _.debounce(this.renderContentDocument, 100));
   
       this.el = el;
@@ -57,7 +57,7 @@ class PreviewDocument extends Component {
     const anchor = this.iframe.contentDocument.getElementById(id);
 
     if (anchor) {
-      let offsetTop = anchor.offsetTop - 20;
+      let offsetTop = anchor.offsetTop;
       let offsetParent = anchor.offsetParent;
 
       while (offsetParent) {
@@ -85,7 +85,7 @@ class PreviewDocument extends Component {
   }
 
   isChild(parentLevel, childLevel) {
-    if (childLevel.length !== parentLevel.length + 1) {
+    if (parentLevel.length >= childLevel.length || parentLevel.length === 0 && childLevel.length > 1) {
       return false;
     }
 
