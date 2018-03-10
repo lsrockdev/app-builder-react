@@ -25,6 +25,7 @@ class PreviewDocument extends Component {
       frameBody.appendChild(el);
   
       this.iframe.contentDocument.addEventListener('scroll', _.throttle(this.handleScroll, 25));
+      this.iframe.contentWindow.addEventListener('resize', _.debounce(this.renderContentDocument, 100));
   
       this.el = el;
     }
@@ -149,7 +150,7 @@ class PreviewDocument extends Component {
     }
   }
 
-  renderContentDocument() {
+  renderContentDocument = () => {
     // const bodyStyle = this.props.onPage ? { backgroundColor: this.props.htmlPreviewBackgroundColor } : {};
     const pageVMarginPx = 60;
     const pageLeftMarginPx = 70;
