@@ -1,18 +1,10 @@
-import { takeLatest, takeEvery, call } from 'redux-saga/effects';
+import {takeLatest, takeEvery, call} from 'redux-saga/effects';
 import {
   GET_DOCUMENTS,
   CREATE_DOCUMENT,
   UPDATE_DOCUMENT,
   DELETE_DOCUMENT,
   SEARCH_DOCUMENT,
-  GET_DOCUMENT,
-  LEFT_UPDATE_DOCUMENT,
-  RIGHT_UPDATE_DOCUMENT,
-  UP_UPDATE_DOCUMENT,
-  DOWN_UPDATE_DOCUMENT,
-  UPDATE_SELECTION,
-  DELETE_SELECTION,
-  CREATE_SELECTION,
 } from 'api/modules/document';
 
 import request from 'utils/request';
@@ -32,117 +24,31 @@ const createDocument = request({
 const updateDocument = request({
   type: UPDATE_DOCUMENT,
   method: 'PUT',
-  url: 'document',
+  url: 'document'
 });
 
-const deleteDocument = function*(action) {
+const deleteDocument = function* (action) {
   const apiRequest = request({
     type: DELETE_DOCUMENT,
     method: 'DELETE',
     url: 'document/' + action.payload.id,
-    success: action.payload.success,
+    success: action.payload.success
   });
-  yield call(apiRequest, action.payload);
+  yield call(apiRequest, action.payload)
 };
 
-const searchDocument = function*(action) {
+const searchDocument = function* (action) {
   const apiRequest = request({
     type: SEARCH_DOCUMENT,
     method: 'GET',
     url: 'my/documents/' + action.payload.searchValue,
   });
-  yield call(apiRequest, action.payload);
-};
-
-const getDocument = function*({ payload }) {
-  const { documentId } = payload;
-  const apiRequest = request({
-    type: GET_DOCUMENT,
-    method: 'GET',
-    url: 'document/' + documentId,
-  });
-  yield call(apiRequest, payload);
-};
-
-const upUpdateDocument = function*({ payload }) {
-  const { documentId, selectionId } = payload;
-  const apiRequest = request({
-    type: UP_UPDATE_DOCUMENT,
-    method: 'POST',
-    url: `move/selection/${documentId}/${selectionId}/up`,
-  });
-  yield call(apiRequest, payload);
-};
-
-const downUpdateDocument = function*({ payload }) {
-  const { documentId, selectionId } = payload;
-  const apiRequest = request({
-    type: DOWN_UPDATE_DOCUMENT,
-    method: 'POST',
-    url: `move/selection/${documentId}/${selectionId}/down`,
-  });
-  yield call(apiRequest, payload);
-};
-
-const rightUpdateDocument = function*({ payload }) {
-  const { documentId, selectionId } = payload;
-  const apiRequest = request({
-    type: RIGHT_UPDATE_DOCUMENT,
-    method: 'POST',
-    url: `move/selection/${documentId}/${selectionId}/right`,
-  });
-  yield call(apiRequest, payload);
-};
-
-const leftUpdateDocument = function*({ payload }) {
-  const { documentId, selectionId } = payload;
-  const apiRequest = request({
-    type: LEFT_UPDATE_DOCUMENT,
-    method: 'POST',
-    url: `move/selection/${documentId}/${selectionId}/left`,
-  });
-  yield call(apiRequest, payload);
-};
-
-const deleteSelection = function*({ payload }) {
-  const { documentId, selectionId } = payload;
-  const apiRequest = request({
-    type: DELETE_SELECTION,
-    method: 'DELETE',
-    url: `selection/${documentId}/${selectionId}`,
-  });
-  yield call(apiRequest, payload);
-};
-
-const updateSelection = function*({ payload }) {
-  const apiRequest = request({
-    type: UPDATE_SELECTION,
-    method: 'PUT',
-    url: 'selection',
-  });
-  yield call(apiRequest, payload);
-};
-
-const createSelection = function*({ payload }) {
-  const apiRequest = request({
-    type: CREATE_SELECTION,
-    method: 'POST',
-    url: 'selection',
-  });
-  yield call(apiRequest, payload);
+  yield call(apiRequest, action.payload)
 };
 
 export default function* rootSaga() {
   yield takeLatest(GET_DOCUMENTS, getDocuments);
   yield takeLatest(SEARCH_DOCUMENT, searchDocument);
-  yield takeEvery(CREATE_SELECTION, createSelection);
-  yield takeEvery(UPDATE_SELECTION, updateSelection);
-  yield takeEvery(DELETE_SELECTION, deleteSelection);
-  yield takeEvery(LEFT_UPDATE_DOCUMENT, leftUpdateDocument);
-  yield takeEvery(RIGHT_UPDATE_DOCUMENT, rightUpdateDocument);
-  yield takeEvery(UP_UPDATE_DOCUMENT, upUpdateDocument);
-  yield takeEvery(DOWN_UPDATE_DOCUMENT, downUpdateDocument);
-  yield takeEvery(GET_DOCUMENT, getDocument);
   yield takeEvery(CREATE_DOCUMENT, createDocument);
   yield takeEvery(UPDATE_DOCUMENT, updateDocument);
   yield takeEvery(DELETE_DOCUMENT, deleteDocument);

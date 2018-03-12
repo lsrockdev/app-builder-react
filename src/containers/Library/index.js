@@ -9,7 +9,7 @@ import Wrapper from './Wrapper';
 class Library extends Component {
   state = {
     visibleAddContent: false,
-    visibleAddFolder: false,
+    visibleAddFolder: false
   };
 
   showAddContent = () => this.setState({ visibleAddContent: true });
@@ -29,18 +29,10 @@ class Library extends Component {
             <div className="library-overview">
               <div className="section-header-block">
                 <h1 className="header1">Library</h1>
-                <i
-                  className="material-icons"
-                  title="Add content"
-                  onClick={this.showAddContent}
-                >
+                <i className="material-icons" title="Add content" onClick={this.showAddContent}>
                   add
                 </i>
-                <i
-                  className="material-icons"
-                  title="Add folder"
-                  onClick={this.showAddFolder}
-                >
+                <i className="material-icons" title="Add folder" onClick={this.showAddFolder}>
                   create_new_folder
                 </i>
               </div>
@@ -48,11 +40,8 @@ class Library extends Component {
               <div style={{ flex: '1 1 0%', overflowY: 'auto' }} />
 
               <div className="search-container">
-                <i className="pro icon-search" />
-                <input
-                  placeholder="Search Content Blocks"
-                  className="inline-input"
-                />
+                <i className="pro icon-search" ></i>
+                <input placeholder="Search Content Blocks" className="inline-input" />
               </div>
             </div>
 
