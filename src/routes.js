@@ -4,6 +4,7 @@ import Library from 'containers/Library';
 import Documents from 'containers/Documents';
 import Dashboard from 'containers/Dashboard';
 import LogIn from 'containers/LogIn';
+import SignUp from 'containers/SignUp';
 import { userIsNotAuthenticatedRedir, userIsAuthenticatedRedir } from 'utils/authHelper';
 
 const Routes = () => (
@@ -14,6 +15,7 @@ const Routes = () => (
       <Route exact path="/documents" component={userIsAuthenticatedRedir(Documents)} />
       <Route exact path="/support" component={userIsAuthenticatedRedir(Dashboard)} />
       <Route path="/login" component={userIsNotAuthenticatedRedir(LogIn)} />
+      <Route path="/sign-up" component={SignUp} />
     </Switch>
   </Router>
 );

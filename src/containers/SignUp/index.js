@@ -1,39 +1,30 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { logIn } from 'api/modules/auth'
 import './styles.scss'
 
-class LogIn extends Component {
-  static propTypes = {
-    logIn: PropTypes.func,
-  }
+class SignUp extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
       email: '',
-      password: '',
-      staySignedIn: false,
+      password: ''
     }
   }
 
   handleChange = (field, evt) => {
-    const { target: { type, checked, value } } = evt
-    this.setState({
-      [field]: type === 'checkbox' ? checked : value,
-    })
+    const { target: { type, value } } = evt
+
   }
 
   handleSubmit = evt => {
     evt.preventDefault()
-    const { logIn } = this.props
-    logIn({ body: { ...this.state } })
+
   }
 
   render() {
-    const { email, password, staySignedIn } = this.state
+    const { email, password } = this.state
 
     return (
       <div className="loginPage">
@@ -52,15 +43,10 @@ class LogIn extends Component {
                   <input className="field" placeholder="Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} required />
                 </div>
                 <div>
-                  <button className="large form button">Sign in</button>
-                </div>
-                <div className="checkbox">
-                  <input id="stay-signed-in" type="checkbox" checked={staySignedIn} onChange={evt => this.handleChange('staySignedIn', evt)} />
-                  <div id="stay-signed-in-replacer" className={staySignedIn ? 'checked' : 'unchecked'} />
-                  <label id="stay-signed-in-label">Stay signed in</label>
+                  <button className="large form button">Sign up</button>
                 </div>
                 <div>
-                  <NavLink to="/sign-up">Create account</NavLink>
+                  <NavLink to="/login">Sign in</NavLink>
                   <span>|</span>
                   <NavLink to="/password-recovery">Reset password</NavLink>
                 </div>
@@ -79,7 +65,7 @@ class LogIn extends Component {
 }
 
 const actions = {
-  logIn,
+
 }
 
-export default connect(null, actions)(LogIn)
+export default connect(null, actions)(SignUp)
