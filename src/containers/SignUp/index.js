@@ -54,7 +54,7 @@ class SignUp extends Component {
                 <div>
                   <NavLink to="/login">Sign in</NavLink>
                   <span>|</span>
-                  <NavLink to="/password-recovery">Reset password</NavLink>
+                  <NavLink to="/recover/password">Reset password</NavLink>
                 </div>
               </form>
             </div>

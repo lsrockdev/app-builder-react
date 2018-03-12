@@ -5,7 +5,7 @@ import Documents from 'containers/Documents';
 import Dashboard from 'containers/Dashboard';
 import LogIn from 'containers/LogIn';
 import SignUp from 'containers/SignUp';
-import PasswordRecovery from 'containers/PasswordRecovery';
+import RecoverPassword from 'containers/RecoverPassword';
 import { userIsNotAuthenticatedRedir, userIsAuthenticatedRedir } from 'utils/authHelper';
 
 const Routes = () => (
@@ -17,7 +17,7 @@ const Routes = () => (
       <Route exact path="/support" component={userIsAuthenticatedRedir(Dashboard)} />
       <Route path="/login" component={userIsNotAuthenticatedRedir(LogIn)} />
       <Route path="/sign-up" component={SignUp} />
-      <Route path="/password-recovery" component={PasswordRecovery} />
+      <Route path="/recover/password" component={RecoverPassword} />
     </Switch>
   </Router>
 );

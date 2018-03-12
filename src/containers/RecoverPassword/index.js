@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import './styles.scss'
 
-class PasswordRecovery extends Component {
+class RecoverPassword extends Component {
 
   constructor(props) {
     super(props)
@@ -30,14 +30,14 @@ class PasswordRecovery extends Component {
     const { email } = this.state
 
     return (
-      <div className="passwordRecoveryPage">
+      <div className="recoverPasswordPage">
         <div className="wrapper">
-          <div className="passwordRecoveryForm">
-            <div className="passwordRecoveryForm__title">
+          <div className="recoverPasswordForm">
+            <div className="recoverPasswordForm__title">
               <img src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/logo@3x.png" alt="" />
             </div>
 
-            <div className="passwordRecoveryForm__content">
+            <div className="recoverPasswordForm__content">
               <form onSubmit={this.handleSubmit}>
                 <div>
                   <input className="field" placeholder="Email" type="email" onChange={evt => this.handleChange('email', evt)} value={email} required autoFocus />
@@ -66,4 +66,4 @@ const actions = {
 
 }
 
-export default connect(null, actions)(PasswordRecovery)
+export default connect(null, actions)(RecoverPassword)
