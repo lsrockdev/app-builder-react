@@ -174,12 +174,14 @@ class PreviewDocument extends Component {
     const pageHeightMm = 279.4;
     const pagePaddingMm = 25.4;
     // const footerPaddingTopMm = 10;
+    const fontSizePt = 11;
     const footerFontSizePt = 9;
 
     const width = this.iframe.contentDocument.scrollingElement.clientWidth - pageLeftMarginPx - pageRightMarginPx - scrollbarIndentPx * 2;
     const height = (width / pageWidthMm) * pageHeightMm;
     const padding = (width / pageWidthMm) * pagePaddingMm;
-    const fontSize = (width / pageWidthMm) * (0.352778 * footerFontSizePt);
+    const fontSize = (width / pageWidthMm) * (0.352778 * fontSizePt);
+    const footerFontSize = (width / pageWidthMm) * (0.352778 * footerFontSizePt);
 
     const pageStyles = {
       position: "relative",
@@ -196,7 +198,7 @@ class PreviewDocument extends Component {
       position: "absolute",
       left: `${padding}px`,
       bottom: `${padding}px`,
-      fontSize: `${fontSize}px`,
+      fontSize: `${footerFontSize}px`,
       color: "#afafaf",
       lineHeight: "2",
       boxSizing: "border-box"
@@ -205,16 +207,18 @@ class PreviewDocument extends Component {
     const pageNumberStyles = {
       textAlign: "center",
       position: "absolute",
-      bottom: `${padding - (fontSize * 2)}px`,
+      bottom: `${padding - (footerFontSize * 2)}px`,
       left: "0",
       right: "0"
     };
-    
+
     const firstPageStyles = { margin: '60px 0 0', display: 'flex', flexDirection: 'row' };
     const subsequentPageStyles = {"margin":"10px 0 0","display":"flex","flexDirection":"row"};
     const { document } = this.props;
     const dueDate = this.formatDate(document.dueDate);
     const selections = this.parseSelections();
+
+    this.iframe.contentDocument.body.style.fontSize = `${fontSize}px`;
     
     ReactDOM.render((
       <React.Fragment>
