@@ -46,7 +46,7 @@ class PreviewDocument extends Component {
         }
       } else {
         if (newProps.scrollPercent !== this.props.scrollPercent) {
-          const height = this.iframe.contentDocument.scrollingElement.scrollHeight;
+          const height = this.iframe.contentDocument.scrollingElement.scrollHeight - this.iframe.contentDocument.scrollingElement.clientHeight;
           this.iframe.contentDocument.scrollingElement.scrollTop = (newProps.scrollPercent / 100) * height;
         }
       }
@@ -81,6 +81,11 @@ class PreviewDocument extends Component {
 
   formatDate(timestamp) {
     const date = new Date(parseInt(timestamp, 10));
+
+    if (isNaN(date)) {
+      return '';
+    }
+    
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() - 100}`;
   }
 
@@ -139,7 +144,7 @@ class PreviewDocument extends Component {
   }
 
   handleScroll = (e) => {
-    const height = this.iframe.contentDocument.scrollingElement.scrollHeight;
+    const height = this.iframe.contentDocument.scrollingElement.scrollHeight - this.iframe.contentDocument.scrollingElement.clientHeight;
     const percent = (this.iframe.contentDocument.scrollingElement.scrollTop / height) * 100;
     this.props.onScroll(percent);
   }
@@ -218,7 +223,7 @@ class PreviewDocument extends Component {
                   </React.Fragment>
                 ))}
                 <div style={footerStyles}>
-                  <p>{document.title} | Due Date: {dueDate}</p>
+                  <p>{document.title}{dueDate && ` | Due Date: ${dueDate}`}</p>
                   <p style={{ fontStyle: 'italic' }}>
                     Use or disclosure of data contained on this page is subject to the restriction on the cover sheet of this proposal.
                   </p>
