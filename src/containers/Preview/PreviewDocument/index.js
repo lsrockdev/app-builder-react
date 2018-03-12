@@ -166,7 +166,7 @@ class PreviewDocument extends Component {
   renderContentDocument = () => {
     // const bodyStyle = this.props.onPage ? { backgroundColor: this.props.htmlPreviewBackgroundColor } : {};
     // const pageVMarginPx = 60;
-    const pageLeftMarginPx = 70;
+    const pageLeftMarginPx = 80;
     const pageRightMarginPx = 90;
     // const marginBetweenPagesPx = 10;
     const scrollbarIndentPx = 20;

@@ -250,7 +250,7 @@ class Preview extends Component {
               </div>
             </div>
           </div>
-          <div style={{backgroundColor: 'rgb(16, 71, 71)', padding: '0px 110px 0 80px'}}>
+          <div style={{backgroundColor: 'rgb(16, 71, 71)', padding: '0px 110px 0 90px'}}>
             <div className="bottom-navigation-button" style={{textAlign: 'center', display: 'flex', alignItems: 'center'}}>
               <span style={{marginRight: '20px'}}>Export Document:</span>
               <span style={{marginRight: '20px', cursor: 'pointer'}} onClick={this.exportDocx}>DOCX</span>
