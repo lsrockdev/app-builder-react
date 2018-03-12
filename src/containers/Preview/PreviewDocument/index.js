@@ -197,7 +197,7 @@ class PreviewDocument extends Component {
     const { document } = this.props;
     const dueDate = this.formatDate(document.dueDate);
     const selections = this.parseSelections();
-
+    
     ReactDOM.render((
       <React.Fragment>
         <div style={{"position":"absolute","left":"0","right":"20px","height":"60px","top":"-60px","display":"flex","alignItems":"center","justifyContent":"center","paddingLeft":"140px","paddingRight":"150px","fontSize":"10px","lineHeight":"1.3","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}>
@@ -210,6 +210,7 @@ class PreviewDocument extends Component {
             <div style={selection === selections[0] ? firstPageStyles: subsequentPageStyles} key={selection.index}>
               <div className="page" style={pageStyles}>
                 <p id={`selection-header-${selection.id}`}><strong>{this.makeTitle(selection)}</strong></p>
+                <br />
                 {selection.textBlocks.map((textBlock, index) => (
                   <div dangerouslySetInnerHTML={{ __html: textBlock }} key={index} />
                 ))}
@@ -217,6 +218,7 @@ class PreviewDocument extends Component {
                   <React.Fragment key={child.index}>
                     <br /><br />
                     <p id={`selection-header-${child.id}`}><strong>{this.makeTitle(child)}</strong></p>
+                    <br />
                     {child.textBlocks.map((textBlock, childIndex) => (
                       <div dangerouslySetInnerHTML={{ __html: textBlock }} key={childIndex} />
                     ))}
