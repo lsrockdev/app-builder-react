@@ -179,7 +179,7 @@ class Preview extends Component {
   }
 
   renderMainContent() {
-    const { searchValue, anchor, scrollbarPercent, iframeScrollPercent, totalPages } =  this.state;
+    const { anchor, scrollbarPercent, iframeScrollPercent, totalPages } =  this.state;
     const { document } = this.props;
     const { settings } = document;
     const currentPage = scrollbarPercent < 100 ? Math.floor((scrollbarPercent / 100) * totalPages) + 1 : totalPages;

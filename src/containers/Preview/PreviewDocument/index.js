@@ -80,12 +80,12 @@ class PreviewDocument extends Component {
   }
 
   formatDate(timestamp) {
-    const date = new Date(parseInt(timestamp));
+    const date = new Date(parseInt(timestamp, 10));
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() - 100}`;
   }
 
   isChild(parentLevel, childLevel) {
-    if (parentLevel.length >= childLevel.length || parentLevel.length === 0 && childLevel.length > 1) {
+    if (parentLevel.length >= childLevel.length || (parentLevel.length === 0 && childLevel.length > 1)) {
       return false;
     }
 
@@ -160,10 +160,10 @@ class PreviewDocument extends Component {
 
   renderContentDocument = () => {
     // const bodyStyle = this.props.onPage ? { backgroundColor: this.props.htmlPreviewBackgroundColor } : {};
-    const pageVMarginPx = 60;
+    // const pageVMarginPx = 60;
     const pageLeftMarginPx = 70;
     const pageRightMarginPx = 90;
-    const marginBetweenPagesPx = 10;
+    // const marginBetweenPagesPx = 10;
     const scrollbarIndentPx = 20;
     const pageWidthMm = 215.9;
     const pageHeightMm = 279.4;

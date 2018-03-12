@@ -12,7 +12,6 @@ import {
 } from 'api/modules/document';
 
 import request from 'utils/request';
-import { exportDocument } from '../modules/document';
 
 const getDocuments = request({
   type: GET_DOCUMENTS,
