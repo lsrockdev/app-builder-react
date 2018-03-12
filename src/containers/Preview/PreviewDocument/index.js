@@ -173,12 +173,13 @@ class PreviewDocument extends Component {
     const pageWidthMm = 215.9;
     const pageHeightMm = 279.4;
     const pagePaddingMm = 25.4;
+    // const footerPaddingTopMm = 10;
+    const footerFontSizePt = 9;
 
     const width = this.iframe.contentDocument.scrollingElement.clientWidth - pageLeftMarginPx - pageRightMarginPx - scrollbarIndentPx * 2;
     const height = (width / pageWidthMm) * pageHeightMm;
     const padding = (width / pageWidthMm) * pagePaddingMm;
-
-    const footerStyles = {"position":"absolute","left":"130.11764705882354px","bottom":"130.11764705882354px","fontSize":"16.26471612783696px","color":"#afafaf","lineHeight":"2","paddingTop":"51.22742010189903px","boxSizing":"border-box"};
+    const fontSize = (width / pageWidthMm) * (0.352778 * footerFontSizePt);
 
     const pageStyles = {
       position: "relative",
@@ -189,6 +190,16 @@ class PreviewDocument extends Component {
       padding: `${padding}px`,
       boxSizing: "border-box",
       overflow: "hidden"
+    };
+
+    const footerStyles = {
+      position: "absolute",
+      left: `${padding}px`,
+      bottom: `${padding}px`,
+      fontSize: `${fontSize}px`,
+      color: "#afafaf",
+      lineHeight: "2",
+      boxSizing: "border-box"
     };
 
     const pageNumberStyles = {"textAlign":"center","position":"absolute","bottom":"92.61764705882354px","left":"0","right":"0"};
