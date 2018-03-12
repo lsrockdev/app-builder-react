@@ -178,10 +178,32 @@ class Preview extends Component {
     }
   }
 
+  findUndeclaredSettings() {
+    const textBlocks = Object.keys(this.props.document.selections || {}).reduce((previousValue, key) => {
+      return previousValue.concat(this.props.document.selections[key].textBlocks);
+    }, [])
+
+    return textBlocks.reduce((previousValue, textBlock) => {
+      const settings = textBlock.match(/\[[a-z0-9 _-]+\]/gi);
+      
+      if (settings) {
+        for (let setting of settings) {
+          const trimmed = setting.substring(1, setting.length - 1);
+          
+          if (!previousValue.hasOwnProperty(trimmed) && !this.props.document.settings.hasOwnProperty(trimmed)) {
+            previousValue[trimmed] = '';
+          }
+        }
+      }
+
+      return previousValue;
+    }, {})
+  }
+
   renderMainContent() {
     const { anchor, scrollbarPercent, iframeScrollPercent, totalPages } =  this.state;
     const { document } = this.props;
-    const { settings } = document;
+    const settings = { ...document.settings, ...this.findUndeclaredSettings() };
     const currentPage = scrollbarPercent < 100 ? Math.floor((scrollbarPercent / 100) * totalPages) + 1 : totalPages;
 
     return (

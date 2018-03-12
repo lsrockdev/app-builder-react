@@ -108,7 +108,7 @@ class PreviewDocument extends Component {
     }
 
     textBlock = textBlock.replace(
-      new RegExp(`(\\[([a-z][0-9] _-]+)\\])`, 'gi'),
+      new RegExp(`(\\[([a-z0-9 _-]+)\\])`, 'gi'),
       '<span style="background-color: #ecd58c;" data-variable="$2" class="variable">$1</span>'
     );
 
