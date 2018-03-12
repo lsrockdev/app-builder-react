@@ -40,12 +40,37 @@ class Preview extends Component {
     }
 
     if (nextProps.document.selections) {
+      const settingCounts = this.countSettings();
       this.setState({ totalPages: this.getPageCount(nextProps.document.selections) });
     }
   }
 
   componentWillMount() {
     this.retrieveDocument();
+  }
+
+  countSettings() {
+    const textBlocks = Object.keys(this.props.document.selections || {}).reduce((previousValue, key) => {
+      return previousValue.concat(this.props.document.selections[key].textBlocks);
+    }, [])
+
+    return textBlocks.reduce((previousValue, textBlock) => {
+      const settings = textBlock.match(/\[[a-z0-9 _-]+\]/gi);
+      
+      if (settings) {
+        for (let setting of settings) {
+          const trimmed = setting.substring(1, setting.length - 1);
+
+          if (previousValue.hasOwnProperty(trimmed)) {
+            previousValue[trimmed]++;
+          } else {
+            previousValue[trimmed] = 1;
+          }
+        }
+      }
+
+      return previousValue;
+    }, {})
   }
 
   retrieveDocument() {
@@ -205,6 +230,7 @@ class Preview extends Component {
     const { document } = this.props;
     const settings = { ...document.settings, ...this.findUndeclaredSettings() };
     const currentPage = scrollbarPercent < 100 ? Math.floor((scrollbarPercent / 100) * totalPages) + 1 : totalPages;
+    const settingCounts = this.countSettings();
 
     return (
       <div className="main hbox space-between preview-page" onMouseMove={this.handleMouseMove} onMouseUp={this.stopScroll}>
@@ -241,7 +267,7 @@ class Preview extends Component {
                 </div>
                 <div className="bottom-section-border" style={{"padding":"40px 50px","fontSize":"14px","lineHeight":"1.3"}}>Use the Field Autofill tool below to quickly fill placeholders with content relevant to your proposal. If fields
                   are not readily available, you can export this list and share with other team members who have that missing content.</div>
-                <PreviewSettingsForm settings={settings} onSave={this.updateSettings} />
+                <PreviewSettingsForm settings={settings} settingCounts={settingCounts} onSave={this.updateSettings} />
             </div>
             <div style={{display: 'flex', width: '100%'}}>
               <form id="autofill-import-file-form">

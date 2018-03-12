@@ -7,12 +7,13 @@ class PreviewSetting extends Component {
   }
 
   render() {
-    const { setting, value } = this.props;
+    const { setting, value, count } = this.props;
 
     return (
       <div style={{marginBottom: '30px'}}>
         <div style={{display: 'flex', paddingLeft: '10px', marginBottom: '10px'}}>
           <label style={{"color":"rgb(55, 109, 114)","fontSize":"16px"}}>{setting}</label>
+          {count > 1 && <span style={{ paddingRight: "10px", color: "rgb(175, 175, 175)", fontSize: "16px", marginLeft: "auto" }}>{count}x</span>}
         </div>
         <input type="text" className="autofill-input" value={value} onChange={this.changeHandler} />
       </div>
@@ -22,6 +23,7 @@ class PreviewSetting extends Component {
 
 PreviewSetting.propTypes = {
   setting: PropTypes.string,
+  count: PropTypes.number,
   value: PropTypes.string,
   onChange: PropTypes.func
 };
@@ -110,6 +112,7 @@ class PreviewSettingsForm extends Component {
 
   render() {
     const settings = this.makeSettingsArray();
+    const { settingCounts } = this.props;
     const undoDisabled = this.state.undoStack.length === 0;
     const redoDisabled = this.state.redoStack.length === 0;
     const saveDisabled = this.checkSavedSettings();
@@ -122,7 +125,7 @@ class PreviewSettingsForm extends Component {
           <button className="autofill-button" disabled={saveDisabled} onClick={this.saveHandler} style={{paddingRight: '10px', marginLeft: 'auto'}}>Save</button>
         </div>
         <div>
-          {settings.map(setting => <PreviewSetting { ...setting }  key={setting.setting} onChange={this.changeHandler} />)}
+          {settings.map(setting => <PreviewSetting { ...setting } count={settingCounts[setting.setting]}  key={setting.setting} onChange={this.changeHandler} />)}
         </div>
       </div>
     );
@@ -131,6 +134,7 @@ class PreviewSettingsForm extends Component {
 
 PreviewSettingsForm.propTypes = {
   settings: PropTypes.object,
+  settingCounts: PropTypes.object,
   onSave: PropTypes.func
 };
 
