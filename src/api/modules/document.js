@@ -13,6 +13,7 @@ export const SEARCH_DOCUMENT = 'SEARCH_DOCUMENT';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 export const IMPORT_FIELDS = 'IMPORT_FIELDS';
 export const REQUEST_DOCUMENT = 'REQUEST_DOCUMENT';
+export const SELECT_DOCUMENT = 'SELECT_DOCUMENT';
 
 // ------------------------------------
 // Actions
@@ -27,12 +28,14 @@ export const searchDocument = createAction(SEARCH_DOCUMENT);
 export const updateSettings = createAction(UPDATE_SETTINGS);
 export const importFields   = createAction(IMPORT_FIELDS);
 export const requestDocument = createAction(REQUEST_DOCUMENT);
+export const selectDocument = createAction(SELECT_DOCUMENT);
 
 const initialState = {
   document: {},
   documents: [],
   status: 'INIT',
   error: null,
+  documentId: ''
 };
 
 // ------------------------------------
@@ -131,19 +134,19 @@ export default handleActions(
       error: payload,
     }),
 
-    [requestSuccess(REQUEST_DOCUMENT)]: (state, { payload }) => {
-      return {
-        ...state,
-        status: requestSuccess(REQUEST_DOCUMENT),
-        documentToken: payload
-      };
-    },
+    [requestSuccess(REQUEST_DOCUMENT)]: (state, { payload }) => ({
+      ...state,
+      status: requestSuccess(REQUEST_DOCUMENT),
+      documentToken: payload
+    }),
 
     [requestFail(REQUEST_DOCUMENT)]: (state, { payload }) => ({
       ...state,
       status: requestFail(REQUEST_DOCUMENT),
       error: payload,
     }),
+
+    [SELECT_DOCUMENT]: (state, { payload }) => ({ ...state, documentId: payload.id })
   },
   initialState
 );

@@ -4,7 +4,7 @@ import { Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { logOut } from 'api/modules/auth';
-import { isAuthenticated } from 'api/selectors';
+import { isAuthenticated, getDocumentId } from 'api/selectors';
 import './styles.scss';
 
 const MenuItem = ({ to, label }) => (
@@ -22,11 +22,12 @@ class Header extends Component {
   static propTypes = {
     authenticated: PropTypes.bool,
     logOut: PropTypes.func,
-    showBuilder: PropTypes.bool
+    showBuilder: PropTypes.bool,
+    documentId: PropTypes.string
   };
 
   render() {
-    const { authenticated, logOut, showBuilder } = this.props;
+    const { authenticated, logOut, showBuilder, documentId } = this.props;
 
     return (
       <div className="app-bar">
@@ -37,8 +38,8 @@ class Header extends Component {
             <MenuItem to="/documents" label="Documents" />
             {showBuilder &&
               <React.Fragment>
-                <MenuItem to="#" label="Builder" />
-                <MenuItem to="/preview" label="Preview" />
+                <MenuItem to={`/builder/${documentId}`} label="Builder" />
+                <MenuItem to={`/preview/${documentId}`} label="Preview" />
               </React.Fragment>
             }
             <MenuItem to="/support" label="Support" />
@@ -51,7 +52,8 @@ class Header extends Component {
 }
 
 const selectors = createStructuredSelector({
-  authenticated: isAuthenticated
+  authenticated: isAuthenticated,
+  documentId: getDocumentId
 });
 
 const actions = {

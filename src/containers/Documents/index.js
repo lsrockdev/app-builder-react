@@ -4,7 +4,7 @@ import Header from 'components/Header'
 import DocumentManageModal from './DocumentManageModal';
 import DocumentDeleteModal from './DocumentDeleteModal';
 import { connect } from 'react-redux'
-import { getDocuments, createDocument, updateDocument, deleteDocument, searchDocument} from '../../api/modules/document'
+import { getDocuments, createDocument, updateDocument, deleteDocument, searchDocument, selectDocument } from '../../api/modules/document'
 import { epochToString } from '../../utils/timeHelper';
 import './styles.scss'
 
@@ -42,7 +42,7 @@ class Documents extends Component {
 
   }
   handleDocumentClick(index) {
-    this.setState({selectedDocumentIndex: index});
+    this.setState({selectedDocumentIndex: index}, () => this.selectDocument());
   }
 
   openDocumentManageModal(isEdit = false) {
@@ -105,6 +105,13 @@ class Documents extends Component {
         });
       }
     });
+  }
+
+  selectDocument() {
+    if (this.state.selectedDocumentIndex > -1 && this.state.selectedDocumentIndex < this.state.documents.length) {
+      const { id } = this.state.documents[this.state.selectedDocumentIndex];
+      this.props.selectDocument({ id });
+    }
   }
 
   changeSortBy(sortBy) {
@@ -262,6 +269,7 @@ Documents.propTypes = {
   updateDocument: PropTypes.func,
   deleteDocument: PropTypes.func,
   searchDocument: PropTypes.func,
+  selectDocument: PropTypes.func
 };
 
 const mapStateToProps = ({document}) => {
@@ -274,7 +282,8 @@ const mapActionToProps = {
   createDocument,
   updateDocument,
   deleteDocument,
-  searchDocument
+  searchDocument,
+  selectDocument
 };
 
 export default connect(mapStateToProps, mapActionToProps)(Documents)
