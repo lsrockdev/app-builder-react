@@ -4,12 +4,17 @@ import { NavLink } from 'react-router-dom'
 import { recoverPassword } from 'api/modules/auth'
 import './styles.scss'
 
-class RecoverPassword extends Component {
+class NewPassword extends Component {
 
   constructor(props) {
     super(props)
+
+    const token = new URLSearchParams(this.props.location.search).get('token')
+
     this.state = {
-      email: ''
+      password: '',
+      passwordConfirm: '',
+      token
     }
   }
 
@@ -29,7 +34,7 @@ class RecoverPassword extends Component {
   }
 
   render() {
-    const { email } = this.state
+    const { password, passwordConfirm } = this.state
 
     return (
       <div className="recoverPasswordPage">
@@ -42,7 +47,10 @@ class RecoverPassword extends Component {
             <div className="recoverPasswordForm__content">
               <form onSubmit={this.handleSubmit}>
                 <div>
-                  <input className="field" placeholder="Email" type="email" onChange={evt => this.handleChange('email', evt)} value={email} required autoFocus />
+                  <input className="field" placeholder="New Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} required />
+                </div>
+                <div>
+                  <input className="field" placeholder="Confirm Password" type="password" onChange={evt => this.handleChange('passwordConfirm', evt)} value={passwordConfirm} required />
                 </div>
                 <div>
                   <button className="large form button">Recover</button>
@@ -68,4 +76,4 @@ const actions = {
   recoverPassword,
 }
 
-export default connect(null, actions)(RecoverPassword)
+export default connect(null, actions)(NewPassword)

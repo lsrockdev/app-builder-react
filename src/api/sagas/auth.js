@@ -1,5 +1,5 @@
 import { takeLatest } from 'redux-saga/effects'
-import { LOGIN, LOGOUT, SIGNUP } from 'api/modules/auth'
+import { LOGIN, LOGOUT, SIGNUP, RECOVER_PASSWORD } from 'api/modules/auth'
 import request from 'utils/request'
 
 const doLogin = request({
@@ -32,8 +32,19 @@ const doSignup = request({
   },
 })
 
+const doRecoverPassword = request({
+  type: RECOVER_PASSWORD,
+  method: 'POST',
+  url: 'recover/password',
+  success: (res, action) => {
+    console.log(res.data);
+    // localStorage.setItem('token', JSON.stringify(res.data))
+  },
+})
+
 export default function* rootSaga() {
   yield takeLatest(LOGIN, doLogin)
   yield takeLatest(LOGOUT, doLogout)
   yield takeLatest(SIGNUP, doSignup)
+  yield takeLatest(RECOVER_PASSWORD, doRecoverPassword)
 }
