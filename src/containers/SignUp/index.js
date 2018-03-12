@@ -14,8 +14,11 @@ class SignUp extends Component {
   }
 
   handleChange = (field, evt) => {
-    const { target: { type, value } } = evt
+    const { value } = evt.target
 
+    this.setState({
+      [field]: value,
+    })
   }
 
   handleSubmit = evt => {
