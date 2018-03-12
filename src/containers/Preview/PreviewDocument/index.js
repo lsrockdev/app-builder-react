@@ -177,7 +177,7 @@ class PreviewDocument extends Component {
     const fontSizePt = 11;
     const footerFontSizePt = 9;
 
-    const width = this.iframe.contentDocument.scrollingElement.clientWidth - pageLeftMarginPx - pageRightMarginPx - scrollbarIndentPx * 2;
+    const width = this.iframe.contentDocument.scrollingElement.clientWidth - pageLeftMarginPx - pageRightMarginPx - scrollbarIndentPx;
     const height = (width / pageWidthMm) * pageHeightMm;
     const padding = (width / pageWidthMm) * pagePaddingMm;
     const fontSize = (width / pageWidthMm) * (0.352778 * fontSizePt);
