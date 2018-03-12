@@ -1,117 +1,94 @@
-import React, {Component, Fragment} from 'react'
-import {Redirect} from 'react-router-dom';
-import {connect} from 'react-redux'
-
-import './Builder.css';
-
+import React, { Component } from 'react';
 import Header from 'components/Header';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { get } from 'lodash';
 
-import {createSection} from "../../api/modules/builder";
-import Library from "../../components/Library/Library";
-import Preview from "../../components/Preview/Preview";
-import Builder from "../../components/Builder/Builder";
+import { Wrapper } from './styles';
+import Library from './partials/Library';
+import BuilderMain from './partials/BuilderMain';
+import Preview from './partials/Preview';
+import * as actions from '../../api/modules/document';
 
-class Documents extends Component {
-  state = {
-    showDocumentSectionModal: false,
-    newSectionTitle: ''
-  };
+const propTypes = {
+  match: PropTypes.object,
+  getDocument: PropTypes.func,
+  upUpdateDocument: PropTypes.func,
+  downUpdateDocument: PropTypes.func,
+  rightUpdateDocument: PropTypes.func,
+  leftUpdateDocument: PropTypes.func,
+  createSelection: PropTypes.func,
+  updateSelection: PropTypes.func,
+  deleteSelection: PropTypes.func,
+};
 
-  addSectionHandler = () => {
-    this.setState({
-      showDocumentSectionModal: true
-    })
-  };
+const defaultProps = {};
 
-  handleSubmit = (event) => {
-    event.preventDefault();
+class Builder extends Component {
+  componentDidMount() {
+    const { match, getDocument } = this.props;
+    getDocument({ documentId: match.params.documentId });
+  }
 
-    let payload = {
-      document: this.props.document.id,
-      title: this.state.newSectionTitle
-    };
-
-    this.props.createSection({
-      body: payload
-    });
-
-    this.setState({
-      showDocumentSectionModal: false
-    });
-  };
-
-  changeSectionTitleHandler = (event) => {
-    this.setState({
-      newSectionTitle: event.target.value
-    })
-  };
-
-  onSupportClick = () => {
-    this.props.history.push('/support');
-  };
-
-  handleOutsideClick = () => {
-    this.setState({
-      showDocumentSectionModal: false
-    });
-  };
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.status !== this.props.status &&
+      this.props.status !== 'GET_DOCUMENT/success'
+    ) {
+      const { match, getDocument } = this.props;
+      getDocument({ documentId: match.params.documentId });
+    }
+  }
 
   render() {
-
-    const {showDocumentSectionModal} = this.state;
-
-    if (!this.props.document.title) {
-      return (<Redirect to="/documents"/>)
-    }
+    const {
+      currentDocument,
+      match,
+      upUpdateDocument,
+      downUpdateDocument,
+      rightUpdateDocument,
+      leftUpdateDocument,
+      createSelection,
+      updateSelection,
+      deleteSelection,
+      getDocument,
+    } = this.props;
+    const documentId = match.params.documentId;
 
     return (
-      <Fragment>
-        <Header showBuilder/>
-        <div className="main hbox space-between">
-
-          <Library/>
-
-          <Builder document={this.props.document} onAddSectionClick={this.addSectionHandler}/>
-
-          <Preview/>
-
-          <button className="general-help-button" onClick={this.onSupportClick}>?</button>
-        </div>
-
-        {showDocumentSectionModal &&
-        <div>
-          <div className="wizard-container" onClick={this.handleOutsideClick}>
-            <div className="wizard">
-            </div>
-          </div>
-          <div className="wizard-content modal-content">
-            <form onSubmit={(event) => this.handleSubmit(event)}>
-              <div>
-                <input placeholder="Title" className="field" required value={this.state.newSectionTitle}
-                       name="title" autoFocus
-                       onChange={(event) => this.changeSectionTitleHandler(event)}/>
-              </div>
-              <button type="submit" className="large form button" style={{marginTop: 20}}>{'Create section'}</button>
-
-              <div className="clear"/>
-            </form>
-          </div>
-        </div>
-        }
-      </Fragment>
+      <div className="viewport vbox">
+        <Header showBuilder />
+        <Wrapper>
+          <Library />
+          <BuilderMain
+            currentDocument={currentDocument}
+            documentId={documentId}
+            upUpdateDocument={upUpdateDocument}
+            downUpdateDocument={downUpdateDocument}
+            rightUpdateDocument={rightUpdateDocument}
+            leftUpdateDocument={leftUpdateDocument}
+            createSelection={createSelection}
+            updateSelection={updateSelection}
+            deleteSelection={deleteSelection}
+            getDocument={getDocument}
+          />
+          <Preview />
+        </Wrapper>
+      </div>
     );
   }
 }
 
+Builder.propTypes = propTypes;
+Builder.defaultProps = defaultProps;
 
-const mapStateToProps = (state) => {
-  return {
-    document: state.builder.document,
-  }
-};
+Builder = connect(state => {
+  const documentState = get(state, 'document');
 
-const mapActionToProps = {
-  createSection
-};
+  return { ...documentState };
+}, actions)(Builder);
 
-export default connect(mapStateToProps, mapActionToProps)(Documents)
+Builder = withRouter(Builder);
+
+export default Builder;
