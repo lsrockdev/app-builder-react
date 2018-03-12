@@ -6,6 +6,8 @@ import { requestSuccess, requestFail } from 'utils/request'
 // ------------------------------------
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
+export const SIGNUP = 'SIGNUP'
+export const RECOVER_PASSWORD = 'RECOVER_PASSWORD'
 
 // ------------------------------------
 // Actions
@@ -13,6 +15,7 @@ export const LOGOUT = 'LOGOUT'
 
 export const logIn = createAction(LOGIN)
 export const logOut = createAction(LOGOUT)
+export const signUp = createAction(SIGNUP)
 
 const token = localStorage.getItem('token')
 
@@ -49,6 +52,19 @@ export default handleActions(
       ...state,
       status: requestFail(LOGOUT),
       token: null,
+      error: payload,
+    }),
+
+    [requestSuccess(SIGNUP)]: (state, { payload }) => ({
+      ...state,
+      token: payload,
+      status: requestSuccess(SIGNUP),
+    }),
+
+    [requestFail(SIGNUP)]: (state, { payload }) => ({
+      ...state,
+      token: null,
+      status: requestFail(SIGNUP),
       error: payload,
     }),
   },

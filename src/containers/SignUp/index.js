@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
+import { signUp } from 'api/modules/auth'
 import './styles.scss'
 
 class SignUp extends Component {
@@ -9,7 +10,8 @@ class SignUp extends Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      staySignedIn: false,
     }
   }
 
@@ -23,7 +25,8 @@ class SignUp extends Component {
 
   handleSubmit = evt => {
     evt.preventDefault()
-
+    const { signUp } = this.props
+    signUp({ body: { ...this.state } })
   }
 
   render() {
@@ -68,7 +71,7 @@ class SignUp extends Component {
 }
 
 const actions = {
-
+  signUp,
 }
 
 export default connect(null, actions)(SignUp)

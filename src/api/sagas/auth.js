@@ -1,5 +1,5 @@
 import { takeLatest } from 'redux-saga/effects'
-import { LOGIN, LOGOUT } from 'api/modules/auth'
+import { LOGIN, LOGOUT, SIGNUP } from 'api/modules/auth'
 import request from 'utils/request'
 
 const doLogin = request({
@@ -23,7 +23,17 @@ const doLogout = request({
   },
 })
 
+const doSignup = request({
+  type: SIGNUP,
+  method: 'POST',
+  url: 'signup',
+  success: (res, action) => {
+    localStorage.setItem('token', JSON.stringify(res.data))
+  },
+})
+
 export default function* rootSaga() {
   yield takeLatest(LOGIN, doLogin)
   yield takeLatest(LOGOUT, doLogout)
+  yield takeLatest(SIGNUP, doSignup)
 }
