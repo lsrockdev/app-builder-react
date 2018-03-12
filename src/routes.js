@@ -19,7 +19,7 @@ const Routes = () => (
       <Route exact path="/login" component={userIsNotAuthenticatedRedir(LogIn)} />
       <Route exact path="/sign-up" component={SignUp} />
       <Route exact path="/recover/password" component={RecoverPassword} />
-      <Route path="/verify" component={NewPassword} />
+      <Route path="/" component={NewPassword} />
     </Switch>
   </Router>
 );
