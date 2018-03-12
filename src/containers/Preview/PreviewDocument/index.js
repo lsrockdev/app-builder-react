@@ -202,7 +202,14 @@ class PreviewDocument extends Component {
       boxSizing: "border-box"
     };
 
-    const pageNumberStyles = {"textAlign":"center","position":"absolute","bottom":"92.61764705882354px","left":"0","right":"0"};
+    const pageNumberStyles = {
+      textAlign: "center",
+      position: "absolute",
+      bottom: `${padding - (fontSize * 2)}px`,
+      left: "0",
+      right: "0"
+    };
+    
     const firstPageStyles = { margin: '60px 0 0', display: 'flex', flexDirection: 'row' };
     const subsequentPageStyles = {"margin":"10px 0 0","display":"flex","flexDirection":"row"};
     const { document } = this.props;
