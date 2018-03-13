@@ -8,12 +8,16 @@ export const UPDATE_SECTION = 'UPDATE_SECTION';
 export const DELETE_SECTION = 'DELETE_SECTION';
 export const MOVE_DOWN_SECTION = 'MOVE_DOWN_SECTION';
 export const MOVE_UP_SECTION = 'MOVE_UP_SECTION';
+export const MOVE_RIGHT_SECTION = 'MOVE_RIGHT_SECTION';
+export const MOVE_LEFT_SECTION = 'MOVE_LEFT_SECTION';
 
 export const addSection = createAction(ADD_SECTION);
 export const updateSection = createAction(UPDATE_SECTION);
 export const deleteSection = createAction(DELETE_SECTION);
 export const moveUpSection = createAction(MOVE_UP_SECTION);
 export const moveDownSection = createAction(MOVE_DOWN_SECTION);
+export const moveRightSection = createAction(MOVE_RIGHT_SECTION);
+export const moveLeftSection = createAction(MOVE_LEFT_SECTION);
 
 export const setActiveDocument = (document) => {
   return {

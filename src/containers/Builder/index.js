@@ -6,7 +6,7 @@ import './Builder.css';
 
 import Header from 'components/Header';
 
-import {addSection, updateSection, deleteSection, moveUpSection, moveDownSection, getDocument} from "../../api/modules/builder";
+import {addSection, updateSection, deleteSection, moveUpSection, moveDownSection, moveRightSection, moveLeftSection, getDocument} from "../../api/modules/builder";
 
 import Library from "../../components/Library/Library";
 import Preview from "../../components/Preview/Preview";
@@ -117,6 +117,28 @@ class Documents extends Component {
     }, 1000);
   };
 
+  moveRightSectionHandler = (sectionId) => {
+    this.props.moveRightSection({
+      documentId: this.props.document.id,
+      sectionId: sectionId,
+    });
+
+    setTimeout(() => {
+      this.props.getDocument(this.props.document.id)
+    }, 1500);
+  };
+
+  moveLeftSectionHandler= (sectionId) => {
+    this.props.moveLeftSection({
+      documentId: this.props.document.id,
+      sectionId: sectionId,
+    });
+
+    setTimeout(() => {
+      this.props.getDocument(this.props.document.id)
+    }, 1500);
+  };
+
   moveUpSectionHandler = (sectionId) => {
     this.props.moveUpSection({
       documentId: this.props.document.id,
@@ -177,6 +199,8 @@ class Documents extends Component {
                    onDeleteSectionClick={this.deleteSectionHandler}
                    onMoveUpSectionClick={this.moveUpSectionHandler}
                    onMoveDownSectionClick={this.moveDownSectionHandler}
+                   onMoveRightSectionClick={this.moveRightSectionHandler}
+                   onMoveLeftSectionClick={this.moveLeftSectionHandler}
                    onSectionClick={this.handlerOnSectionClick}
           />
 
@@ -249,7 +273,9 @@ const mapActionToProps = {
   updateSection,
   deleteSection,
   moveUpSection,
-  moveDownSection
+  moveDownSection,
+  moveRightSection,
+  moveLeftSection
 };
 
 export default connect(mapStateToProps, mapActionToProps)(Documents)

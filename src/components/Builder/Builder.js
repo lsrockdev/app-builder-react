@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import renderHTML from 'react-render-html';
 
 class Builder extends Component {
   state = {
@@ -84,6 +85,18 @@ class Builder extends Component {
                 </div>
                 <span style={{marginLeft: 'auto', fontSize: '15px'}}>
 
+                  {current.parent && <span style={{paddingRight: '10px'}}>
+                    <a title="Move section left" style={{cursor: 'pointer'}} onClick={(selectionId) => this.props.onMoveLeftSectionClick(current.id)}>
+                      <i className={"action pro icon-arrow-left " + (current.id !== this.state.activeIndex ? "disabled" : "")}/>
+                    </a>
+                  </span>}
+
+                  {current.previous && <span style={{paddingRight: '10px'}}>
+                  <a title="Move section right" style={{cursor: 'pointer'}} onClick={(selectionId) => this.props.onMoveRightSectionClick(current.id)}>
+                    <i className={"action pro icon-arrow-right " + (current.id !== this.state.activeIndex ? "disabled" : "")}/>
+                  </a>
+                  </span>}
+
                     {index > 0 && <span style={{paddingRight: '10px'}}>
                     <a title="Move section up" style={{cursor: 'pointer'}}
                        onClick={(selectionId) => this.props.onMoveUpSectionClick(current.id)}>
@@ -114,6 +127,60 @@ class Builder extends Component {
                     </span>
                   </span>
               </div>
+
+                {current.id === this.state.activeIndex && current.textBlocks.length === 0 && <div style={{marginTop: '20px'}}>
+                <div>
+                  <span className="drop-here-area-new">Drop in content</span>
+                </div>
+              </div>}
+
+                {current.id === this.state.activeIndex && current.textBlocks.length > 0 &&
+                <div style={{marginTop: '20px'}}>
+                  <div>
+                    <span className="drop-here-area-new">Drop in content above</span>
+                  </div>
+                    {current.textBlocks.map((block, index) => {
+                      return (
+                          <div key={index} className="section-content" style={{marginBottom: '15px'}}>
+                    <div className="right-section-border" style={{flex: '1 1 0%', padding: '10px 15px'}}>
+                      <div id="selection-text-block-text-0" className="html-preview"
+                           style={{fontFamily: 'Times New Roman, serif', fontSize: '15px', lineHeight: '1.25'}}>
+                        <div>
+                            {renderHTML(block)}
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{width: '90px', padding: '10px 15px', textAlign: 'right'}}>
+                      <span style={{marginLeft: 'auto'}}>
+                        <span style={{paddingRight: '10px'}}>
+                          <a title="Move content up" style={{cursor: 'pointer'}}>
+                            <i className="action pro icon-arrow-up disabled"/>
+                          </a>
+                        </span>
+                        <span style={{paddingRight: '10px'}}>
+                          <a title="Move content down" style={{cursor: 'pointer'}}>
+                            <i className="action pro icon-arrow-down disabled"/>
+                          </a>
+                        </span>
+                        <span style={{paddingRight: '10px'}}>
+                          <a title="Edit content" style={{cursor: 'pointer'}}>
+                            <i className="action pro icon-edit disabled"/>
+                          </a>
+                        </span>
+                        <span style={{paddingRight: '0px'}}>
+                          <a title="Delete content" style={{cursor: 'pointer'}}>
+                            <i className="action pro icon-delete disabled"/>
+                          </a>
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                      )
+                    })}
+
+                  <span className="drop-here-area-new">Drop in content below</span></div>
+                }
+
             </div>
           </div>
         );
@@ -155,7 +222,7 @@ class Builder extends Component {
           <h1 className="header1">{this.props.document.title}</h1>
         </div>
         <div style={{display: 'flex', flexDirection: 'column', flex: '1 1 0%'}}>
-          <div style={{flex: '1 1 0%', display: 'flex', flexDirection: 'column'}}>
+          <div style={{flex: '1 1 0%', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
             {selection}
           </div>
         </div>

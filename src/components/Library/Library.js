@@ -1,28 +1,69 @@
-import React from 'react';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import Resizable from 're-resizable';
 
-const Library = (props) => {
-  return (
-    <div style={{display: 'flex'}}>
-      <div className="library-overview" style={{width: '356px'}}>
-        <div className="section-header-block">
-          <h1 className="header1" style={{flex: '1 1 0%'}}>Library</h1>
-          <i className="material-icons" style={{cursor: 'pointer'}} title="Add content">
-            add
-          </i>
-          <i className="material-icons" style={{cursor: 'pointer', marginLeft: '10px'}} title="Add folder">
-            create_new_folder
-          </i>
-        </div>
+import {getTemplates, openFolder, moveTemplate} from '../../api/modules/template';
+import Templates from '../Templates';
+import FolderModal from './FolderModal';
+import ContentModal from './ContentModal';
+import DeleteModal from './DeleteModal';
 
-        <div style={{flex: '1 1 0%', overflowY: 'auto'}}/>
+class Library extends Component {
+    state = {};
 
-        <div className="search-container">
-          <i className="pro icon-search"/>
-          <input placeholder="Search Content Blocks" className="inline-input"/>
-        </div>
-      </div>
-    </div>
-  );
-};
+    componentWillMount() {
+        this.props.getTemplates();
+    }
 
-export default Library;
+    showDialog = (kind, item) => this.setState({dialog: {kind, item}});
+    hideDialog = () => this.setState({dialog: null});
+
+    showAddFolderDialog = parentId => {
+        this.showDialog('folder', {parentId});
+    };
+
+    showAddContentDialog = parentId => {
+        this.showDialog('content', {parentId});
+    };
+
+    showEditDialog = item => {
+        this.showDialog(item.folder ? 'folder' : 'content', item);
+    };
+
+    showDeleteDialog = item => {
+        this.showDialog('delete', item);
+    };
+
+    render() {
+        const {templates, opens, openFolder, moveTemplate} = this.props;
+        const {dialog} = this.state;
+        const {kind, item} = dialog || {};
+
+        return (
+            <Resizable defaultSize={{width: 356}} minWidth="356">
+                <Templates
+                    data={templates}
+                    opens={opens}
+                    onEdit={this.showEditDialog}
+                    onDelete={this.showDeleteDialog}
+                    onAddContent={this.showAddContentDialog}
+                    onAddFolder={this.showAddFolderDialog}
+                    openFolder={openFolder}
+                    moveTemplate={moveTemplate}
+                />
+
+                {kind === 'folder' && <FolderModal item={item} onClose={this.hideDialog}/>}
+                {kind === 'content' && <ContentModal item={item} onClose={this.hideDialog}/>}
+                {kind === 'delete' && <DeleteModal item={item} onClose={this.hideDialog}/>}
+            </Resizable>
+        );
+    }
+}
+
+export default connect(
+    ({template}) => ({
+        templates: template.templates,
+        opens: template.opens
+    }),
+    {getTemplates, openFolder, moveTemplate}
+)(Library);

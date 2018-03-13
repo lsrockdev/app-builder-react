@@ -1,53 +1,68 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Resizable from 're-resizable';
 
+import { getTemplates, openFolder, moveTemplate } from 'api/modules/template';
 import Header from 'components/Header';
-import AddFolder from 'components/AddFolder';
-import AddContent from 'components/AddContent';
+import Templates from 'components/Templates';
+import FolderModal from './FolderModal';
+import ContentModal from './ContentModal';
+import DeleteModal from './DeleteModal';
 
 import Wrapper from './Wrapper';
 
 class Library extends Component {
-  state = {
-    visibleAddContent: false,
-    visibleAddFolder: false
+  state = {};
+
+  componentWillMount() {
+    this.props.getTemplates();
+  }
+
+  showDialog = (kind, item) => this.setState({ dialog: { kind, item } });
+  hideDialog = () => this.setState({ dialog: null });
+
+  showAddFolderDialog = parentId => {
+    this.showDialog('folder', { parentId });
   };
 
-  showAddContent = () => this.setState({ visibleAddContent: true });
-  hideAddContent = () => this.setState({ visibleAddContent: false });
+  showAddContentDialog = parentId => {
+    this.showDialog('content', { parentId });
+  };
 
-  showAddFolder = () => this.setState({ visibleAddFolder: true });
-  hideAddFolder = () => this.setState({ visibleAddFolder: false });
+  showEditDialog = item => {
+    this.showDialog(item.folder ? 'folder' : 'content', item);
+  };
+
+  showDeleteDialog = item => {
+    this.showDialog('delete', item);
+  };
 
   render() {
-    const { visibleAddFolder, visibleAddContent } = this.state;
+    const { templates, opens, openFolder, moveTemplate } = this.props;
+    const { dialog } = this.state;
+    const { kind, item } = dialog || {};
 
     return (
       <Fragment>
         <Header />
         <Wrapper className="main hbox space-between">
-          <div>
-            <div className="library-overview">
-              <div className="section-header-block">
-                <h1 className="header1">Library</h1>
-                <i className="material-icons" title="Add content" onClick={this.showAddContent}>
-                  add
-                </i>
-                <i className="material-icons" title="Add folder" onClick={this.showAddFolder}>
-                  create_new_folder
-                </i>
-              </div>
+          <Resizable defaultSize={{ width: 356 }} minWidth="356">
+            <Templates
+              data={templates}
+              opens={opens}
+              onEdit={this.showEditDialog}
+              onDelete={this.showDeleteDialog}
+              onAddContent={this.showAddContentDialog}
+              onAddFolder={this.showAddFolderDialog}
+              openFolder={openFolder}
+              moveTemplate={moveTemplate}
+            />
 
-              <div style={{ flex: '1 1 0%', overflowY: 'auto' }} />
-
-              <div className="search-container">
-                <i className="pro icon-search" ></i>
-                <input placeholder="Search Content Blocks" className="inline-input" />
-              </div>
-            </div>
-
-            {visibleAddContent && <AddContent onClose={this.hideAddContent} />}
-            {visibleAddFolder && <AddFolder onClose={this.hideAddFolder} />}
-          </div>
+            {kind === 'folder' && <FolderModal item={item} onClose={this.hideDialog} />}
+            {kind === 'content' && <ContentModal item={item} onClose={this.hideDialog} />}
+            {kind === 'delete' && <DeleteModal item={item} onClose={this.hideDialog} />}
+          </Resizable>
 
           <div className="main left-section-border">
             <div className="template-preview">
@@ -55,11 +70,19 @@ class Library extends Component {
             </div>
           </div>
 
-          <button className="general-help-button">?</button>
+          <Link className="general-help-button" to="/support">
+            ?
+          </Link>
         </Wrapper>
       </Fragment>
     );
   }
 }
 
-export default Library;
+export default connect(
+  ({ template }) => ({
+    templates: template.templates,
+    opens: template.opens
+  }),
+  { getTemplates, openFolder, moveTemplate }
+)(Library);

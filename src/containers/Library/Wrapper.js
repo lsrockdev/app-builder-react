@@ -6,32 +6,14 @@ export default styled.div`
     display: flex;
   }
 
-  .library-overview {
-    width: 356px;
+  > div:first-child {
+    > span {
+      > div {
+        cursor: initial !important;
 
-    .section-header-block {
-      .header1 {
-        flex: 1 1 0%;
-      }
-
-      i {
-        cursor: pointer;
-      }
-
-      i + i {
-        margin-left: 10px;
-      }
-    }
-
-    .search-container {
-      i {
-        margin-right: 10px;
-        font-size: 16px;
-      }
-
-      input {
-        color: rgb(124, 124, 124);
-        width: 80%;
+        &:nth-child(2) {
+          cursor: ew-resize !important;
+        }
       }
     }
   }

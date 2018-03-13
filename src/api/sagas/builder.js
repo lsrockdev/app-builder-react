@@ -6,6 +6,8 @@ import {
   DELETE_SECTION,
   MOVE_UP_SECTION,
   MOVE_DOWN_SECTION,
+  MOVE_RIGHT_SECTION,
+  MOVE_LEFT_SECTION,
   GET_DOCUMENT
 } from "../modules/builder";
 
@@ -59,6 +61,24 @@ const moveDownSection = function* (action) {
   yield call(apiRequest, action.payload)
 };
 
+const moveRightSection = function* (action) {
+  const apiRequest = request({
+    type: MOVE_RIGHT_SECTION,
+    method: 'POST',
+    url: '/move/selection/' + action.payload.documentId + '/' + action.payload.sectionId + '/right',
+  });
+  yield call(apiRequest, action.payload)
+};
+
+const moveLeftSection = function* (action) {
+  const apiRequest = request({
+    type: MOVE_LEFT_SECTION,
+    method: 'POST',
+    url: '/move/selection/' + action.payload.documentId + '/' + action.payload.sectionId + '/left',
+  });
+  yield call(apiRequest, action.payload)
+};
+
 export default function* rootSaga() {
   yield takeLatest(GET_DOCUMENT, getDocument);
   yield takeEvery(ADD_SECTION, addSection);
@@ -66,4 +86,6 @@ export default function* rootSaga() {
   yield takeEvery(DELETE_SECTION, deleteSection);
   yield takeEvery(MOVE_UP_SECTION, moveUpSection);
   yield takeEvery(MOVE_DOWN_SECTION, moveDownSection);
+  yield takeEvery(MOVE_RIGHT_SECTION, moveRightSection);
+  yield takeEvery(MOVE_LEFT_SECTION, moveLeftSection);
 }
