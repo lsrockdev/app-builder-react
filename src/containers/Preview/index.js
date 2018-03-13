@@ -42,6 +42,10 @@ class Preview extends Component {
     if (nextProps.document.selections) {
       this.setState({ totalPages: this.getPageCount(nextProps.document.selections) });
     }
+
+    if (nextProps.document) {
+      this.setState({ document: {...nextProps.document}});
+    }
   }
 
   componentWillMount() {
@@ -230,7 +234,7 @@ class Preview extends Component {
 
   renderMainContent() {
     const { anchor, scrollbarPercent, iframeScrollPercent, totalPages } =  this.state;
-    const { document } = this.props;
+    const document = this.state.document || this.props.document;
     const settings = { ...document.settings, ...this.findUndeclaredSettings() };
     const currentPage = scrollbarPercent < 100 ? Math.floor((scrollbarPercent / 100) * totalPages) + 1 : totalPages;
     const settingCounts = this.countSettings();
