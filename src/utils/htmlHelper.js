@@ -17,6 +17,25 @@ const TokenizerState = {
   inEntity: 4
 };
 
+const convertPxValues = (html, conversionValue) => {
+  const props = ["width", "height"];
+  var result = html;
+
+  for (let prop of props) {
+    const regex = createInlinePropertyRegex(prop, "px");
+
+    result = result.replace(regex, (match, b, c, d) => {
+      return `${b}${parseFloat(c) * 0.352778 * conversionValue}${d}`;
+    });
+  }
+
+  return result;
+}
+
+const createInlinePropertyRegex = (name, unit) => {
+  return new RegExp(`("[^"]*${name}:\\s*)(\\d+\\.?\\d*)(${unit}[^"]*")`, 'g');
+}
+
 const extractTagName = (textInTag) => {
   var s = textInTag.trim().toLowerCase();
 
@@ -163,7 +182,8 @@ const tokenizeContent = (content) => {
     return result;
   }
 
-const splitHtmlTextOnPages = (content, fontSizePx, pageInnerWidthPx, pageInnerHeightPx, document) => {
+const splitHtmlTextOnPages = (c, fontSizePx, pageInnerWidthPx, pageInnerHeightPx, document, ratio) => {
+    const content = convertPxValues(c, ratio);
     const tokens = tokenizeContent(content);
     const lineHeight = computeLineHeight(document);
     const result = [];

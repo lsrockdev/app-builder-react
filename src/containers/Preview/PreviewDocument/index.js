@@ -165,7 +165,7 @@ class PreviewDocument extends Component {
 
   renderStyles = () => {
     return `
-      <style type="text/css">@import 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600,700';::-webkit-scrollbar { display: none; }html, body {  height: auto !important;}ol, ul {  margin-left: 55.349698934691986px !important;}ul, ul li {  list-style: disc inside !important;}ul li {  list-style-type: disc !important;}ul ul li {  list-style-type: circle !important;}ul ul ul li {  list-style-type: square !important;}ol, ol li {  list-style: none !important;}ol {  counter-reset: level1;}ol li {  display: block;}ol li::before {  content: counter(level1) '.';  counter-increment: level1;  margin-right: 22.139879573876794px;}ol ol {  counter-reset: level2;}ol ol li::before {  content: counter(level2) '.';  counter-increment: level2;}ol ol ol {  counter-reset: level3;}ol ol ol li::before {  content: counter(level3) '.';  counter-increment: level3;}ol ol ol ol {  counter-reset: level4;}ol ol ol ol li::before {  content: counter(level4) '.';  counter-increment: level4;}ol ol ol ol ol {  counter-reset: level5;}ol ol ol ol ol li::before {  content: counter(level5) '.';  counter-increment: level5;}</style>  <link type="text/css" rel="stylesheet" href="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/for-html-preview.css">
+      <style type="text/css">@import 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600,700';::-webkit-scrollbar { display: none; }html, body {  height: auto !important;}ol, ul {  margin-left: 55.349698934691986px !important;}ul, ul li {  list-style: disc inside !important;}ul li {  list-style-type: disc !important;}ul ul li {  list-style-type: circle !important;}ul ul ul li {  list-style-type: square !important;}ol, ol li {  list-style: none !important;}ol {  counter-reset: level1;}ol li {  display: block;}ol li::before {  content: counter(level1) '.';  counter-increment: level1;  margin-right: 22.139879573876794px;}ol ol {  counter-reset: level2;}ol ol li::before {  content: counter(level2) '.';  counter-increment: level2;}ol ol ol {  counter-reset: level3;}ol ol ol li::before {  content: counter(level3) '.';  counter-increment: level3;}ol ol ol ol {  counter-reset: level4;}ol ol ol ol li::before {  content: counter(level4) '.';  counter-increment: level4;}ol ol ol ol ol {  counter-reset: level5;}ol ol ol ol ol li::before {  content: counter(level5) '.';  counter-increment: level5;}table { font-size: inherit; }</style>  <link type="text/css" rel="stylesheet" href="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/for-html-preview.css">
     `;
   }
 
@@ -210,7 +210,8 @@ class PreviewDocument extends Component {
     const fontSize = (width / pageWidthMm) * (0.352778 * fontSizePt);
     const footerFontSize = (width / pageWidthMm) * (0.352778 * footerFontSizePt);
     const footerPadding = (width / pageWidthMm) * footerPaddingTopMm;
-    const footerHeight = 2.5 * footerFontSize + footerPadding;
+    const footerHeight = 4 * footerFontSize + footerPadding;
+    const ratio = width / pageWidthMm;
 
     const pageStyles = {
       position: "relative",
@@ -240,12 +241,12 @@ class PreviewDocument extends Component {
       left: "0",
       right: "0"
     };
-
+    
     const firstPageStyles = { margin: '60px 0 0', display: 'flex', flexDirection: 'row' };
     const subsequentPageStyles = {"margin":"10px 0 0","display":"flex","flexDirection":"row"};
     const { document } = this.props;
     const dueDate = this.formatDate(document.dueDate);
-    const pages = splitHtmlTextOnPages(this.buildFullHtml(), fontSize, width - padding * 2, height - (padding * 2) - footerHeight, this.iframe.contentDocument);
+    const pages = splitHtmlTextOnPages(this.buildFullHtml(), fontSize, width - (padding * 2), height - (padding * 2) - footerHeight, this.iframe.contentDocument, ratio);
 
     this.props.onPageCountComplete(pages.length);
     this.iframe.contentDocument.body.style.fontSize = `${fontSize}px`;
