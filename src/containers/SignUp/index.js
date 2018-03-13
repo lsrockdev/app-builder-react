@@ -1,20 +1,13 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { logIn } from 'api/modules/auth'
+import { signUp } from 'api/modules/auth'
 import './styles.scss'
 
-class LogIn extends Component {
-  static propTypes = {
-    logIn: PropTypes.func,
-  }
+class SignUp extends Component {
 
   constructor(props) {
     super(props)
-    const token = new URLSearchParams(this.props.location.search).get('token');
-    console.log(token);
-
     this.state = {
       email: '',
       password: '',
@@ -23,30 +16,44 @@ class LogIn extends Component {
   }
 
   handleChange = (field, evt) => {
-    const { target: { type, checked, value } } = evt
+    const { value } = evt.target
+
     this.setState({
-      [field]: type === 'checkbox' ? checked : value,
+      [field]: value,
     })
   }
 
   handleSubmit = evt => {
     evt.preventDefault()
-    const { logIn } = this.props
-    logIn({ body: { ...this.state } })
+    const { signUp } = this.props
+    signUp({ body: { ...this.state } })
   }
 
   render() {
-    const { email, password, staySignedIn } = this.state
+    const { email, password } = this.state
+    const { error } = this.props.auth;
+
+    let errorMessage = null;
+    if(error) {
+      errorMessage = <div>
+                        <div style={{marginBottom: 15}}>
+                          <div className="red message">
+                            <span>{error.data}</span>
+                          </div>
+                        </div>
+                      </div>
+    }
 
     return (
-      <div className="loginPage">
+      <div className="signupPage">
         <div className="wrapper">
-          <div className="loginForm">
-            <div className="loginForm__title">
+          <div className="signupForm">
+            <div className="signupForm__title">
               <img src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/logo@3x.png" alt="" />
             </div>
 
-            <div className="loginForm__content">
+            <div className="signupForm__content">
+              {errorMessage}
               <form onSubmit={this.handleSubmit}>
                 <div>
                   <input className="field" placeholder="Email" type="email" onChange={evt => this.handleChange('email', evt)} value={email} required autoFocus />
@@ -55,15 +62,10 @@ class LogIn extends Component {
                   <input className="field" placeholder="Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} required />
                 </div>
                 <div>
-                  <button className="large form button">Sign in</button>
-                </div>
-                <div className="checkbox">
-                  <input id="stay-signed-in" type="checkbox" checked={staySignedIn} onChange={evt => this.handleChange('staySignedIn', evt)} />
-                  <div id="stay-signed-in-replacer" className={staySignedIn ? 'checked' : 'unchecked'} />
-                  <label id="stay-signed-in-label">Stay signed in</label>
+                  <button className="large form button">Sign up</button>
                 </div>
                 <div>
-                  <NavLink to="/sign-up">Create account</NavLink>
+                  <NavLink to="/login">Sign in</NavLink>
                   <span>|</span>
                   <NavLink to="/recover/password">Reset password</NavLink>
                 </div>
@@ -81,8 +83,12 @@ class LogIn extends Component {
   }
 }
 
-const actions = {
-  logIn,
+const props = ({auth}) => {
+  return {auth}
 }
 
-export default connect(null, actions)(LogIn)
+const actions = {
+  signUp,
+}
+
+export default connect(props, actions)(SignUp)
