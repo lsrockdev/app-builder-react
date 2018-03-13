@@ -40,7 +40,6 @@ class Preview extends Component {
     }
 
     if (nextProps.document.selections) {
-      const settingCounts = this.countSettings();
       this.setState({ totalPages: this.getPageCount(nextProps.document.selections) });
     }
   }

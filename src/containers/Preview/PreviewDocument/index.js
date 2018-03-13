@@ -210,6 +210,7 @@ class PreviewDocument extends Component {
     const fontSize = (width / pageWidthMm) * (0.352778 * fontSizePt);
     const footerFontSize = (width / pageWidthMm) * (0.352778 * footerFontSizePt);
     const footerPadding = (width / pageWidthMm) * footerPaddingTopMm;
+    const footerHeight = 2.5 * footerFontSize + footerPadding;
 
     const pageStyles = {
       position: "relative",
@@ -244,9 +245,7 @@ class PreviewDocument extends Component {
     const subsequentPageStyles = {"margin":"10px 0 0","display":"flex","flexDirection":"row"};
     const { document } = this.props;
     const dueDate = this.formatDate(document.dueDate);
-    const selections = this.parseSelections();
-
-    const pages = splitHtmlTextOnPages(this.buildFullHtml(), fontSize, width - padding * 2, height - (padding * 2) - footerPadding, this.iframe.contentDocument);
+    const pages = splitHtmlTextOnPages(this.buildFullHtml(), fontSize, width - padding * 2, height - (padding * 2) - footerHeight, this.iframe.contentDocument);
 
     this.props.onPageCountComplete(pages.length);
     this.iframe.contentDocument.body.style.fontSize = `${fontSize}px`;
