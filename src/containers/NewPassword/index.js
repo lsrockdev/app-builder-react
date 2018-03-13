@@ -37,11 +37,12 @@ class NewPassword extends Component {
     if(this.state.password !== this.state.confirmPassword) {
       const confirmPassword = document.getElementById('confirmPassword');
       confirmPassword.setCustomValidity("Passwords Don't Match");
+      return;
     }
 
     const { recoverPassword } = this.props
     const { password, token } = this.state
-    
+
     recoverPassword({ body: { password, token }, successCallback: () => {console.log("wow");} })
   }
 
