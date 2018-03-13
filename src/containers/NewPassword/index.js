@@ -8,8 +8,12 @@ class NewPassword extends Component {
 
   constructor(props) {
     super(props)
-
     const token = new URLSearchParams(this.props.location.search).get('token')
+
+    // redirect if logged in or token not defined
+    if (this.props.auth.token !== null || token === null)
+        this.props.history.push("/documents");
+
 
     this.state = {
       password: '',
@@ -72,8 +76,12 @@ class NewPassword extends Component {
   }
 }
 
+const mapStateToProps = ({auth}) => {
+  return {auth}
+};
+
 const actions = {
   recoverPassword,
 }
 
-export default connect(null, actions)(NewPassword)
+export default connect(mapStateToProps, actions)(NewPassword)

@@ -12,6 +12,9 @@ class LogIn extends Component {
 
   constructor(props) {
     super(props)
+    const token = new URLSearchParams(this.props.location.search).get('token');
+    console.log(token);
+
     this.state = {
       email: '',
       password: '',

@@ -31,6 +31,18 @@ class SignUp extends Component {
 
   render() {
     const { email, password } = this.state
+    const { error } = this.props;
+    console.log(error);
+    let errorMessage = null;
+    if(error) {
+      errorMessage = <div>
+                        <div style={{marginBottom: 15}}>
+                          <div className="red message">
+                            <span>{error.data}</span>
+                          </div>
+                        </div>
+                      </div>
+    }
 
     return (
       <div className="signupPage">
@@ -41,6 +53,7 @@ class SignUp extends Component {
             </div>
 
             <div className="signupForm__content">
+              {errorMessage}
               <form onSubmit={this.handleSubmit}>
                 <div>
                   <input className="field" placeholder="Email" type="email" onChange={evt => this.handleChange('email', evt)} value={email} required autoFocus />
@@ -70,8 +83,12 @@ class SignUp extends Component {
   }
 }
 
+const props = (state) => ({
+  error: state.auth.error
+})
+
 const actions = {
   signUp,
 }
 
-export default connect(null, actions)(SignUp)
+export default connect(props, actions)(SignUp)
