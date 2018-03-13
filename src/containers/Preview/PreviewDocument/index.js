@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import splitHtmlTextOnPages from '../../../utils/htmlHelper';
 
 class PreviewDocument extends Component {
   constructor(props) {
@@ -102,7 +103,7 @@ class PreviewDocument extends Component {
     return true;
   }
 
-  substituteVariables(textBlock) {
+  substituteVariables = (textBlock) => {
     for (let setting in this.props.document.settings) {
       const value = this.props.document.settings[setting];
 
@@ -143,6 +144,11 @@ class PreviewDocument extends Component {
     return pages;
   }
 
+  sortSelections() {
+    const selections =  Object.keys(this.props.document.selections || {}).map(key => this.props.document.selections[key]);
+    return selections.sort((a, b) => this.makeIndex(a.level) > this.makeIndex(b.level) ? 1 : -1);
+  }
+
   handleScroll = (e) => {
     const height = this.iframe.contentDocument.scrollingElement.scrollHeight - this.iframe.contentDocument.scrollingElement.clientHeight;
     const percent = (this.iframe.contentDocument.scrollingElement.scrollTop / height) * 100;
@@ -163,6 +169,27 @@ class PreviewDocument extends Component {
     `;
   }
 
+  buildFullHtml() {
+    const filteredSelections = this.sortSelections();
+    let builder = '';
+
+    for (let i in filteredSelections) {
+      const index = parseInt(i, 10);
+      const selection = filteredSelections[index];
+      const header = selection.level.join(".") + " " + selection.title;
+
+      builder += `<br><p id="selection-header-${selection.id}"><strong>${header}</strong></p><br>`;
+      builder += selection.textBlocks.map(this.substituteVariables).join('<br>');
+      builder += '<br>';
+
+      if ((index < filteredSelections.length - 1) && (filteredSelections[index].level[0] !== filteredSelections[index + 1].level[0])) {
+        builder += '<span data-page-break="true" style="display:none"></span>';
+      }
+    }
+
+    return builder;
+  }
+
   renderContentDocument = () => {
     // const bodyStyle = this.props.onPage ? { backgroundColor: this.props.htmlPreviewBackgroundColor } : {};
     // const pageVMarginPx = 60;
@@ -173,7 +200,7 @@ class PreviewDocument extends Component {
     const pageWidthMm = 215.9;
     const pageHeightMm = 279.4;
     const pagePaddingMm = 25.4;
-    // const footerPaddingTopMm = 10;
+    const footerPaddingTopMm = 20;
     const fontSizePt = 11;
     const footerFontSizePt = 9;
 
@@ -182,6 +209,7 @@ class PreviewDocument extends Component {
     const padding = (width / pageWidthMm) * pagePaddingMm;
     const fontSize = (width / pageWidthMm) * (0.352778 * fontSizePt);
     const footerFontSize = (width / pageWidthMm) * (0.352778 * footerFontSizePt);
+    const footerPadding = (width / pageWidthMm) * footerPaddingTopMm;
 
     const pageStyles = {
       position: "relative",
@@ -218,6 +246,9 @@ class PreviewDocument extends Component {
     const dueDate = this.formatDate(document.dueDate);
     const selections = this.parseSelections();
 
+    const pages = splitHtmlTextOnPages(this.buildFullHtml(), fontSize, width - padding * 2, height - (padding * 2) - footerPadding, this.iframe.contentDocument);
+
+    this.props.onPageCountComplete(pages.length);
     this.iframe.contentDocument.body.style.fontSize = `${fontSize}px`;
     
     ReactDOM.render((
@@ -228,31 +259,17 @@ class PreviewDocument extends Component {
           </div>
         </div>
         <div style={{ marginBottom: '60px' }} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}>
-          {selections.map(selection => (
-            <div style={selection === selections[0] ? firstPageStyles: subsequentPageStyles} key={selection.index}>
+          {pages.map((page, index) => (
+            <div style={page === pages[0] ? firstPageStyles: subsequentPageStyles} key={index}>
               <div className="page" style={pageStyles}>
-                <p id={`selection-header-${selection.id}`}><strong>{this.makeTitle(selection)}</strong></p>
-                <br />
-                {selection.textBlocks.map((textBlock, index) => (
-                  <div dangerouslySetInnerHTML={{ __html: textBlock }} key={index} />
-                ))}
-                {selection.children.map(child => (
-                  <React.Fragment key={child.index}>
-                    <br /><br />
-                    <p id={`selection-header-${child.id}`}><strong>{this.makeTitle(child)}</strong></p>
-                    <br />
-                    {child.textBlocks.map((textBlock, childIndex) => (
-                      <div dangerouslySetInnerHTML={{ __html: textBlock }} key={childIndex} />
-                    ))}
-                  </React.Fragment>
-                ))}
+                <div dangerouslySetInnerHTML={{ __html: page }}></div>
                 <div style={footerStyles}>
                   <p>{document.title}{dueDate && ` | Due Date: ${dueDate}`}</p>
                   <p style={{ fontStyle: 'italic' }}>
                     Use or disclosure of data contained on this page is subject to the restriction on the cover sheet of this proposal.
                   </p>
                 </div>
-                <div style={pageNumberStyles}>{selection.index}</div>
+                <div style={pageNumberStyles}>{index + 1}</div>
               </div>
             </div>
           ))}
@@ -275,7 +292,8 @@ PreviewDocument.propTypes = {
   anchor: PropTypes.string,
   scrollPercent: PropTypes.number,
   onScroll: PropTypes.func,
-  onMouseMove: PropTypes.func
+  onMouseMove: PropTypes.func,
+  onPageCountComplete: PropTypes.func
 };
 
 export default PreviewDocument;
