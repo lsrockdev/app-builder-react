@@ -25,7 +25,7 @@ class RecoverPassword extends Component {
   handleSubmit = evt => {
     evt.preventDefault()
     const { recoverPassword } = this.props
-    recoverPassword({ body: { ...this.state } })
+    recoverPassword({ body: { ...this.state }, successCallback: () => {console.log("wow");} } )
   }
 
   render() {

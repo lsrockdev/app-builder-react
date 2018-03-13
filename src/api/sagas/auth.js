@@ -1,4 +1,5 @@
-import { takeLatest } from 'redux-saga/effects'
+import { takeLatest, put } from 'redux-saga/effects'
+import { push } from 'react-router-redux'
 import { LOGIN, LOGOUT, SIGNUP, RECOVER_PASSWORD } from 'api/modules/auth'
 import request from 'utils/request'
 
@@ -37,8 +38,7 @@ const doRecoverPassword = request({
   method: 'POST',
   url: 'recover/password',
   success: (res, action) => {
-    console.log(res.data);
-    // localStorage.setItem('token', JSON.stringify(res.data))
+    localStorage.setItem('token', JSON.stringify(res.data))
   },
 })
 

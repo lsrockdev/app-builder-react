@@ -31,8 +31,8 @@ class SignUp extends Component {
 
   render() {
     const { email, password } = this.state
-    const { error } = this.props;
-    console.log(error);
+    const { error } = this.props.auth;
+
     let errorMessage = null;
     if(error) {
       errorMessage = <div>
@@ -83,9 +83,9 @@ class SignUp extends Component {
   }
 }
 
-const props = (state) => ({
-  error: state.auth.error
-})
+const props = ({auth}) => {
+  return {auth}
+}
 
 const actions = {
   signUp,

@@ -8,18 +8,17 @@ import SignUp from 'containers/SignUp';
 import RecoverPassword from 'containers/RecoverPassword';
 import NewPassword from 'containers/NewPassword';
 import { userIsNotAuthenticatedRedir, userIsAuthenticatedRedir } from 'utils/authHelper';
-//<Redirect exact strict from="/" to="documents" />
+
 const Routes = () => (
   <Router>
     <Switch>
-
+      <Route exact path="/" component={NewPassword} />
       <Route exact path="/library" component={userIsAuthenticatedRedir(Library)} />
       <Route exact path="/documents" component={userIsAuthenticatedRedir(Documents)} />
       <Route exact path="/support" component={userIsAuthenticatedRedir(Dashboard)} />
       <Route exact path="/login" component={userIsNotAuthenticatedRedir(LogIn)} />
       <Route exact path="/sign-up" component={SignUp} />
       <Route exact path="/recover/password" component={RecoverPassword} />
-      <Route path="/" component={NewPassword} />
     </Switch>
   </Router>
 );

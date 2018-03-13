@@ -17,7 +17,7 @@ class NewPassword extends Component {
 
     this.state = {
       password: '',
-      passwordConfirm: '',
+      confirmPassword: '',
       token
     }
   }
@@ -33,14 +33,37 @@ class NewPassword extends Component {
 
   handleSubmit = evt => {
     evt.preventDefault()
+
+    if(this.state.password !== this.state.confirmPassword) {
+      const confirmPassword = document.getElementById('confirmPassword');
+      confirmPassword.setCustomValidity("Passwords Don't Match");
+    }
+
     const { recoverPassword } = this.props
-    recoverPassword({ body: { ...this.state } })
+    const { password, token } = this.state
+    
+    recoverPassword({ body: { password, token }, successCallback: () => {console.log("wow");} })
   }
 
   render() {
-    const { password, passwordConfirm } = this.state
+    const { password, confirmPassword } = this.state
+    const { error } = this.props;
+
+    let errorMessage = null;
+    if(error) {
+      errorMessage = <div>
+                        <div style={{marginBottom: 15}}>
+                          <div className="red message">
+                            <span>{error.data}</span>
+                          </div>
+                        </div>
+                      </div>
+    }
 
     return (
+
+
+
       <div className="recoverPasswordPage">
         <div className="wrapper">
           <div className="recoverPasswordForm">
@@ -54,7 +77,7 @@ class NewPassword extends Component {
                   <input className="field" placeholder="New Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} required />
                 </div>
                 <div>
-                  <input className="field" placeholder="Confirm Password" type="password" onChange={evt => this.handleChange('passwordConfirm', evt)} value={passwordConfirm} required />
+                  <input id="confirmPassword" className="field" placeholder="Confirm Password" type="password" onChange={evt => this.handleChange('confirmPassword', evt)} value={confirmPassword} required />
                 </div>
                 <div>
                   <button className="large form button">Recover</button>

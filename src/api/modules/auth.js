@@ -71,15 +71,12 @@ export default handleActions(
 
     [requestSuccess(RECOVER_PASSWORD)]: (state, { payload }) => ({
       ...state,
-      token: payload,
       status: requestSuccess(RECOVER_PASSWORD),
     }),
 
-    [requestFail(SIGNUP)]: (state, { payload }) => ({
+    [requestFail(RECOVER_PASSWORD)]: (state, { payload }) => ({
       ...state,
-      token: null,
-      status: requestFail(SIGNUP),
-      error: payload,
+      status: requestFail(RECOVER_PASSWORD)
     }),
   },
   initialState
