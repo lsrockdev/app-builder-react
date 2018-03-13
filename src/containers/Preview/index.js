@@ -42,10 +42,6 @@ class Preview extends Component {
     if (nextProps.document.selections) {
       this.setState({ totalPages: this.getPageCount(nextProps.document.selections) });
     }
-
-    if (nextProps.document) {
-      this.setState({ document: {...nextProps.document}});
-    }
   }
 
   componentWillMount() {

@@ -36,6 +36,7 @@ class PreviewDocument extends Component {
 
     if (props.document !== this.props.document) {
       this.renderContentDocument();
+      setTimeout(() => this.renderContentDocument(), 500);
     }
   }
 
