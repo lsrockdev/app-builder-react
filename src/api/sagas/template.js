@@ -7,14 +7,14 @@ import {
   UPDATE_CONTENT,
   MOVE_TEMPLATE,
   DELETE_TEMPLATE,
-  OPEN_FOLDER
+  OPEN_FOLDER,
 } from 'api/modules/template';
 import request from 'utils/request';
 
 const getTemplates = request({
   type: GET_TEMPLATES,
   method: 'GET',
-  url: 'templates'
+  url: 'templates',
 });
 
 function* addFolder(action) {
@@ -22,7 +22,7 @@ function* addFolder(action) {
     request({
       type: ADD_FOLDER,
       method: 'POST',
-      url: 'folder'
+      url: 'folder',
     }),
     action
   );
@@ -32,7 +32,7 @@ function* addFolder(action) {
   if (parentId) {
     yield put({
       type: OPEN_FOLDER,
-      payload: { id: parentId, open: true }
+      payload: { id: parentId, open: true },
     });
   }
 }
@@ -42,7 +42,7 @@ function* updateFolder(action) {
     request({
       type: UPDATE_FOLDER,
       method: 'PUT',
-      url: `folder/${action.payload.id}`
+      url: `folder/${action.payload.id}`,
     }),
     action
   );
@@ -54,7 +54,7 @@ function* addContent(action) {
     request({
       type: ADD_CONTENT,
       method: 'POST',
-      url: 'template'
+      url: 'template',
     }),
     action
   );
@@ -64,7 +64,7 @@ function* addContent(action) {
   if (parentTemplateId) {
     yield put({
       type: OPEN_FOLDER,
-      payload: { id: parentTemplateId, open: true }
+      payload: { id: parentTemplateId, open: true },
     });
   }
 }
@@ -74,7 +74,7 @@ function* updateContent(action) {
     request({
       type: UPDATE_CONTENT,
       method: 'PUT',
-      url: 'template'
+      url: 'template',
     }),
     action
   );
@@ -86,7 +86,9 @@ function* moveTemplate(action) {
     request({
       type: MOVE_TEMPLATE,
       method: 'POST',
-      url: `/move/template/${action.payload.from}/${action.payload.where}/${action.payload.to}`
+      url: `/move/template/${action.payload.from}/${action.payload.where}/${
+        action.payload.to
+      }`,
     }),
     action
   );
@@ -94,7 +96,7 @@ function* moveTemplate(action) {
 
   yield put({
     type: OPEN_FOLDER,
-    payload: { id: action.payload.to, open: true }
+    payload: { id: action.payload.to, open: true },
   });
 }
 
@@ -103,7 +105,7 @@ function* deleteTemplate(action) {
     request({
       type: DELETE_TEMPLATE,
       method: 'DELETE',
-      url: `template/${action.payload.id}`
+      url: `template/${action.payload.id}`,
     }),
     action
   );

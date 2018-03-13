@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export default styled.div`
   display: flex;
@@ -17,4 +17,10 @@ export default styled.div`
       }
     }
   }
+
+  ${({ reuse }) =>
+    reuse &&
+    css`
+      flex: none !important;
+    `};
 `;

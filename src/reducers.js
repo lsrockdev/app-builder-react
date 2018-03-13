@@ -1,15 +1,13 @@
-import { combineReducers } from 'redux'
-import { routerReducer } from 'react-router-redux'
+import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 
-import auth from 'api/modules/auth'
-import document from 'api/modules/document'
-import builder from 'api/modules/builder'
+import auth from 'api/modules/auth';
 import template from 'api/modules/template';
+import document from 'api/modules/document';
 
 export default combineReducers({
   routing: routerReducer,
   auth,
-  document,
   template,
-  builder
-})
+  document,
+});

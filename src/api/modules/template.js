@@ -40,7 +40,7 @@ const initialState = {
   templates: null,
   status: 'INIT',
   error: null,
-  opens: {}
+  opens: {},
 };
 
 // ------------------------------------
@@ -51,19 +51,19 @@ export default handleActions(
     [requestSuccess(GET_TEMPLATES)]: (state, { payload }) => ({
       ...state,
       templates: payload,
-      status: requestSuccess(GET_TEMPLATES)
+      status: requestSuccess(GET_TEMPLATES),
     }),
 
     [requestFail(GET_TEMPLATES)]: (state, { payload }) => ({
       ...state,
       status: requestFail(GET_TEMPLATES),
-      error: payload
+      error: payload,
     }),
 
     [OPEN_FOLDER]: (state, { payload }) => ({
       ...state,
       opens: { ...state.opens, [payload.id]: payload.open },
-    })
+    }),
   },
   initialState
 );

@@ -1,9 +1,8 @@
-import {all} from 'redux-saga/effects'
-import auth from './auth'
-import document from './document'
-import builder from './builder';
-import template from './template'
+import { all } from 'redux-saga/effects';
+import auth from './auth';
+import template from './template';
+import mainDocument from './document';
 
 export default function* rootSaga() {
-  yield all([auth(), document(), template(), builder()])
+  yield all([auth(), template(), mainDocument()]);
 }
