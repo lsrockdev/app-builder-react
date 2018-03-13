@@ -200,7 +200,7 @@ class PreviewDocument extends Component {
     const pageWidthMm = 215.9;
     const pageHeightMm = 279.4;
     const pagePaddingMm = 25.4;
-    const footerPaddingTopMm = 20;
+    const footerPaddingTopMm = 15;
     const fontSizePt = 11;
     const footerFontSizePt = 9;
 
