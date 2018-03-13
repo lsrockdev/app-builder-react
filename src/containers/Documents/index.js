@@ -5,6 +5,8 @@ import DocumentManageModal from './DocumentManageModal';
 import DocumentDeleteModal from './DocumentDeleteModal';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { isEmpty } from 'lodash';
+
 import {
   getDocuments,
   createDocument,
@@ -194,7 +196,9 @@ class Documents extends Component {
   }
 
   renderMainContent() {
-    const { selectedDocumentIndex, searchValue } = this.state;
+    const { selectedDocumentIndex, searchValue, documentId } = this.state;
+    const enableBuildButton = !isEmpty(documentId);
+    console.log(this.props);
 
     return (
       <div className="document-page">
@@ -292,8 +296,12 @@ class Documents extends Component {
             />
           </div>
           <button
-            className="bottom-navigation-button disabled"
-            disabled="disabled"
+            className={`bottom-navigation-button ${
+              enableBuildButton ? '' : 'disabled'
+            }`}
+            disabled={!enableBuildButton}
+            onClick={() => this.props.history.push(`/builder/${documentId}`)}
+            style={{ cursor: 'pointer' }}
           >
             Build Document
           </button>
