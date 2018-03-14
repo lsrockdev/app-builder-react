@@ -11,6 +11,10 @@ class NewPassword extends Component {
     
     const token = new URLSearchParams(this.props.location.search).get('token')
 
+    if(!token || token === "") {
+      this.props.history.push("/login");
+    }
+
     this.state = {
       password: '',
       confirmPassword: '',
