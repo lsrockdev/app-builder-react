@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { NavLink } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 import { recoverPassword } from 'api/modules/auth'
 import './styles.scss'
 
@@ -25,7 +25,7 @@ class RecoverPassword extends Component {
   handleSubmit = evt => {
     evt.preventDefault()
     const { recoverPassword } = this.props
-    recoverPassword({ body: { ...this.state }, successCallback: () => {console.log("wow");} } )
+    recoverPassword({ body: { ...this.state }, success: () => {this.props.history.push("/login");} } )        
   }
 
   render() {
@@ -64,8 +64,11 @@ class RecoverPassword extends Component {
   }
 }
 
-const actions = {
-  recoverPassword,
+function mapStateToProps(state, ownProps) {
+  return {
+      error: state.auth.error,
+      state
+  };
 }
 
-export default connect(null, actions)(RecoverPassword)
+export default withRouter(connect(mapStateToProps, {recoverPassword})(RecoverPassword));

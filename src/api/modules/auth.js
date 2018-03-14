@@ -34,6 +34,7 @@ export default handleActions(
       ...state,
       token: payload,
       status: requestSuccess(LOGIN),
+      error: null
     }),
 
     [requestFail(LOGIN)]: (state, { payload }) => ({
@@ -47,6 +48,7 @@ export default handleActions(
       ...state,
       token: null,
       status: requestSuccess(LOGOUT),
+      error: null
     }),
 
     [requestFail(LOGOUT)]: (state, { payload }) => ({
@@ -60,6 +62,7 @@ export default handleActions(
       ...state,
       token: payload,
       status: requestSuccess(SIGNUP),
+      error: null
     }),
 
     [requestFail(SIGNUP)]: (state, { payload }) => ({
@@ -72,11 +75,13 @@ export default handleActions(
     [requestSuccess(RECOVER_PASSWORD)]: (state, { payload }) => ({
       ...state,
       status: requestSuccess(RECOVER_PASSWORD),
+      error: null,
+      token: null
     }),
 
     [requestFail(RECOVER_PASSWORD)]: (state, { payload }) => ({
       ...state,
-      status: requestFail(RECOVER_PASSWORD)
+      status: requestFail(RECOVER_PASSWORD)         
     }),
   },
   initialState

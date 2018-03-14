@@ -8,18 +8,26 @@ class NewPassword extends Component {
 
   constructor(props) {
     super(props)
-    const token = new URLSearchParams(this.props.location.search).get('token')
+    
+    //const token = new URLSearchParams(this.props.location.search).get('token')
 
-    // redirect if logged in or token not defined
-    if (this.props.auth.token !== null || token === null)
+    const token = this.props.auth.token;
+
+    // redirect if not logged in or token not defined
+    if (this.props.auth.token === null)
         this.props.history.push("/documents");
 
 
     this.state = {
       password: '',
       confirmPassword: '',
+      passwordsDontMatch: false,
       token
     }
+  }
+
+  componentDidMount(){
+    this.passwordInput.focus();
   }
 
   handleChange = (field, evt) => {
@@ -35,15 +43,17 @@ class NewPassword extends Component {
     evt.preventDefault()
 
     if(this.state.password !== this.state.confirmPassword) {
-      const confirmPassword = document.getElementById('confirmPassword');
-      confirmPassword.setCustomValidity("Passwords Don't Match");
+      this.setState({
+        passwordsDontMatch: true
+      });
+      
       return;
     }
 
     const { recoverPassword } = this.props
     const { password, token } = this.state
 
-    recoverPassword({ body: { password, token }, successCallback: () => {console.log("wow");} })
+    recoverPassword({ body: { password, token }, success: () => {this.props.history.push("/login");} } )
   }
 
   render() {
@@ -73,15 +83,17 @@ class NewPassword extends Component {
             </div>
 
             <div className="recoverPasswordForm__content">
+              {this.state.passwordsDontMatch &&
+                <div className="red message" style={{marginBottom: "15px"}}><span>Passwords don't match.</span></div>}
               <form onSubmit={this.handleSubmit}>
                 <div>
-                  <input className="field" placeholder="New Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} required />
+                  <input className="field" placeholder="New Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} ref={(input) => { this.passwordInput = input; }} required />
                 </div>
                 <div>
                   <input id="confirmPassword" className="field" placeholder="Confirm Password" type="password" onChange={evt => this.handleChange('confirmPassword', evt)} value={confirmPassword} required />
                 </div>
                 <div>
-                  <button className="large form button">Recover</button>
+                  <button className="large form button">Set new password</button>
                 </div>
                 <div>
                   <NavLink to="/login">Return to login</NavLink>
