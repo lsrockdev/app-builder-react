@@ -89,12 +89,14 @@ export default handleActions(
     [requestSuccess(NEW_PASSWORD)]: (state, { payload }) => ({
       ...state,
       status: requestSuccess(NEW_PASSWORD),
-      error: null      
+      error: null,
+      token: null
     }),
 
     [requestFail(NEW_PASSWORD)]: (state, { payload }) => ({
       ...state,
-      status: requestFail(NEW_PASSWORD)         
+      status: requestFail(NEW_PASSWORD),
+      token: null
     }),
   },
   initialState

@@ -50,7 +50,7 @@ const doNewPassword = request({
     'Content-Type': 'application/x-www-form-urlencoded',
   },
   success: (res, action) => {
-    localStorage.setItem('token', JSON.stringify(res.data))
+    localStorage.removeItem('token')
   },
 })
 
