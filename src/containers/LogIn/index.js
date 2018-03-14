@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+<<<<<<< HEAD
 import { NavLink } from 'react-router-dom'
+=======
+>>>>>>> builder-page
 import { logIn } from 'api/modules/auth'
 import './styles.scss'
 
@@ -12,9 +15,12 @@ class LogIn extends Component {
 
   constructor(props) {
     super(props)
+<<<<<<< HEAD
     const token = new URLSearchParams(this.props.location.search).get('token');
     console.log(token);
 
+=======
+>>>>>>> builder-page
     this.state = {
       email: '',
       password: '',
@@ -63,9 +69,15 @@ class LogIn extends Component {
                   <label id="stay-signed-in-label">Stay signed in</label>
                 </div>
                 <div>
+<<<<<<< HEAD
                   <NavLink to="/sign-up">Create account</NavLink>
                   <span>|</span>
                   <NavLink to="/recover/password">Reset password</NavLink>
+=======
+                  <span>Create account</span>
+                  <span>|</span>
+                  <span>Reset password</span>
+>>>>>>> builder-page
                 </div>
               </form>
             </div>

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import styled from 'styled-components';
+=======
+import styled, { css } from 'styled-components';
+>>>>>>> builder-page
 
 export default styled.div`
   display: flex;
@@ -17,4 +21,13 @@ export default styled.div`
       }
     }
   }
+<<<<<<< HEAD
+=======
+
+  ${({ reuse }) =>
+    reuse &&
+    css`
+      flex: none !important;
+    `};
+>>>>>>> builder-page
 `;

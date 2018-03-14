@@ -39,14 +39,23 @@ class Library extends Component {
   };
 
   render() {
+<<<<<<< HEAD
     const { templates, opens, openFolder, moveTemplate } = this.props;
+=======
+    const { templates, opens, openFolder, moveTemplate, reuse } = this.props;
+>>>>>>> builder-page
     const { dialog } = this.state;
     const { kind, item } = dialog || {};
 
     return (
       <Fragment>
+<<<<<<< HEAD
         <Header />
         <Wrapper className="main hbox space-between">
+=======
+        {!reuse && <Header />}
+        <Wrapper reuse={reuse} className="main hbox space-between">
+>>>>>>> builder-page
           <Resizable defaultSize={{ width: 356 }} minWidth="356">
             <Templates
               data={templates}
@@ -59,6 +68,7 @@ class Library extends Component {
               moveTemplate={moveTemplate}
             />
 
+<<<<<<< HEAD
             {kind === 'folder' && <FolderModal item={item} onClose={this.hideDialog} />}
             {kind === 'content' && <ContentModal item={item} onClose={this.hideDialog} />}
             {kind === 'delete' && <DeleteModal item={item} onClose={this.hideDialog} />}
@@ -73,6 +83,32 @@ class Library extends Component {
           <Link className="general-help-button" to="/support">
             ?
           </Link>
+=======
+            {kind === 'folder' && (
+              <FolderModal item={item} onClose={this.hideDialog} />
+            )}
+            {kind === 'content' && (
+              <ContentModal item={item} onClose={this.hideDialog} />
+            )}
+            {kind === 'delete' && (
+              <DeleteModal item={item} onClose={this.hideDialog} />
+            )}
+          </Resizable>
+
+          {!reuse && (
+            <div className="main left-section-border">
+              <div className="template-preview">
+                <div className="template-preview-inner" />
+              </div>
+            </div>
+          )}
+
+          {!reuse && (
+            <Link className="general-help-button" to="/support">
+              ?
+            </Link>
+          )}
+>>>>>>> builder-page
         </Wrapper>
       </Fragment>
     );
@@ -82,7 +118,11 @@ class Library extends Component {
 export default connect(
   ({ template }) => ({
     templates: template.templates,
+<<<<<<< HEAD
     opens: template.opens
+=======
+    opens: template.opens,
+>>>>>>> builder-page
   }),
   { getTemplates, openFolder, moveTemplate }
 )(Library);

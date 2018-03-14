@@ -46,7 +46,11 @@ class DocumentManageModal extends React.Component {
   }
 
   render() {
+<<<<<<< HEAD
     const { title, client, dueDate, type, isEdit} = this.props;
+=======
+    const { title, client, type, isEdit} = this.props;
+>>>>>>> builder-page
     return (
       <div className="wizard-container">
         <div className="wizard">

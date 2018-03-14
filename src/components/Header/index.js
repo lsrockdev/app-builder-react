@@ -32,18 +32,31 @@ class Header extends Component {
     return (
       <div className="app-bar">
         <div className="menu">
-          <img src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/logo_small.png" className="menu-logo" alt="" />
+          <img
+            src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/logo_small.png"
+            className="menu-logo"
+            alt=""
+          />
           <div className="right">
             <MenuItem to="/library" label="Library" />
             <MenuItem to="/documents" label="Documents" />
-            {showBuilder &&
+            {showBuilder && (
               <React.Fragment>
-                <MenuItem to={`/builder/${documentId}`} label="Builder" />
-                <MenuItem to={`/preview/${documentId}`} label="Preview" />
+                <Link
+                  to={`/builder/${documentId}`}
+                  className={path === '/builder/:documentId' ? 'selected' : ''}
+                >
+                  <span style={{ marginLeft: 10 }}> Builder</span>
+                </Link>
+                <MenuItem to="#" label="Preview" />
               </React.Fragment>
-            }
+            )}
             <MenuItem to="/support" label="Support" />
-            {authenticated && <a onClick={logOut} ><span style={{marginLeft: 10}}>Log out</span></a>}
+            {authenticated && (
+              <a onClick={logOut}>
+                <span style={{ marginLeft: 10 }}>Log out</span>
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -53,11 +66,10 @@ class Header extends Component {
 
 const selectors = createStructuredSelector({
   authenticated: isAuthenticated,
-  documentId: getDocumentId
 });
 
 const actions = {
-  logOut
+  logOut,
 };
 
-export default connect(selectors, actions)(Header);
+export default connect(selectors, actions)(withRouter(Header));
