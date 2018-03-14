@@ -1,5 +1,4 @@
-import { takeLatest, put } from 'redux-saga/effects'
-import { push } from 'react-router-redux'
+import { takeLatest } from 'redux-saga/effects'
 import { LOGIN, LOGOUT, SIGNUP, RECOVER_PASSWORD } from 'api/modules/auth'
 import request from 'utils/request'
 

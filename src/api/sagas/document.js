@@ -1,7 +1,6 @@
 import { takeLatest, takeEvery, call } from 'redux-saga/effects';
 import {
   GET_DOCUMENTS,
-  GET_DOCUMENT,
   CREATE_DOCUMENT,
   UPDATE_DOCUMENT,
   DELETE_DOCUMENT,
@@ -28,7 +27,7 @@ import request from 'utils/request';
 const getDocuments = request({
   type: GET_DOCUMENTS,
   method: 'GET',
-  url: 'my/documents',
+  url: 'my/documents'
 });
 
 const getDocument = function* (action) {
@@ -43,7 +42,7 @@ const getDocument = function* (action) {
 const createDocument = request({
   type: CREATE_DOCUMENT,
   method: 'POST',
-  url: 'document',
+  url: 'document'
 });
 
 const updateDocument = request({
@@ -52,7 +51,7 @@ const updateDocument = request({
   url: 'document'
 });
 
-const deleteDocument = function* (action) {
+const deleteDocument = function*(action) {
   const apiRequest = request({
     type: DELETE_DOCUMENT,
     method: 'DELETE',
@@ -71,15 +70,7 @@ const searchDocument = function*(action) {
   yield call(apiRequest, action.payload);
 };
 
-const getDocument = function*({ payload }) {
-  const { documentId } = payload;
-  const apiRequest = request({
-    type: GET_DOCUMENT,
-    method: 'GET',
-    url: 'document/' + documentId
-  });
-  yield call(apiRequest, payload);
-};
+
 
 const upUpdateDocument = function*({ payload }) {
   const { documentId, selectionId } = payload;
@@ -185,6 +176,37 @@ const deleteTextblock = function*({ payload }) {
   yield call(apiRequest, payload);
 };
 
+const updateSettings = function* (action) {
+  const apiRequest = request({
+    type: UPDATE_SETTINGS,
+    method: 'PUT',
+    url: 'document/' + action.payload.id + '/settings',
+  });
+  yield call(apiRequest, action);
+};
+
+const importFields = function* (action) {
+  const data = new FormData();
+  const apiRequest = request({
+    type: IMPORT_FIELDS,
+    method: 'POST',
+    url: 'autofill/import/' + action.payload.id,
+  });
+
+  data.append('file', action.payload.file);
+  
+  yield call(apiRequest, { ...action, payload: { ...action.payload, body: data }});
+};
+
+const requestDocument = function* (action) {
+  const apiRequest = request({
+    type: REQUEST_DOCUMENT,
+    method: 'POST',
+    url: `request/document/${action.payload.id}`,
+  });
+  yield call(apiRequest, action.payload);
+};
+
 export default function* rootSaga() {
   yield takeLatest(GET_DOCUMENTS, getDocuments);
   yield takeLatest(SEARCH_DOCUMENT, searchDocument);
@@ -203,4 +225,7 @@ export default function* rootSaga() {
   yield takeEvery(CREATE_DOCUMENT, createDocument);
   yield takeEvery(UPDATE_DOCUMENT, updateDocument);
   yield takeEvery(DELETE_DOCUMENT, deleteDocument);
+  yield takeEvery(UPDATE_SETTINGS, updateSettings);
+  yield takeEvery(IMPORT_FIELDS, importFields);
+  yield takeEvery(REQUEST_DOCUMENT, requestDocument);
 }

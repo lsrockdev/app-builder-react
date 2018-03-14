@@ -42,7 +42,10 @@ class Templates extends Component {
       data.forEach(item => {
         const { id, title, text } = item;
         if (!visibleNodeIds[id]) {
-          if (title.indexOf(str) !== -1 || (text || '').indexOf(str) !== -1) {
+          if (
+            title.toLowerCase().indexOf(str) !== -1 ||
+            (text.toLowerCase() || '').indexOf(str) !== -1
+          ) {
             visibleNodeIds[id] = 1;
             while (item.parentId) {
               item = this.getParentNode(item, data);

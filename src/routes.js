@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Library from 'containers/Library';
 import Documents from 'containers/Documents';
 import Preview from 'containers/Preview';

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { logOut } from 'api/modules/auth';
-import { isAuthenticated, getDocumentId } from 'api/selectors';
+import { isAuthenticated } from 'api/selectors';
 import './styles.scss';
 
 const MenuItem = ({ to, label }) => (
@@ -12,7 +12,7 @@ const MenuItem = ({ to, label }) => (
     path={to}
     children={({ match }) => (
       <Link to={to} className={match ? 'selected' : ''}>
-        <span style={{marginLeft: 10}}> {label}</span>
+        <span style={{ marginLeft: 10 }}> {label}</span>
       </Link>
     )}
   />
@@ -23,11 +23,16 @@ class Header extends Component {
     authenticated: PropTypes.bool,
     logOut: PropTypes.func,
     showBuilder: PropTypes.bool,
-    documentId: PropTypes.string
   };
 
   render() {
-    const { authenticated, logOut, showBuilder, documentId } = this.props;
+    const {
+      authenticated,
+      logOut,
+      showBuilder,
+      documentId,
+      match: { path },
+    } = this.props;
 
     return (
       <div className="app-bar">

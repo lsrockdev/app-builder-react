@@ -5,7 +5,6 @@ import { requestSuccess, requestFail } from 'utils/request';
 // Constants
 // ------------------------------------
 export const GET_DOCUMENTS = 'GET_DOCUMENTS';
-export const GET_DOCUMENT = 'GET_DOCUMENT';
 export const CREATE_DOCUMENT = 'CREATE_DOCUMENT';
 export const UPDATE_DOCUMENT = 'UPDATE_DOCUMENT';
 export const DELETE_DOCUMENT = 'DELETE_DOCUMENT';
@@ -32,8 +31,6 @@ export const SET_CURRENT_SELECTION = 'SET_CURRENT_SELECTION';
 // Actions
 // ------------------------------------
 
-export const getDocuments   = createAction(GET_DOCUMENTS);
-export const getDocument    = createAction(GET_DOCUMENT);
 export const downTextblock = createAction(DOWN_TEXTBLOCK);
 export const upTextblock = createAction(UP_TEXTBLOCK);
 export const editTextblock = createAction(EDIT_TEXTBLOCK);
@@ -51,6 +48,10 @@ export const downUpdateDocument = createAction(DOWN_UPDATE_DOCUMENT);
 export const updateSelection = createAction(UPDATE_SELECTION);
 export const deleteSelection = createAction(DELETE_SELECTION);
 export const createSelection = createAction(CREATE_SELECTION);
+export const updateSettings = createAction(UPDATE_SETTINGS);
+export const importFields   = createAction(IMPORT_FIELDS);
+export const requestDocument = createAction(REQUEST_DOCUMENT);
+export const selectDocument = createAction(SELECT_DOCUMENT);
 export const setCurrentSelection = createAction(
   SET_CURRENT_SELECTION,
   currentSelection => currentSelection
@@ -208,11 +209,11 @@ export default handleActions(
 
     [requestSuccess(GET_DOCUMENT)]: (state, { payload }) => ({
       ...state,
-      document: payload,
+      currentDocument: payload,
       status: requestSuccess(GET_DOCUMENT),
     }),
 
-    [requestFail(GET_DOCUMENT)]: (state, { payload }) => ({
+    [requestFail(GET_DOCUMENTS)]: (state, { payload }) => ({
       ...state,
       status: requestFail(GET_DOCUMENT),
       error: payload,
@@ -297,7 +298,6 @@ export default handleActions(
       error: payload,
     }),
 
-    [SELECT_DOCUMENT]: (state, { payload }) => ({ ...state, documentId: payload.id })
   },
   initialState
 );
