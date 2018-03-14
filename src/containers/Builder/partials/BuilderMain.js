@@ -332,19 +332,23 @@ class BuilderMain extends Component {
             <div className="flex-main">
               <div>
                 {selectionsInOrder.map((selection, index, selectionArray) => {
-                  const previousSelectLen =
-                    index > 0 ? selectionArray[index - 1].level.length : 0;
                   const strLevel = selection.level.join('.');
                   const selectLen = selection.level.length;
 
-                  const showArrowDown = selection.parent
-                    ? index < selectionArray.length - 1
-                    : index < selectionArray.length - 1 && selection.next;
-                  const showArrowUp = index >= 1;
+                  const showArrowDown =
+                    (!!selection.parent &&
+                      !!selections[selection.parent].next) ||
+                    !!selection.next;
+
+                  const showArrowUp =
+                    !!selection.parent || !!selection.previous;
+
                   const showArrowLeft = selectLen >= 2;
+
                   const showArrowRight =
-                    (!selection.parent && index > 0) ||
-                    (!!selection.parent && selectLen <= previousSelectLen);
+                    !!selection.previous &&
+                    selection.level.length <=
+                      selections[selection.previous].level.length;
 
                   return (
                     <Selection
