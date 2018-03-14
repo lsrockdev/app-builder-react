@@ -198,7 +198,6 @@ class Documents extends Component {
   renderMainContent() {
     const { selectedDocumentIndex, searchValue, documentId } = this.state;
     const enableBuildButton = !isEmpty(documentId);
-    console.log(this.props);
 
     return (
       <div className="document-page">

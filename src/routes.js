@@ -30,7 +30,6 @@ const Routes = () => (
         component={userIsAuthenticatedRedir(Documents)}
       />
       <Route
-        exact
         path="/builder/:documentId"
         component={userIsAuthenticatedRedir(Builder)}
       />

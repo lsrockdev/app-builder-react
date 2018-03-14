@@ -86,6 +86,7 @@ class Selection extends Component {
       onExpand,
       isFirst,
       isLast,
+      substituteVariables,
     } = this.props;
     const isExpanded = currentExpanded === selection.id;
     const { id, title, textBlocks } = selection;
@@ -124,7 +125,7 @@ class Selection extends Component {
               </div>
               {textBlocks.map((markup, index, array) => (
                 <TextBlock
-                  templateMarkup={markup}
+                  templateMarkup={substituteVariables(markup)}
                   isFirst={isFirst && index === 0}
                   isLast={isLast && index === array.length - 1}
                   selectionId={selection.id}

@@ -70,7 +70,6 @@ class TextBlock extends Component {
       },
     };
     const { editModal } = this.state;
-
     return (
       <Fragment>
         <div className="section-content" style={{ marginBottom: 10 }}>

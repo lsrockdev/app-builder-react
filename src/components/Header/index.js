@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { logOut } from 'api/modules/auth';
@@ -26,7 +26,13 @@ class Header extends Component {
   };
 
   render() {
-    const { authenticated, logOut, showBuilder, documentId } = this.props;
+    const {
+      authenticated,
+      logOut,
+      showBuilder,
+      documentId,
+      match: { path },
+    } = this.props;
 
     return (
       <div className="app-bar">
@@ -41,7 +47,12 @@ class Header extends Component {
             <MenuItem to="/documents" label="Documents" />
             {showBuilder && (
               <React.Fragment>
-                <MenuItem to={`/builder/${documentId}`} label="Builder" />
+                <Link
+                  to={`/builder/${documentId}`}
+                  className={path === '/builder/:documentId' ? 'selected' : ''}
+                >
+                  <span style={{ marginLeft: 10 }}> Builder</span>
+                </Link>
                 <MenuItem to="#" label="Preview" />
               </React.Fragment>
             )}
@@ -66,4 +77,4 @@ const actions = {
   logOut,
 };
 
-export default connect(selectors, actions)(Header);
+export default connect(selectors, actions)(withRouter(Header));

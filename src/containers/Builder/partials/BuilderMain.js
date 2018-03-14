@@ -264,6 +264,7 @@ class BuilderMain extends Component {
       currentDocument: { title, selections },
       documentId,
       editTextblock,
+      substituteVariables,
     } = this.props;
     const selectionsInOrder = this.getSelectionsInOrder({ selections });
     const {
@@ -289,58 +290,79 @@ class BuilderMain extends Component {
             {title}
           </div>
         </div>
-        <FlexChildWrap>
-          <div className="flex-main">
-            <div>
-              {selectionsInOrder.map((selection, index, selectionArray) => {
-                const previousSelectLen =
-                  index > 0 ? selectionArray[index - 1].level.length : 0;
-                const strLevel = selection.level.join('.');
-                const selectLen = selection.level.length;
-
-                const showArrowDown = selection.parent
-                  ? index < selectionArray.length - 1
-                  : index < selectionArray.length - 1 && selection.next;
-                const showArrowUp = index >= 1;
-                const showArrowLeft = selectLen >= 2;
-                const showArrowRight =
-                  (!selection.parent && index > 0) ||
-                  (!!selection.parent && selectLen <= previousSelectLen);
-
-                return (
-                  <Selection
-                    key={selection.id}
-                    selectLen={selectLen}
-                    selection={selection}
-                    strLevel={strLevel}
-                    showArrowLeft={!!showArrowLeft}
-                    showArrowRight={!!showArrowRight}
-                    showArrowDown={!!showArrowDown}
-                    showArrowUp={!!showArrowUp}
-                    onModifySelection={this._onModifySelection}
-                    showUpdateSectionModal={this.showUpdateSectionModal}
-                    onExpand={this._onSetExpandedSelection}
-                    currentExpanded={currentExpanded}
-                    isFirst={index === 0}
-                    isLast={index === selectionArray.length - 1}
-                    documentId={documentId}
-                    editTextblock={editTextblock}
-                  />
-                );
-              })}
+        {value && selectionsInOrder.length === 0 ? (
+          <div
+            style={{
+              display: 'flex',
+              flex: '1 1 0%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div
+              style={{
+                fontSize: 13,
+                color: 'rgb(175, 175, 175)',
+              }}
+            >
+              No sections match the search criteria.
             </div>
           </div>
-          <div className="search-box">
-            <i className="pro icon-search" />
-            <input
-              placeholder="Search Sections"
-              type="text"
-              className="inline-input"
-              value={value}
-              onChange={this._onChangeSearchTerm}
-            />
-          </div>
-        </FlexChildWrap>
+        ) : (
+          <FlexChildWrap>
+            <div className="flex-main">
+              <div>
+                {selectionsInOrder.map((selection, index, selectionArray) => {
+                  const previousSelectLen =
+                    index > 0 ? selectionArray[index - 1].level.length : 0;
+                  const strLevel = selection.level.join('.');
+                  const selectLen = selection.level.length;
+
+                  const showArrowDown = selection.parent
+                    ? index < selectionArray.length - 1
+                    : index < selectionArray.length - 1 && selection.next;
+                  const showArrowUp = index >= 1;
+                  const showArrowLeft = selectLen >= 2;
+                  const showArrowRight =
+                    (!selection.parent && index > 0) ||
+                    (!!selection.parent && selectLen <= previousSelectLen);
+
+                  return (
+                    <Selection
+                      key={selection.id}
+                      selectLen={selectLen}
+                      selection={selection}
+                      strLevel={strLevel}
+                      showArrowLeft={!!showArrowLeft}
+                      showArrowRight={!!showArrowRight}
+                      showArrowDown={!!showArrowDown}
+                      showArrowUp={!!showArrowUp}
+                      onModifySelection={this._onModifySelection}
+                      showUpdateSectionModal={this.showUpdateSectionModal}
+                      onExpand={this._onSetExpandedSelection}
+                      currentExpanded={currentExpanded}
+                      isFirst={index === 0}
+                      isLast={index === selectionArray.length - 1}
+                      documentId={documentId}
+                      editTextblock={editTextblock}
+                      substituteVariables={substituteVariables}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </FlexChildWrap>
+        )}
+        <div className="search-box">
+          <i className="pro icon-search" />
+          <input
+            placeholder="Search Sections"
+            type="text"
+            className="inline-input"
+            value={value}
+            onChange={this._onChangeSearchTerm}
+          />
+        </div>
         {updateSectionModal === 'visible' && (
           <Modal>
             <UpdateSectionModal

@@ -45,6 +45,15 @@ class Builder extends Component {
     }
   }
 
+  substituteVariables = textBlock => {
+    const newTextBlock = textBlock.replace(
+      new RegExp(`(\\[([a-z0-9 _-]+)\\])`, 'gi'),
+      '<span style="background-color: #ecd58c;" data-variable="$2" class="variable">$1</span>'
+    );
+
+    return newTextBlock;
+  };
+
   render() {
     const {
       currentDocument,
@@ -86,8 +95,13 @@ class Builder extends Component {
             getDocument={getDocument}
             setCurrentSelection={setCurrentSelection}
             editTextblock={editTextblock}
+            substituteVariables={this.substituteVariables}
           />
-          <Preview selection={previewSelection} />
+          <Preview
+            selection={previewSelection}
+            documentId={documentId}
+            substituteVariables={this.substituteVariables}
+          />
           <Link className="general-help-button" to="/support">
             ?
           </Link>
