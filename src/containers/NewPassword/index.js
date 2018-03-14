@@ -57,9 +57,7 @@ class NewPassword extends Component {
     const { newPassword } = this.props
     const { password, token } = this.state
     
-    console.log("tu sam");
-
-    newPassword({ body: { password, token }, success: () => {console.log("pusham"); this.props.history.push("/login");} } )
+    newPassword({ body: { password, token }, success: () => {this.props.history.push("/login");} } )
   }
 
   render() {
