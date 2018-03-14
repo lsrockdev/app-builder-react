@@ -11,10 +11,6 @@ class NewPassword extends Component {
     
     const token = new URLSearchParams(this.props.location.search).get('token')
 
-    if(!token || token === "") {
-      this.props.history.push("/login");
-    }
-
     this.state = {
       password: '',
       confirmPassword: '',
@@ -67,19 +63,7 @@ class NewPassword extends Component {
   }
 
   render() {
-    const { password, confirmPassword } = this.state
-    const { error } = this.props;
-
-    let errorMessage = null;
-    if(error) {
-      errorMessage = <div>
-                        <div style={{marginBottom: 15}}>
-                          <div className="red message">
-                            <span>{error.data}</span>
-                          </div>
-                        </div>
-                      </div>
-    }
+    const { password, confirmPassword } = this.state    
 
     if(this.state.passwordsDontMatch === true) {
       document.getElementById("confirmPassword").setCustomValidity("Passwords Don't Match");

@@ -6,7 +6,7 @@ import { requestPending } from './request'
 
 const locationHelper = locationHelperBuilder({})
 
-export const isLoggingIn = state => state.auth.status === requestPending(LOGIN)
+export const isLoggingIn = state => {return state.auth.status === requestPending(LOGIN)}
 
 const userIsAuthenticatedDefaults = {
   authenticatedSelector: state => state.auth.token !== null,
@@ -30,7 +30,7 @@ const userIsNotAuthenticatedDefaults = {
 
 export const userIsNotAuthenticated = connectedAuthWrapper(userIsNotAuthenticatedDefaults)
 
-export const userIsNotAuthenticatedRedir = connectedRouterRedirect({
+export const userIsNotAuthenticatedRedir = connectedRouterRedirect({  
   ...userIsNotAuthenticatedDefaults,
   redirectPath: (state, ownProps) => locationHelper.getRedirectQueryParam(ownProps) || '/',
   allowRedirectBack: false,

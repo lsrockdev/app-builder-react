@@ -36,7 +36,7 @@ export default handleActions(
       ...state,
       token: payload,
       status: requestSuccess(LOGIN),
-      error: null
+      error: null,      
     }),
 
     [requestFail(LOGIN)]: (state, { payload }) => ({

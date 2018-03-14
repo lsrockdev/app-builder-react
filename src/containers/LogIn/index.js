@@ -12,12 +12,23 @@ class LogIn extends Component {
 
   constructor(props) {
     super(props)
-    const token = new URLSearchParams(this.props.location.search).get('token');    
-
+    
     this.state = {
       email: '',
       password: '',
       staySignedIn: false,
+    }
+  }
+
+  componentDidMount() {
+    if(this.props.state.auth.token) {
+      this.props.history.push('/');
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    if(newProps.state.auth.token) {
+      newProps.history.push('/');
     }
   }
 
@@ -31,7 +42,7 @@ class LogIn extends Component {
   handleSubmit = evt => {
     evt.preventDefault()
     const { logIn } = this.props
-    logIn({ body: { ...this.state }, success: () => {this.props.history.push("/documents");} } )
+    logIn({ body: { ...this.state }, success: () => {this.props.history.push("/");} } )
   }
 
   render() {
@@ -49,9 +60,9 @@ class LogIn extends Component {
               {this.props.error && this.props.error.status === 401 &&
                 <div className="red message" style={{marginBottom: "15px"}}><span>{this.props.error.data}</span><span><NavLink style={{cursor: "pointer", color: "rgb(16, 135, 188)"}} to="/recover/password">&nbsp;Forgot password?</NavLink></span></div>}
               {this.props.status === "RECOVER_PASSWORD/success" &&
-                <div class="green message" style={{marginBottom: "15px"}}>We've sent an email with instructions on how to reset your password.</div>}
+                <div className="green message" style={{marginBottom: "15px"}}>We've sent an email with instructions on how to reset your password.</div>}
               {this.props.status === "NEW_PASSWORD/success" &&
-                <div class="green message" style={{marginBottom: "15px"}}>Your password has been changed.</div>}
+                <div className="green message" style={{marginBottom: "15px"}}>Your password has been changed.</div>}
               <form onSubmit={this.handleSubmit}>
                 <div>
                   <input className="field" placeholder="Email" type="email" onChange={evt => this.handleChange('email', evt)} value={email} required autoFocus />
