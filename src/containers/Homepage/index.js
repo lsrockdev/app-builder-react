@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
+import Header from '../../components/Header'
 
 class Homepage extends Component {
     constructor(self) {
@@ -14,11 +15,7 @@ class Homepage extends Component {
   render() {
     
     return (
-      <div className="viewport vbox" style={{textAlign: "center", marginTop: "50px"}}>
-        <h1>This is the homepage</h1>
-        <br/><br/>
-        <Link to="/documents">Documents</Link>
-      </div>
+        <Header/>
     )
   }
 }
