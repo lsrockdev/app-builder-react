@@ -77,7 +77,15 @@ class TextBlock extends Component {
             className="right-section-border"
             style={{ flex: '1 1 0%', padding: '10px 15px' }}
           >
-            <div className="block-text">
+            <div
+              id="selection-text-block-text-3"
+              className="html-preview"
+              style={{
+                fontFamily: "'Times New Roman', serif",
+                fontSize: 15,
+                lineHeight: 1.25,
+              }}
+            >
               <div dangerouslySetInnerHTML={{ __html: templateMarkup }} />
             </div>
           </div>
