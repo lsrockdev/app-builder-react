@@ -16,6 +16,7 @@ const Routes = () => (
       <Route exact path="/" component={NewPassword} />
       <Route exact path="/library" component={userIsAuthenticatedRedir(Library)} />
       <Route exact path="/documents" component={userIsAuthenticatedRedir(Documents)} />
+      <Route exact path="/builder/:documentId" component={userIsAuthenticatedRedir(Builder)} />
       <Route exact path="/preview/:documentId" component={userIsAuthenticatedRedir(Preview)} />
       <Route exact path="/support" component={userIsAuthenticatedRedir(Dashboard)} />
       <Route exact path="/login" component={userIsNotAuthenticatedRedir(LogIn)} />
