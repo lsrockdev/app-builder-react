@@ -11,11 +11,6 @@ class NewPassword extends Component {
     
     const token = new URLSearchParams(this.props.location.search).get('token')
 
-    // redirect if not logged in or token not defined
-    if (this.props.auth.token === null)
-        this.props.history.push("/documents");
-
-
     this.state = {
       password: '',
       confirmPassword: '',
@@ -30,10 +25,15 @@ class NewPassword extends Component {
 
   validatePasswords = () => {
     if(this.state.password !== this.state.confirmPassword) {
-      document.getElementById("confirmPassword").setCustomValidity("Passwords Don't Match");      
-
       this.setState({
         passwordsDontMatch: true
+      })
+    } else {
+
+      document.getElementById("confirmPassword").setCustomValidity("");
+
+      this.setState({
+        passwordsDontMatch: false
       });
     }
   }
@@ -57,7 +57,9 @@ class NewPassword extends Component {
     const { newPassword } = this.props
     const { password, token } = this.state
     
-    newPassword({ body: { password, token }, success: () => {this.props.history.push("/login");} } )
+    console.log("tu sam");
+
+    newPassword({ body: { password, token }, success: () => {console.log("pusham"); this.props.history.push("/login");} } )
   }
 
   render() {
@@ -75,8 +77,8 @@ class NewPassword extends Component {
                       </div>
     }
 
-    if(this.state.passwordsDontMatch) {
-      document.getElementById("confirmPassword").setCustomValidity("Passwords Don't Match");      
+    if(this.state.passwordsDontMatch === true) {
+      document.getElementById("confirmPassword").setCustomValidity("Passwords Don't Match");
     }
 
     return (

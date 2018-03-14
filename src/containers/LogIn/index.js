@@ -31,7 +31,7 @@ class LogIn extends Component {
   handleSubmit = evt => {
     evt.preventDefault()
     const { logIn } = this.props
-    logIn({ body: { ...this.state } })
+    logIn({ body: { ...this.state }, success: () => {this.props.history.push("/documents");} } )
   }
 
   render() {
