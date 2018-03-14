@@ -102,7 +102,6 @@ class Preview extends Component {
                 }}
                 initialContent={this.renderInitialHtml()}
                 mountTarget="#mount-preview"
-                contentDidMount={() => console.log('MOUNTED IFRAME')}
               >
                 <div style={{ marginRight: 14, marginLeft: 4 }}>
                   {textBlocks.map((block, index) => (

@@ -143,6 +143,21 @@ class BuilderMain extends Component {
     };
   };
 
+  convertToString = arrayOfString => {
+    if (!isEmpty(arrayOfString)) {
+      const minimizedStr = arrayOfString
+        .map(str => {
+          const cleanedStr = str.replace(/<{1}[^<>]{1,}>{1}/g, ' ');
+          return cleanedStr;
+        })
+        .reduce((prev, curr) => `${prev} ${curr}`);
+
+      return minimizedStr;
+    }
+
+    return '';
+  };
+
   filterBySearch = selections => {
     const { value } = this.state;
     const allKeys = !isEmpty(selections) ? Object.keys(selections) : [];
@@ -150,7 +165,11 @@ class BuilderMain extends Component {
     if (value) {
       const allUniqueHits = allKeys.filter(
         key =>
-          selections[key].title.toLowerCase().indexOf(value.toLowerCase()) >= 0
+          `${selections[key].title} ${this.convertToString(
+            selections[key].textBlocks
+          )}`
+            .toLowerCase()
+            .indexOf(value.toLowerCase()) >= 0
       );
 
       const withDuplicate = allUniqueHits.map(hitKey => {

@@ -57,20 +57,6 @@ class EditTextblock extends Component {
     const { index, textBlocks } = this.props;
     return (
       <div id="editor-x" className="wizard-content">
-        <button
-          onClick={this._onHide}
-          style={{
-            color: '#d35400',
-            position: 'absolute',
-            top: 10,
-            right: 10,
-            fontSize: 12,
-            letterSpacing: 0.6,
-          }}
-          type="button"
-        >
-          Close
-        </button>
         <form onSubmit={this._onSubmit}>
           <div>
             <Editor
