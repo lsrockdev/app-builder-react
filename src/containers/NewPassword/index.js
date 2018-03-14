@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { NavLink } from 'react-router-dom'
-import { recoverPassword } from 'api/modules/auth'
+import { NavLink, withRouter } from 'react-router-dom'
+import { newPassword } from 'api/modules/auth'
 import './styles.scss'
 
 class NewPassword extends Component {
@@ -9,9 +9,7 @@ class NewPassword extends Component {
   constructor(props) {
     super(props)
     
-    //const token = new URLSearchParams(this.props.location.search).get('token')
-
-    const token = this.props.auth.token;
+    const token = new URLSearchParams(this.props.location.search).get('token')
 
     // redirect if not logged in or token not defined
     if (this.props.auth.token === null)
@@ -30,6 +28,16 @@ class NewPassword extends Component {
     this.passwordInput.focus();
   }
 
+  validatePasswords = () => {
+    if(this.state.password !== this.state.confirmPassword) {
+      document.getElementById("confirmPassword").setCustomValidity("Passwords Don't Match");      
+
+      this.setState({
+        passwordsDontMatch: true
+      });
+    }
+  }
+
   handleChange = (field, evt) => {
     const { value } = evt.target
 
@@ -39,21 +47,17 @@ class NewPassword extends Component {
 
   }
 
-  handleSubmit = evt => {
+  handleSubmit = evt => {        
     evt.preventDefault()
 
-    if(this.state.password !== this.state.confirmPassword) {
-      this.setState({
-        passwordsDontMatch: true
-      });
-      
+    if(this.state.passwordsDontMatch) {
       return;
     }
 
-    const { recoverPassword } = this.props
+    const { newPassword } = this.props
     const { password, token } = this.state
-
-    recoverPassword({ body: { password, token }, success: () => {this.props.history.push("/login");} } )
+    
+    newPassword({ body: { password, token }, success: () => {this.props.history.push("/login");} } )
   }
 
   render() {
@@ -71,9 +75,11 @@ class NewPassword extends Component {
                       </div>
     }
 
+    if(this.state.passwordsDontMatch) {
+      document.getElementById("confirmPassword").setCustomValidity("Passwords Don't Match");      
+    }
+
     return (
-
-
 
       <div className="recoverPasswordPage">
         <div className="wrapper">
@@ -82,9 +88,7 @@ class NewPassword extends Component {
               <img src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/logo@3x.png" alt="" />
             </div>
 
-            <div className="recoverPasswordForm__content">
-              {this.state.passwordsDontMatch &&
-                <div className="red message" style={{marginBottom: "15px"}}><span>Passwords don't match.</span></div>}
+            <div className="recoverPasswordForm__content">              
               <form onSubmit={this.handleSubmit}>
                 <div>
                   <input className="field" placeholder="New Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} ref={(input) => { this.passwordInput = input; }} required />
@@ -93,7 +97,7 @@ class NewPassword extends Component {
                   <input id="confirmPassword" className="field" placeholder="Confirm Password" type="password" onChange={evt => this.handleChange('confirmPassword', evt)} value={confirmPassword} required />
                 </div>
                 <div>
-                  <button className="large form button">Set new password</button>
+                  <button onClick={this.validatePasswords} className="large form button">Set new password</button>
                 </div>
                 <div>
                   <NavLink to="/login">Return to login</NavLink>
@@ -117,7 +121,7 @@ const mapStateToProps = ({auth}) => {
 };
 
 const actions = {
-  recoverPassword,
+  newPassword,
 }
 
-export default connect(mapStateToProps, actions)(NewPassword)
+export default withRouter(connect(mapStateToProps, actions)(NewPassword))

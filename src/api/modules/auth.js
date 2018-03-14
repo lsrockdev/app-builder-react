@@ -8,6 +8,7 @@ export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 export const SIGNUP = 'SIGNUP'
 export const RECOVER_PASSWORD = 'RECOVER_PASSWORD'
+export const NEW_PASSWORD = 'NEW_PASSWORD'
 
 // ------------------------------------
 // Actions
@@ -17,6 +18,7 @@ export const logIn = createAction(LOGIN)
 export const logOut = createAction(LOGOUT)
 export const signUp = createAction(SIGNUP)
 export const recoverPassword = createAction(RECOVER_PASSWORD);
+export const newPassword = createAction(NEW_PASSWORD);
 
 const token = localStorage.getItem('token')
 
@@ -82,6 +84,17 @@ export default handleActions(
     [requestFail(RECOVER_PASSWORD)]: (state, { payload }) => ({
       ...state,
       status: requestFail(RECOVER_PASSWORD)         
+    }),
+
+    [requestSuccess(NEW_PASSWORD)]: (state, { payload }) => ({
+      ...state,
+      status: requestSuccess(NEW_PASSWORD),
+      error: null      
+    }),
+
+    [requestFail(NEW_PASSWORD)]: (state, { payload }) => ({
+      ...state,
+      status: requestFail(NEW_PASSWORD)         
     }),
   },
   initialState
