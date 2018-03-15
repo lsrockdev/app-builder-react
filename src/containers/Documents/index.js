@@ -5,7 +5,6 @@ import DocumentManageModal from './DocumentManageModal';
 import DocumentDeleteModal from './DocumentDeleteModal';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { isEmpty } from 'lodash';
 
 import {
   getDocuments,
@@ -13,6 +12,7 @@ import {
   updateDocument,
   deleteDocument,
   searchDocument,
+  selectDocument,
 } from '../../api/modules/document';
 import { epochToString } from '../../utils/timeHelper';
 import './styles.scss';
@@ -103,6 +103,7 @@ class Documents extends Component {
 
   setCurrentDocument = (documentId, index) => {
     this.setState({ documentId, selectedDocumentIndex: index });
+    this.props.selectDocument({ id: documentId });
   };
 
   deleteDocument() {
@@ -116,6 +117,16 @@ class Documents extends Component {
         });
       },
     });
+  }
+
+  selectDocument() {
+    if (
+      this.state.selectedDocumentIndex > -1 &&
+      this.state.selectedDocumentIndex < this.state.documents.length
+    ) {
+      const { id } = this.state.documents[this.state.selectedDocumentIndex];
+      this.props.selectDocument({ id });
+    }
   }
 
   changeSortBy(sortBy) {
@@ -162,10 +173,8 @@ class Documents extends Component {
               className="overview-row"
               style={{ cursor: 'pointer' }}
               key={i}
+              onClick={() => this.setCurrentDocument(doc.id, i)}
               onDoubleClick={() => this.handleDocumentClick(doc.id)}
-              onClick={() => {
-                this.setCurrentDocument(doc.id, i);
-              }}
             >
               <div className={'overview-body flex0 ' + className}>
                 {doc.title}
@@ -197,7 +206,7 @@ class Documents extends Component {
 
   renderMainContent() {
     const { selectedDocumentIndex, searchValue, documentId } = this.state;
-    const enableBuildButton = !isEmpty(documentId);
+    const hasDocument = !!documentId;
 
     return (
       <div className="document-page">
@@ -296,9 +305,9 @@ class Documents extends Component {
           </div>
           <button
             className={`bottom-navigation-button ${
-              enableBuildButton ? '' : 'disabled'
+              hasDocument ? '' : 'disabled'
             }`}
-            disabled={!enableBuildButton}
+            disabled={!hasDocument}
             onClick={() => this.props.history.push(`/builder/${documentId}`)}
             style={{ cursor: 'pointer' }}
           >
@@ -316,14 +325,10 @@ class Documents extends Component {
       isEdit,
       selectedDocumentIndex,
     } = this.state;
-    const { documents, documentId } = this.state;
-
+    const { documents } = this.state;
     return (
       <div className="viewport vbox">
-        <Header
-          documentId={documentId}
-          showBuilder={selectedDocumentIndex !== -1}
-        />
+        <Header showBuilder={selectedDocumentIndex !== -1} />
         {this.renderMainContent()}
         {showDocumentManageModal && (
           <DocumentManageModal
@@ -356,6 +361,7 @@ Documents.propTypes = {
   updateDocument: PropTypes.func,
   deleteDocument: PropTypes.func,
   searchDocument: PropTypes.func,
+  selectDocument: PropTypes.func,
 };
 
 const mapStateToProps = ({ document }) => {
@@ -369,6 +375,7 @@ const mapActionToProps = {
   updateDocument,
   deleteDocument,
   searchDocument,
+  selectDocument,
 };
 
 export default connect(mapStateToProps, mapActionToProps)(

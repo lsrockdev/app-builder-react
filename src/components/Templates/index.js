@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { get } from 'lodash';
 
 import Wrapper from './Wrapper';
 
@@ -34,7 +33,7 @@ class Templates extends Component {
   }
 
   onFilter = (e, data) => {
-    const str = e && e.target.value.toLowerCase();
+    const str = e && e.target.value;
     let visibleNodeIds;
     if (str) {
       visibleNodeIds = {};
@@ -42,10 +41,7 @@ class Templates extends Component {
       data.forEach(item => {
         const { id, title, text } = item;
         if (!visibleNodeIds[id]) {
-          if (
-            title.toLowerCase().indexOf(str) !== -1 ||
-            (text.toLowerCase() || '').indexOf(str) !== -1
-          ) {
+          if (title.indexOf(str) !== -1 || (text || '').indexOf(str) !== -1) {
             visibleNodeIds[id] = 1;
             while (item.parentId) {
               item = this.getParentNode(item, data);
@@ -59,8 +55,7 @@ class Templates extends Component {
   };
 
   onDragStart = (dragSource, e) => {
-    const stringHtml = get(dragSource, 'text');
-    e.dataTransfer.setData('text/html', stringHtml);
+    e.dataTransfer.setData('text/plain', e.target.id);
     this.setState({ dragSource });
   };
 
@@ -71,14 +66,10 @@ class Templates extends Component {
       this.props.moveTemplate({
         where: selectedDropMenu,
         from: dragSource.id,
-        to: dropTagetInfo.id,
+        to: dropTagetInfo.id
       });
     }
-    this.setState({
-      dragSource: null,
-      dropTagetInfo: null,
-      selectedDropMenu: null,
-    });
+    this.setState({ dragSource: null, dropTagetInfo: null, selectedDropMenu: null });
   };
 
   onShowDropMenu = dropTaget => {
@@ -93,24 +84,17 @@ class Templates extends Component {
       dropTagetInfo: {
         id: dropTaget.id,
         before: dropTaget.prevId !== dragSource.id,
-        into: dropTaget.folder && dropTaget.id !== dragSource.parentId,
-      },
+        into: dropTaget.folder && dropTaget.id !== dragSource.parentId
+      }
     });
   };
 
   getParentNode = (node, data) => {
     return data.filter(({ id }) => id === node.parentId)[0];
-  };
+  }
 
   renderNode = item => {
-    const {
-      opens,
-      onEdit,
-      onDelete,
-      onAddContent,
-      onAddFolder,
-      openFolder,
-    } = this.props;
+    const { opens, onEdit, onDelete, onAddContent, onAddFolder, openFolder } = this.props;
     const { dropTagetInfo, visibleNodeIds, selectedDropMenu } = this.state;
     const { id, title, folder } = item;
     let children = item.children;
@@ -131,12 +115,8 @@ class Templates extends Component {
           <div>
             {dropTagetInfo.before && (
               <span
-                className={`drop-here-area ${
-                  selectedDropMenu === 'before' ? 'selected' : ''
-                }`}
-                onDragEnter={() =>
-                  this.setState({ selectedDropMenu: 'before' })
-                }
+                className={`drop-here-area ${selectedDropMenu === 'before' ? 'selected' : ''}`}
+                onDragEnter={() => this.setState({ selectedDropMenu: 'before' })}
                 onDragLeave={() => this.setState({ selectedDropMenu: null })}
                 onDragOver={e => {
                   e.preventDefault();
@@ -147,9 +127,7 @@ class Templates extends Component {
             )}
             {dropTagetInfo.into && (
               <span
-                className={`drop-here-area ${
-                  selectedDropMenu === 'into' ? 'selected' : ''
-                }`}
+                className={`drop-here-area ${selectedDropMenu === 'into' ? 'selected' : ''}`}
                 onDragEnter={() => this.setState({ selectedDropMenu: 'into' })}
                 onDragLeave={() => this.setState({ selectedDropMenu: null })}
                 onDragOver={e => e.preventDefault()}
@@ -160,18 +138,11 @@ class Templates extends Component {
           </div>
         )}
 
-        <div
-          className="actionable tree-element"
-          onDragEnter={() => this.onShowDropMenu(item)}
-        >
+        <div className="actionable tree-element" onDragEnter={() => this.onShowDropMenu(item)}>
           <span className="arrow">
             {children && (
               <div onClick={() => openFolder({ id, open: !open })}>
-                <i
-                  className={`pro icon-library-${
-                    open ? 'expanded' : 'collapsed'
-                  }`}
-                />
+                <i className={`pro icon-library-${open ? 'expanded' : 'collapsed'}`} />
               </div>
             )}
           </span>
@@ -199,18 +170,12 @@ class Templates extends Component {
 
           <span className="actions">
             <span>
-              <a
-                title={`Edit ${folder ? 'folder' : 'content'}`}
-                onClick={() => onEdit(item)}
-              >
+              <a title={`Edit ${folder ? 'folder' : 'content'}`} onClick={() => onEdit(item)}>
                 <i className="material-icons">edit</i>
               </a>
             </span>
             <span>
-              <a
-                title={`Delete ${folder ? 'folder' : 'content'}`}
-                onClick={() => onDelete(item)}
-              >
+              <a title={`Delete ${folder ? 'folder' : 'content'}`} onClick={() => onDelete(item)}>
                 <i className="material-icons">close</i>
               </a>
             </span>
@@ -231,8 +196,7 @@ class Templates extends Component {
           </span>
         </div>
 
-        {children &&
-          open && <ul>{children.map(node => this.renderNode(node))}</ul>}
+        {children && open && <ul>{children.map(node => this.renderNode(node))}</ul>}
       </li>
     );
   };
@@ -247,18 +211,10 @@ class Templates extends Component {
       <Wrapper className="library-overview">
         <div className="section-header-block">
           <h1 className="header1">Library</h1>
-          <i
-            className="material-icons"
-            title="Add content"
-            onClick={() => onAddContent()}
-          >
+          <i className="material-icons" title="Add content" onClick={() => onAddContent()}>
             add
           </i>
-          <i
-            className="material-icons"
-            title="Add folder"
-            onClick={() => onAddFolder()}
-          >
+          <i className="material-icons" title="Add folder" onClick={() => onAddFolder()}>
             create_new_folder
           </i>
         </div>
@@ -266,9 +222,7 @@ class Templates extends Component {
         <div className="tree-container">
           <div className="top-level-tree">
             {tempaltes.length === 0 ? (
-              <div className="empty">
-                Start by adding your first content block or folder.
-              </div>
+              <div className="empty">Start by adding your first content block or folder.</div>
             ) : (
               <ul>{tempaltes.map(node => this.renderNode(node))}</ul>
             )}
@@ -276,11 +230,7 @@ class Templates extends Component {
         </div>
         <div className="search-container">
           <i className="pro icon-search" />
-          <input
-            className="inline-input"
-            placeholder="Search Content Blocks"
-            onChange={this.onFilter}
-          />
+          <input className="inline-input" placeholder="Search Content Blocks" onChange={this.onFilter} />
         </div>
       </Wrapper>
     );

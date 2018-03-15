@@ -3,7 +3,7 @@ import Header from 'components/Header';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 
 import { Wrapper } from './styles';
 import Library from '../Library';
@@ -27,8 +27,15 @@ const defaultProps = {};
 
 class Builder extends Component {
   componentDidMount() {
-    const { match, getDocument } = this.props;
-    getDocument({ documentId: match.params.documentId });
+    const { match, getDocument, documentId } = this.props;
+    getDocument({ documentId: match.params.documentId || documentId });
+  }
+
+  componentWillMount() {
+    const { match, documentId } = this.props;
+    if (!isEmpty(match.params && !documentId)) {
+      this.props.history.push('/documents');
+    }
   }
 
   componentWillUnmount() {
