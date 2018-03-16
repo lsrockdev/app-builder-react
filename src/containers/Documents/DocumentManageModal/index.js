@@ -39,7 +39,7 @@ class DocumentManageModal extends React.Component {
   }
 
   handleOutsideClick = e => {
-    if (this.node.contains(e.target)) {
+    if (this.node.contains(e.target) || e.target.className.includes('react-datepicker')) {
       return;
     }
     this.props.onHide();
