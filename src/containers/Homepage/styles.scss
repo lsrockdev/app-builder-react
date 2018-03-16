@@ -9,6 +9,9 @@
     @media screen and (min-height: 720px){
       height: calc(100% - 81px);
     }
+    @media screen and (max-height: 632px){
+      height: auto;
+    }
   }
   .homePageContainer::before{
     content: '';
