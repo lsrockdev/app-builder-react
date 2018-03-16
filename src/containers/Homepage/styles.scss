@@ -4,6 +4,11 @@
   .homePageContainer{
     background-image: url('https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/bg.png');
     position: relative;
+    height: 100%;
+
+    @media screen and (min-height: 720px){
+      height: calc(100% - 81px);
+    }
   }
   .homePageContainer::before{
     content: '';
