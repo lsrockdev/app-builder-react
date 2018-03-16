@@ -15,7 +15,7 @@ const editLibrary = (props) => {
             </NavLink>
           </div>
           <div className="box-footer">
-            <a className="help" href="#">Need Help?</a>
+            <NavLink className="help" to="/support">Need Help?</NavLink>
           </div>
         </div>
       )
