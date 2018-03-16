@@ -9,11 +9,11 @@ const createDocument = (props) => {
             src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/document.png"
             className="box-img"
             alt="create-document" />
-          <div
+          <button
             className="create-document"
             onClick={props.openDocumentModal}>
             Create Document
-          </div>
+          </button>
           <div className="box-footer">
             <NavLink className="help" to="/support" >Need Help?</NavLink>
           </div>
