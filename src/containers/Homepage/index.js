@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import DocumentManageModal from '../Documents/DocumentManageModal';
 import Header from '../../components/Header'
 import ChooseTemplate from '../../components/Boxes/ChooseTemplate'
 import EditLibrary from '../../components/Boxes/EditLibrary'
 import CreateDocument from '../../components/Boxes/CreateDocument'
 import HelpButton from '../../components/UI/HelpButton'
-import { createDocument, searchDocument, getDocuments } from '../../api/modules/document'
+import { createDocument, getDocuments } from '../../api/modules/document'
 import './styles.scss'
 
 class Homepage extends Component {
@@ -30,10 +30,6 @@ class Homepage extends Component {
       this.retrieveDocuments();
     }
     retrieveDocuments() {
-      const { searchValue } = this.state;
-      if (searchValue)
-        this.props.searchDocument({searchValue});
-      else
         this.props.getDocuments();
     }
     openDocumentManageModal = () => {
@@ -50,7 +46,6 @@ class Homepage extends Component {
       const success = (res, action) => {
         this.closeDocumentManageModal();
       };
-      console.log(data, this.props.createDocument)
       this.props.createDocument({
         body: data,
         success

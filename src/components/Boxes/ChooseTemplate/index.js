@@ -15,7 +15,7 @@ const chooseTemplate = (props) => {
           </div>
           <div className="box-footer">
             <div className="coming-soon">This feature coming soon!</div>
-            <NavLink className="help" to="/support">Need Help?</NavLink>
+            <NavLink className="help" to="/support">Need help?</NavLink>
           </div>
         </div>
       )

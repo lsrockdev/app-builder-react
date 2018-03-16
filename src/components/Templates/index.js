@@ -23,7 +23,7 @@ class Templates extends Component {
           }
           node = getNextNode(node);
         }
-
+        console.log(nodes)
         function getNextNode(node) {
           return data.filter(({ id }) => id === node.nextId)[0];
         }

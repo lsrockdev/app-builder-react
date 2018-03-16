@@ -15,7 +15,7 @@ const createDocument = (props) => {
             Create Document
           </button>
           <div className="box-footer">
-            <NavLink className="help" to="/support" >Need Help?</NavLink>
+            <NavLink className="help" to="/support" >Need help?</NavLink>
           </div>
         </div>
       )
