@@ -150,6 +150,7 @@ class Templates extends Component {
           <div
             className="content"
             draggable
+            onClick={() => this.props.showTemplate(item)}
             onDragStart={e => this.onDragStart(item, e)}
             onDragEnd={e => this.onDragEnd(e)}
           >

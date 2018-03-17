@@ -15,22 +15,21 @@ class PreviewDocument extends Component {
   shouldComponentUpdate(nextProps) {
     return nextProps.document !== this.props.document;
   }
-
   componentDidUpdate(props) {
     if (!this.iframe) {
       this.iframe = ReactDOM.findDOMNode(this);
       this.iframe.contentDocument.head.innerHTML = this.renderStyles();
-  
+
       const frameBody = this.iframe.contentDocument.body;
       const el = document.createElement('div');
-      
+
       frameBody.className = 'html-preview';
       frameBody.style.cssText = `font-family: 'Times New Roman', serif; font-size: 21.478771699861046px; line-height: 1.25; margin: 0; position: relative; -ms-overflow-style: none; background-color: #104747;`;
       frameBody.appendChild(el);
-  
+
       this.iframe.contentDocument.addEventListener('scroll', _.throttle(this.handleScroll, 50));
       this.iframe.contentWindow.addEventListener('resize', _.debounce(this.renderContentDocument, 100));
-  
+
       this.el = el;
     }
 
@@ -66,7 +65,7 @@ class PreviewDocument extends Component {
         offsetTop += offsetParent.offsetTop;
         offsetParent = offsetParent.offsetParent;
       }
-      
+
       return offsetTop;
     }
 
@@ -87,7 +86,7 @@ class PreviewDocument extends Component {
     if (isNaN(date)) {
       return '';
     }
-    
+
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() - 100}`;
   }
 
@@ -137,7 +136,7 @@ class PreviewDocument extends Component {
 
   parseSelections() {
     const pages = this.parseChildren();
-    
+
     for (let page of pages) {
       page.children = this.parseChildren(page.level);
     }
@@ -146,7 +145,9 @@ class PreviewDocument extends Component {
   }
 
   sortSelections() {
+    console.log(this.props.document.selections)
     const selections =  Object.keys(this.props.document.selections || {}).map(key => this.props.document.selections[key]);
+    console.log(selections)
     return selections.sort((a, b) => this.makeIndex(a.level) > this.makeIndex(b.level) ? 1 : -1);
   }
 
@@ -242,16 +243,15 @@ class PreviewDocument extends Component {
       left: "0",
       right: "0"
     };
-    
+
     const firstPageStyles = { margin: '60px 0 0', display: 'flex', flexDirection: 'row' };
     const subsequentPageStyles = {"margin":"10px 0 0","display":"flex","flexDirection":"row"};
     const { document } = this.props;
     const dueDate = this.formatDate(document.dueDate);
     const pages = splitHtmlTextOnPages(this.buildFullHtml(), fontSize, width - (padding * 2), height - (padding * 2) - footerHeight, this.iframe.contentDocument, ratio);
-
     this.props.onPageCountComplete(pages.length);
     this.iframe.contentDocument.body.style.fontSize = `${fontSize}px`;
-    
+
     ReactDOM.render((
       <React.Fragment>
         <div style={{"position":"absolute","left":"0","right":"20px","height":"60px","top":"-60px","display":"flex","alignItems":"center","justifyContent":"center","paddingLeft":"140px","paddingRight":"150px","fontSize":"10px","lineHeight":"1.3","fontFamily":"'Open Sans', Arial, sans-serif","color":"#5e9090"}} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}>

@@ -55,7 +55,7 @@ class Preview extends Component {
 
     return textBlocks.reduce((previousValue, textBlock) => {
       const settings = textBlock.match(/\[[a-z0-9 _-]+\]/gi);
-      
+
       if (settings) {
         for (let setting of settings) {
           const trimmed = setting.substring(1, setting.length - 1);
@@ -75,7 +75,7 @@ class Preview extends Component {
   retrieveDocument() {
     const { searchValue } = this.state.searchValue;
     const id = this.state.documentId;
-    
+
     if (searchValue) {
       this.props.searchDocument({searchValue});
     } else {
@@ -165,7 +165,7 @@ class Preview extends Component {
       let scrollbarOffset = this.scrollbar.offsetTop;
       let offsetParent = this.scrollbar.offsetParent;
       const mouseY = e.clientY;
-      
+
       while (offsetParent) {
         scrollbarOffset += offsetParent.offsetTop;
         offsetParent = offsetParent.offsetParent;
@@ -213,11 +213,11 @@ class Preview extends Component {
 
     return textBlocks.reduce((previousValue, textBlock) => {
       const settings = textBlock.match(/\[[a-z0-9 _-]+\]/gi);
-      
+
       if (settings) {
         for (let setting of settings) {
           const trimmed = setting.substring(1, setting.length - 1);
-          
+
           if (!previousValue.hasOwnProperty(trimmed) && !this.props.document.settings.hasOwnProperty(trimmed)) {
             previousValue[trimmed] = '';
           }
