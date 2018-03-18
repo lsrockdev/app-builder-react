@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import { signUp } from 'api/modules/auth'
 import './styles.scss'
 
-import { scorePassword, checkPassStrength } from '../../utils/passwordHelper';
+import {checkPassStrength } from '../../utils/passwordHelper';
 
 class SignUp extends Component {
 
