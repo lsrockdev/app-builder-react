@@ -160,7 +160,7 @@ class Documents extends Component {
 
   renderTable(selectedDocumentIndex) {
     const { documents } = this.state;
-
+    
     return (
       <React.Fragment>
         {documents.map((doc, i) => {

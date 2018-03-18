@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import Header from 'components/Header';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import Header from "components/Header";
+import { connect } from "react-redux";
 import {
   getDocument,
   updateSettings,
   searchDocument,
   importFields,
-  requestDocument,
-} from '../../api/modules/document';
-import './styles.scss';
-import PreviewSidebar from './PreviewSidebar';
-import PreviewSettingsForm from './PreviewSettingsForm';
-import PreviewDocument from './PreviewDocument';
+  requestDocument
+} from "../../api/modules/document";
+import "./styles.scss";
+import PreviewSidebar from "./PreviewSidebar";
+import PreviewSettingsForm from "./PreviewSettingsForm";
+import PreviewDocument from "./PreviewDocument";
 
 class Preview extends Component {
   constructor(props) {
@@ -21,22 +21,22 @@ class Preview extends Component {
     super(props);
     this.state = {
       documentId,
-      anchor: '',
-      searchValue: '',
+      anchor: "",
+      searchValue: "",
       scrolling: false,
       scrollbarOffset: 0,
       scrollbarPercent: 0,
       iframeScrollPercent: 0,
       totalPages: 0,
-      documentFormat: '',
+      documentFormat: ""
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.documentToken && this.state.documentFormat) {
       const { documentFormat } = this.state;
-      this.setState({ documentFormat: '' }, () => {
-        if (documentFormat === 'autofill') {
+      this.setState({ documentFormat: "" }, () => {
+        if (documentFormat === "autofill") {
           window.location.href = `${
             process.env.API_ROOT
           }/autofill/export?token=${nextProps.documentToken}`;
@@ -50,7 +50,7 @@ class Preview extends Component {
 
     if (nextProps.document.selections) {
       this.setState({
-        totalPages: this.getPageCount(nextProps.document.selections),
+        totalPages: this.getPageCount(nextProps.document.selections)
       });
     }
   }
@@ -107,7 +107,7 @@ class Preview extends Component {
     this.props.updateSettings({
       id: this.state.documentId,
       body: { ...settings },
-      success,
+      success
     });
   };
 
@@ -126,25 +126,25 @@ class Preview extends Component {
   }
 
   makeAnchor(level) {
-    return level.join('.');
+    return level.join(".");
   }
 
   importFields = e => {
     this.props.importFields({
       id: this.state.documentId,
       file: e.target.files[0],
-      success: () => this.retrieveDocument(),
+      success: () => this.retrieveDocument()
     });
   };
 
   exportFields = () => {
     this.setState(
       {
-        documentFormat: 'autofill',
+        documentFormat: "autofill"
       },
       () => {
         this.props.requestDocument({
-          id: this.state.documentId,
+          id: this.state.documentId
         });
       }
     );
@@ -153,11 +153,11 @@ class Preview extends Component {
   exportDocx = e => {
     this.setState(
       {
-        documentFormat: 'docx',
+        documentFormat: "docx"
       },
       () => {
         this.props.requestDocument({
-          id: this.state.documentId,
+          id: this.state.documentId
         });
       }
     );
@@ -166,11 +166,11 @@ class Preview extends Component {
   exportPdf = e => {
     this.setState(
       {
-        documentFormat: 'pdf',
+        documentFormat: "pdf"
       },
       () => {
         this.props.requestDocument({
-          id: this.state.documentId,
+          id: this.state.documentId
         });
       }
     );
@@ -197,7 +197,7 @@ class Preview extends Component {
       }
 
       this.setState(
-        { scrolling: true, scrollbarOffset, anchor: '' },
+        { scrolling: true, scrollbarOffset, anchor: "" },
         this.updateScroll(mouseY, scrollbarOffset)
       );
     }
@@ -261,7 +261,7 @@ class Preview extends Component {
             !previousValue.hasOwnProperty(trimmed) &&
             !this.props.document.settings.hasOwnProperty(trimmed)
           ) {
-            previousValue[trimmed] = '';
+            previousValue[trimmed] = "";
           }
         }
       }
@@ -275,7 +275,7 @@ class Preview extends Component {
       anchor,
       scrollbarPercent,
       iframeScrollPercent,
-      totalPages,
+      totalPages
     } = this.state;
     const document = this.state.document || this.props.document;
     const settings = { ...document.settings, ...this.findUndeclaredSettings() };
@@ -284,42 +284,41 @@ class Preview extends Component {
         ? Math.floor(scrollbarPercent / 100 * totalPages) + 1
         : totalPages;
     const settingCounts = this.countSettings();
-
     return (
       <div
         className="main hbox space-between preview-page"
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.stopScroll}
       >
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: "flex" }}>
           <PreviewSidebar {...document} onClick={this.updateAnchor} />
         </div>
         <div
           className="left-section-border"
-          style={{ display: 'flex', flexDirection: 'column', flex: '1 1 0%' }}
+          style={{ display: "flex", flexDirection: "column", flex: "1 1 0%" }}
         >
           <div
-            style={{ display: 'flex', flexDirection: 'column', flex: '1 1 0%' }}
+            style={{ display: "flex", flexDirection: "column", flex: "1 1 0%" }}
           >
             <div
               id="document-preview-node"
               style={{
-                display: 'flex',
-                flex: '1 1 0%',
-                position: 'relative',
-                overflowX: 'hidden',
-                backgroundColor: 'rgb(16, 71, 71)',
+                display: "flex",
+                flex: "1 1 0%",
+                position: "relative",
+                overflowX: "hidden",
+                backgroundColor: "rgb(16, 71, 71)"
               }}
             >
               <div
                 id="document-preview-node-inner"
                 style={{
-                  position: 'absolute',
-                  top: '0px',
-                  left: '0px',
-                  right: '-20px',
-                  bottom: '0px',
-                  paddingLeft: '10px',
+                  position: "absolute",
+                  top: "0px",
+                  left: "0px",
+                  right: "-20px",
+                  bottom: "0px",
+                  paddingLeft: "10px"
                 }}
               >
                 <PreviewDocument
@@ -335,14 +334,14 @@ class Preview extends Component {
                   ref={element => (this.scrollbar = element)}
                   onMouseDown={this.startScroll}
                   style={{
-                    position: 'absolute',
-                    right: '70px',
-                    top: '90px',
-                    height: '300px',
-                    width: '7px',
-                    borderRadius: '7px',
-                    backgroundColor: 'rgb(25, 91, 91)',
-                    display: 'inline',
+                    position: "absolute",
+                    right: "70px",
+                    top: "90px",
+                    height: "300px",
+                    width: "7px",
+                    borderRadius: "7px",
+                    backgroundColor: "rgb(25, 91, 91)",
+                    display: "inline"
                   }}
                 >
                   <div
@@ -352,12 +351,12 @@ class Preview extends Component {
                     <div
                       className="scroll-indicator"
                       style={{
-                        position: 'absolute',
-                        left: '15px',
-                        top: '3px',
-                        fontSize: '.75rem',
+                        position: "absolute",
+                        left: "15px",
+                        top: "3px",
+                        fontSize: ".75rem",
                         fontFamily: "'Open Sans', Arial, sans-serif",
-                        color: '#5e9090',
+                        color: "#5e9090"
                       }}
                     >
                       {currentPage}/{totalPages}
@@ -368,25 +367,25 @@ class Preview extends Component {
             </div>
           </div>
           <div
-            style={{ backgroundColor: 'rgb(16, 71, 71)', padding: '0px 90px' }}
+            style={{ backgroundColor: "rgb(16, 71, 71)", padding: "0px 90px" }}
           >
             <div
               className="bottom-navigation-button"
               style={{
-                textAlign: 'center',
-                display: 'flex',
-                alignItems: 'center',
+                textAlign: "center",
+                display: "flex",
+                alignItems: "center"
               }}
             >
-              <span style={{ marginRight: '20px' }}>Export Document:</span>
+              <span style={{ marginRight: "20px" }}>Export Document:</span>
               <span
-                style={{ marginRight: '20px', cursor: 'pointer' }}
+                style={{ marginRight: "20px", cursor: "pointer" }}
                 onClick={this.exportDocx}
               >
                 DOCX
               </span>
               <span
-                style={{ marginRight: '20px', cursor: 'pointer' }}
+                style={{ marginRight: "20px", cursor: "pointer" }}
                 onClick={this.exportPdf}
               >
                 PDF
@@ -397,40 +396,40 @@ class Preview extends Component {
         <div
           className="left-section-border"
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flex: '1 1 0%',
-            maxWidth: '550px',
+            display: "flex",
+            flexDirection: "column",
+            flex: "1 1 0%",
+            maxWidth: "550px"
           }}
         >
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              flex: '1 1 0%',
-              padding: '0px 50px',
-              backgroundColor: 'rgb(248, 248, 248)',
+              display: "flex",
+              flexDirection: "column",
+              flex: "1 1 0%",
+              padding: "0px 50px",
+              backgroundColor: "rgb(248, 248, 248)"
             }}
           >
             <div
               className="left-section-border right-section-border"
               style={{
-                backgroundColor: 'rgb(255, 255, 255)',
-                flex: '1 1 0%',
-                display: 'flex',
-                flexDirection: 'column',
+                backgroundColor: "rgb(255, 255, 255)",
+                flex: "1 1 0%",
+                display: "flex",
+                flexDirection: "column"
               }}
             >
-              <div style={{ flex: '1 1 0%', overflowY: 'auto' }}>
+              <div style={{ flex: "1 1 0%", overflowY: "auto" }}>
                 <div className="section-header-block">
                   <h1 className="header1">Field Autofill</h1>
                 </div>
                 <div
                   className="bottom-section-border"
                   style={{
-                    padding: '40px 50px',
-                    fontSize: '14px',
-                    lineHeight: '1.3',
+                    padding: "40px 50px",
+                    fontSize: "14px",
+                    lineHeight: "1.3"
                   }}
                 >
                   Use the Field Autofill tool below to quickly fill placeholders
@@ -444,13 +443,13 @@ class Preview extends Component {
                   onSave={this.updateSettings}
                 />
               </div>
-              <div style={{ display: 'flex', width: '100%' }}>
+              <div style={{ display: "flex", width: "100%" }}>
                 <form id="autofill-import-file-form">
                   <input
                     id="autofill-import-file-input"
                     type="file"
                     accept=".xlsx"
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     onChange={this.importFields}
                   />
                 </form>
@@ -493,7 +492,7 @@ Preview.propTypes = {
   searchDocument: PropTypes.func,
   updateSettings: PropTypes.func,
   importFields: PropTypes.func,
-  requestDocument: PropTypes.func,
+  requestDocument: PropTypes.func
 };
 
 const mapStateToProps = state => {
@@ -506,7 +505,7 @@ const mapActionToProps = {
   updateSettings,
   searchDocument,
   importFields,
-  requestDocument,
+  requestDocument
 };
 
 export default connect(mapStateToProps, mapActionToProps)(Preview);

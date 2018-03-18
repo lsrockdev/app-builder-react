@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from "react";
 
-import Wrapper from './Wrapper';
+import Wrapper from "./Wrapper";
 
 class Templates extends Component {
   state = {};
@@ -41,7 +41,7 @@ class Templates extends Component {
       data.forEach(item => {
         const { id, title, text } = item;
         if (!visibleNodeIds[id]) {
-          if (title.indexOf(str) !== -1 || (text || '').indexOf(str) !== -1) {
+          if (title.indexOf(str) !== -1 || (text || "").indexOf(str) !== -1) {
             visibleNodeIds[id] = 1;
             while (item.parentId) {
               item = this.getParentNode(item, data);
@@ -55,7 +55,7 @@ class Templates extends Component {
   };
 
   onDragStart = (dragSource, e) => {
-    e.dataTransfer.setData('text/html', dragSource.text);
+    e.dataTransfer.setData("text/html", dragSource.text);
     this.setState({ dragSource });
   };
 
@@ -66,17 +66,18 @@ class Templates extends Component {
       this.props.moveTemplate({
         where: selectedDropMenu,
         from: dragSource.id,
-        to: dropTagetInfo.id,
+        to: dropTagetInfo.id
       });
     }
     this.setState({
       dragSource: null,
       dropTagetInfo: null,
-      selectedDropMenu: null,
+      selectedDropMenu: null
     });
   };
 
   onShowDropMenu = dropTaget => {
+    this.onContentSelect(null);
     let item = dropTaget;
     while (item) {
       if (item.id === this.state.dragSource.id) return;
@@ -88,14 +89,19 @@ class Templates extends Component {
       dropTagetInfo: {
         id: dropTaget.id,
         before: dropTaget.prevId !== dragSource.id,
-        into: dropTaget.folder && dropTaget.id !== dragSource.parentId,
-      },
+        into: dropTaget.folder && dropTaget.id !== dragSource.parentId
+      }
     });
   };
 
   getParentNode = (node, data) => {
     return data.filter(({ id }) => id === node.parentId)[0];
   };
+
+  onContentSelect(node, e) {
+    this.setState({ selectedItem: node });
+    if (this.props.onSelect) this.props.onSelect(node);
+  }
 
   renderNode = item => {
     const {
@@ -104,12 +110,22 @@ class Templates extends Component {
       onDelete,
       onAddContent,
       onAddFolder,
-      openFolder,
+      openFolder
     } = this.props;
-    const { dropTagetInfo, visibleNodeIds, selectedDropMenu } = this.state;
+    const {
+      dropTagetInfo,
+      visibleNodeIds,
+      selectedDropMenu,
+      selectedItem
+    } = this.state;
     const { id, title, folder } = item;
     let children = item.children;
     let open = opens[id];
+    let isSelected = selectedItem && selectedItem.id === id;
+
+    const itemStyle = !isSelected || folder
+      ? {}
+      : { backgroundColor: "rgba(55, 109, 114, 0.1)" };
 
     if (visibleNodeIds) {
       if (!visibleNodeIds[id]) return null;
@@ -127,10 +143,10 @@ class Templates extends Component {
             {dropTagetInfo.before && (
               <span
                 className={`drop-here-area ${
-                  selectedDropMenu === 'before' ? 'selected' : ''
+                  selectedDropMenu === "before" ? "selected" : ""
                 }`}
                 onDragEnter={() =>
-                  this.setState({ selectedDropMenu: 'before' })
+                  this.setState({ selectedDropMenu: "before" })
                 }
                 onDragLeave={() => this.setState({ selectedDropMenu: null })}
                 onDragOver={e => {
@@ -143,9 +159,9 @@ class Templates extends Component {
             {dropTagetInfo.into && (
               <span
                 className={`drop-here-area ${
-                  selectedDropMenu === 'into' ? 'selected' : ''
+                  selectedDropMenu === "into" ? "selected" : ""
                 }`}
-                onDragEnter={() => this.setState({ selectedDropMenu: 'into' })}
+                onDragEnter={() => this.setState({ selectedDropMenu: "into" })}
                 onDragLeave={() => this.setState({ selectedDropMenu: null })}
                 onDragOver={e => e.preventDefault()}
               >
@@ -164,7 +180,7 @@ class Templates extends Component {
               <div onClick={() => openFolder({ id, open: !open })}>
                 <i
                   className={`pro icon-library-${
-                    open ? 'expanded' : 'collapsed'
+                    open ? "expanded" : "collapsed"
                   }`}
                 />
               </div>
@@ -173,12 +189,14 @@ class Templates extends Component {
 
           <div
             className="content"
+            style={itemStyle}
             draggable
             onDragStart={e => this.onDragStart(item, e)}
             onDragEnd={e => this.onDragEnd(e)}
+            onClick={e => this.onContentSelect(item, e)}
           >
             <div>
-              <i className={`pro ${folder ? 'icon-folder' : 'icon-document'}`}>
+              <i className={`pro ${folder ? "icon-folder" : "icon-document"}`}>
                 <span className="path1" />
                 <span className="path2" />
                 {!folder && (
@@ -195,7 +213,7 @@ class Templates extends Component {
           <span className="actions">
             <span>
               <a
-                title={`Edit ${folder ? 'folder' : 'content'}`}
+                title={`Edit ${folder ? "folder" : "content"}`}
                 onClick={() => onEdit(item)}
               >
                 <i className="material-icons">edit</i>
@@ -203,7 +221,7 @@ class Templates extends Component {
             </span>
             <span>
               <a
-                title={`Delete ${folder ? 'folder' : 'content'}`}
+                title={`Delete ${folder ? "folder" : "content"}`}
                 onClick={() => onDelete(item)}
               >
                 <i className="material-icons">close</i>
