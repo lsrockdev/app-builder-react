@@ -28,14 +28,22 @@ export function scorePassword(pass) {
     return parseInt(score);
 }
 
+function checkPasswordRequirements(pass) {
+    return pass.length >= 8 &&
+    /[A-Z]/.test(pass) &&
+    /[a-z]/.test(pass) &&
+    /\d/.test(pass)
+}
+
 export function checkPassStrength(pass) {
+
+    if (!checkPasswordRequirements(pass)) return 'weak';
+
     var score = scorePassword(pass);
     if (score > 80)
         return "strong";
     else if (score > 60)
         return "good";
-    else if (score >= 30)
-        return "weak";
     else 
         return "weak";
 
