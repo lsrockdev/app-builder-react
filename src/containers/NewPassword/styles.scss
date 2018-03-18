@@ -63,4 +63,24 @@
     font-size: 14px;
     text-align: center;
   }
+  
+  .password-container {
+    position: relative;
+    .validator {
+      position: absolute;
+      right: 10px;
+      //top: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      &.weak {
+        color: #d3c644;
+      }
+      &.good {
+        color: #74c37f;
+      }
+      &.strong {
+        color: #2ac84c;
+      }
+    }
+  }
 }

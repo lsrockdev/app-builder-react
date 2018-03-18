@@ -4,6 +4,8 @@ import { NavLink, withRouter } from 'react-router-dom'
 import { newPassword } from 'api/modules/auth'
 import './styles.scss'
 
+import { scorePassword, checkPassStrength } from '../../utils/passwordHelper';
+
 class NewPassword extends Component {
 
   constructor(props) {
@@ -63,6 +65,9 @@ class NewPassword extends Component {
   render() {
     const { password, confirmPassword } = this.state    
 
+    const strength = checkPassStrength(password);
+
+
     if(this.state.passwordsDontMatch === true) {
       document.getElementById("confirmPassword").setCustomValidity("Passwords Don't Match");
     }
@@ -78,8 +83,11 @@ class NewPassword extends Component {
 
             <div className="recoverPasswordForm__content">              
               <form onSubmit={this.handleSubmit}>
-                <div>
+                <div className="password-container">
                   <input className="field" placeholder="New Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} ref={(input) => { this.passwordInput = input; }} required />
+                  {
+                    password.length>0 && <div className={'validator' + (strength?' '+strength:'')}>{strength}</div>
+                  }                  
                 </div>
                 <div>
                   <input id="confirmPassword" className="field" placeholder="Confirm Password" type="password" onChange={evt => this.handleChange('confirmPassword', evt)} value={confirmPassword} required />
