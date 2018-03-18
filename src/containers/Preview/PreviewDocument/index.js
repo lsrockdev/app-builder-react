@@ -358,10 +358,13 @@ class PreviewDocument extends Component {
                     {document.title}
                     {dueDate && ` | Due Date: ${dueDate}`}
                   </p>
-                  <p style={{ fontStyle: "italic" }}>
-                    Use or disclosure of data contained on this page is subject
-                    to the restriction on the cover sheet of this proposal.
-                  </p>
+                  {!this.props.hideDisclaimer && (
+                    <p style={{ fontStyle: "italic" }}>
+                      Use or disclosure of data contained on this page is
+                      subject to the restriction on the cover sheet of this
+                      proposal.
+                    </p>
+                  )}
                 </div>
                 <div style={pageNumberStyles}>{index + 1}</div>
               </div>
