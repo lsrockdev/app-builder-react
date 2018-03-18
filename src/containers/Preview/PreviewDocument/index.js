@@ -205,10 +205,12 @@ class PreviewDocument extends Component {
       const index = parseInt(i, 10);
       const selection = filteredSelections[index];
       const header = selection.level.join(".") + " " + selection.title;
+      if (selection.title) {
+        builder += `<br><p id="selection-header-${
+          selection.id
+        }"><strong>${header}</strong></p><br>`;
+      }
 
-      builder += `<br><p id="selection-header-${
-        selection.id
-      }"><strong>${header}</strong></p><br>`;
       builder += selection.textBlocks
         .map(this.substituteVariables)
         .join("<br>");

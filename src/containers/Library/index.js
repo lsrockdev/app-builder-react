@@ -108,7 +108,7 @@ class Library extends Component {
           next: null,
           previous: null,
           settings: {},
-          title: node.title,
+          title: "",
           textBlocks: [node.text]
         }
       }
