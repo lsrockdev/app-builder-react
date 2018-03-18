@@ -99,8 +99,7 @@ class Library extends Component {
   };
 
   createFromNode(node) {
-    if (!node) return null;
-    console.warn(node);
+    if (!node) return this.state.document;
     return {
       selections: {
         [node.id]: {
@@ -185,6 +184,7 @@ class Library extends Component {
                   }}
                 >
                   <PreviewDocument
+                    pagesPerRow={2}
                     hideDisclaimer
                     document={document}
                     anchor={anchor}

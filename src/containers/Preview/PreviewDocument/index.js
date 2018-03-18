@@ -227,6 +227,7 @@ class PreviewDocument extends Component {
   }
 
   renderContentDocument = () => {
+    if (!this.props.document) return;
     // const bodyStyle = this.props.onPage ? { backgroundColor: this.props.htmlPreviewBackgroundColor } : {};
     // const pageVMarginPx = 60;
     const pageLeftMarginPx = 80;
@@ -240,13 +241,22 @@ class PreviewDocument extends Component {
     const fontSizePt = 11;
     const footerFontSizePt = 9;
 
-    const width =
+    let width =
       (!_.isEmpty(this.iframe.contentDocument) &&
         this.iframe.contentDocument.scrollingElement.clientWidth -
           pageLeftMarginPx -
           pageRightMarginPx -
           scrollbarIndentPx) ||
       100;
+
+    if (this.props.pagesPerRow && this.props.pagesPerRow > 0) {
+      width =
+        (!_.isEmpty(this.iframe.contentDocument) &&
+          this.iframe.contentDocument.scrollingElement.clientWidth /
+            this.props.pagesPerRow -
+            (pageLeftMarginPx + pageRightMarginPx)) ||
+        100;
+    }
     const height = width / pageWidthMm * pageHeightMm;
     const padding = width / pageWidthMm * pagePaddingMm;
     const fontSize = width / pageWidthMm * (0.352778 * fontSizePt);

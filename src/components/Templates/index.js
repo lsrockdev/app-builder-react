@@ -100,7 +100,8 @@ class Templates extends Component {
 
   onContentSelect(node, e) {
     this.setState({ selectedItem: node });
-    if (this.props.onSelect) this.props.onSelect(node);
+    if (this.props.onSelect)
+      this.props.onSelect(node && node.folder ? null : node);
   }
 
   renderNode = item => {
@@ -123,9 +124,13 @@ class Templates extends Component {
     let open = opens[id];
     let isSelected = selectedItem && selectedItem.id === id;
 
-    const itemStyle = !isSelected || folder
-      ? {}
-      : { backgroundColor: "rgba(55, 109, 114, 0.1)" };
+    const itemStyle =
+      !isSelected || folder
+        ? {}
+        : {
+            padding: "1px 0px 1px",
+            backgroundColor: "rgba(55, 109, 114, 0.1)"
+          };
 
     if (visibleNodeIds) {
       if (!visibleNodeIds[id]) return null;
@@ -173,6 +178,7 @@ class Templates extends Component {
 
         <div
           className="actionable tree-element"
+          style={itemStyle}
           onDragEnter={() => this.onShowDropMenu(item)}
         >
           <span className="arrow">
@@ -189,7 +195,6 @@ class Templates extends Component {
 
           <div
             className="content"
-            style={itemStyle}
             draggable
             onDragStart={e => this.onDragStart(item, e)}
             onDragEnd={e => this.onDragEnd(e)}
