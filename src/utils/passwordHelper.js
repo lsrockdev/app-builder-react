@@ -32,9 +32,11 @@ export function checkPassStrength(pass) {
     var score = scorePassword(pass);
     if (score > 80)
         return "strong";
-    if (score > 60)
+    else if (score > 60)
         return "good";
-    if (score >= 30)
+    else if (score >= 30)
+        return "weak";
+    else 
         return "weak";
 
     return "";
