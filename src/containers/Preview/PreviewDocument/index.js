@@ -257,7 +257,7 @@ class PreviewDocument extends Component {
           (this.iframe.contentDocument.scrollingElement.clientWidth -
             (pageLeftMarginPx + pageRightMarginPx)) /
             this.props.pagesPerRow) -
-          (15 * this.props.pagesPerRow - 1) || 100;
+          (8 * this.props.pagesPerRow - 1) || 100;
     }
     const height = width / pageWidthMm * pageHeightMm;
     const padding = width / pageWidthMm * pagePaddingMm;
