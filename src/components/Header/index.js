@@ -38,11 +38,9 @@ class Header extends Component {
     return (
       <div className="app-bar">
         <div className="menu">
-          <img
-            src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/logo_small.png"
-            className="menu-logo"
-            alt=""
-          />
+          <Link to="/">
+            <img src="https://d1xvn5mjulg4qv.cloudfront.net/3.0.0/images/logo_small.png" className="menu-logo" alt="logo" />
+          </Link>
           <div className="right">
             <MenuItem to="/library" label="Library" />
             <MenuItem to="/documents" label="Documents" />

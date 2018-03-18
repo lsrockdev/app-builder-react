@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom'
 import { signUp } from 'api/modules/auth'
 import './styles.scss'
 
+import {checkPassStrength } from '../../utils/passwordHelper';
+
 class SignUp extends Component {
 
   constructor(props) {
@@ -33,6 +35,8 @@ class SignUp extends Component {
     const { email, password } = this.state
     const { error } = this.props.auth;
 
+    const strength = checkPassStrength(password);
+
     let errorMessage = null;
     if(error) {
       errorMessage = <div>
@@ -58,8 +62,11 @@ class SignUp extends Component {
                 <div>
                   <input className="field" placeholder="Email" type="email" onChange={evt => this.handleChange('email', evt)} value={email} required autoFocus />
                 </div>
-                <div>
+                <div className="password-container">
                   <input className="field" placeholder="Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} required />
+                  {
+                    password.length>0 && <div className={'validator' + (strength?' '+strength:'')}>{strength}</div>
+                  }
                 </div>
                 <div>
                   <button className="large form button">Sign up</button>

@@ -15,7 +15,6 @@ class PreviewDocument extends Component {
   shouldComponentUpdate(nextProps) {
     return nextProps.document !== this.props.document;
   }
-
   componentDidUpdate(props) {
     if (!this.iframe) {
       this.iframe = ReactDOM.findDOMNode(this);

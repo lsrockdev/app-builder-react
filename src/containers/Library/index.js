@@ -21,9 +21,54 @@ class Library extends Component {
   componentWillMount() {
     this.props.getTemplates();
   }
+  updateScroll = (mouseY, scrollbarOffset) => {
+    if (this.scrollbar) {
+      const position = Math.max(0, Math.min(this.scrollbar.clientHeight, mouseY - scrollbarOffset));
+      const scrollbarPercent = Math.max(0, Math.min(100, (position / this.scrollbar.clientHeight) * 100));
+      const iframeScrollPercent = scrollbarPercent;
+      this.setState({scrollbarPercent, iframeScrollPercent});
+    }
+  }
+  handleScroll = (scrollbarPercent) => {
+    this.setState({scrollbarPercent});
+  }
+  handleIframeMouseMove = (mouseY) => {
+    if (this.state.scrolling) {
+      this.updateScroll(mouseY, this.state.scrollbarOffset);
+    }
+  }
+  startScroll = (e) => {
+    if (this.scrollbar) {
+      let scrollbarOffset = this.scrollbar.offsetTop;
+      let offsetParent = this.scrollbar.offsetParent;
+      const mouseY = e.clientY;
 
+      while (offsetParent) {
+        scrollbarOffset += offsetParent.offsetTop;
+        offsetParent = offsetParent.offsetParent;
+      }
+
+      this.setState({ scrolling: true, scrollbarOffset, anchor: '' }, this.updateScroll(mouseY, scrollbarOffset));
+    }
+  }
+  stopScroll = (e) => {
+    if (this.state.scrolling) {
+      this.setState({ scrolling: false });
+    }
+  }
+  handleMouseMove = (e) => {
+      if (this.state.scrolling) {
+        this.updateScroll(e.clientY, this.state.scrollbarOffset);
+      }
+    }
+  handlePageCount = (totalPages) => {
+    this.setState({totalPages});
+  }
   showDialog = (kind, item) => this.setState({ dialog: { kind, item } });
   hideDialog = () => this.setState({ dialog: null });
+  showPreviewTemplate = (info) => {
+    !info.folder && this.setState({previewTemplate: {show:true, info}})
+  };
 
   showAddFolderDialog = parentId => {
     this.showDialog("folder", { parentId });
@@ -141,6 +186,7 @@ class Library extends Component {
               }
               data={templates}
               opens={opens}
+              showTemplate={this.showPreviewTemplate}
               onEdit={this.showEditDialog}
               onDelete={this.showDeleteDialog}
               onAddContent={this.showAddContentDialog}
@@ -244,7 +290,7 @@ class Library extends Component {
 }
 
 export default connect(
-  ({ template }) => ({
+  ({ template, document }) => ({
     templates: template.templates,
     opens: template.opens
   }),

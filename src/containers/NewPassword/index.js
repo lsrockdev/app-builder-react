@@ -1,23 +1,42 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { recoverPassword } from 'api/modules/auth';
-import './styles.scss';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { NavLink, withRouter } from 'react-router-dom'
+import { newPassword } from 'api/modules/auth'
+import './styles.scss'
+
+import {checkPassStrength } from '../../utils/passwordHelper';
 
 class NewPassword extends Component {
   constructor(props) {
-    super(props);
-    const token = new URLSearchParams(this.props.location.search).get('token');
-
-    // redirect if logged in or token not defined
-    if (this.props.auth.token !== null || token === null)
-      this.props.history.push('/documents');
+    super(props)
+    
+    const token = new URLSearchParams(this.props.location.search).get('token')
 
     this.state = {
       password: '',
       confirmPassword: '',
-      token,
-    };
+      passwordsDontMatch: false,
+      token
+    }
+  }
+
+  componentDidMount(){
+    this.passwordInput.focus();
+  }
+
+  validatePasswords = () => {
+    if(this.state.password !== this.state.confirmPassword) {
+      this.setState({
+        passwordsDontMatch: true
+      })
+    } else {
+
+      document.getElementById("confirmPassword").setCustomValidity("");
+
+      this.setState({
+        passwordsDontMatch: false
+      });
+    }
   }
 
   handleChange = (field, evt) => {
@@ -28,30 +47,31 @@ class NewPassword extends Component {
     });
   };
 
-  handleSubmit = evt => {
-    evt.preventDefault();
+  handleSubmit = evt => {        
+    evt.preventDefault()
 
-    if (this.state.password !== this.state.confirmPassword) {
-      const confirmPassword = document.getElementById('confirmPassword');
-      confirmPassword.setCustomValidity("Passwords Don't Match");
+    if(this.state.passwordsDontMatch) {
       return;
     }
 
-    const { recoverPassword } = this.props;
-    const { password, token } = this.state;
-
-    recoverPassword({
-      body: { password, token },
-      successCallback: () => {
-        console.log('wow');
-      },
-    });
-  };
+    const { newPassword } = this.props
+    const { password, token } = this.state
+    
+    newPassword({ body: { password, token }, success: () => {this.props.history.push("/login");} } )
+  }
 
   render() {
-    const { password, confirmPassword } = this.state;
+    const { password, confirmPassword } = this.state    
+
+    const strength = checkPassStrength(password);
+
+
+    if(this.state.passwordsDontMatch === true) {
+      document.getElementById("confirmPassword").setCustomValidity("Passwords Don't Match");
+    }
 
     return (
+
       <div className="recoverPasswordPage">
         <div className="wrapper">
           <div className="recoverPasswordForm">
@@ -62,17 +82,13 @@ class NewPassword extends Component {
               />
             </div>
 
-            <div className="recoverPasswordForm__content">
+            <div className="recoverPasswordForm__content">              
               <form onSubmit={this.handleSubmit}>
-                <div>
-                  <input
-                    className="field"
-                    placeholder="New Password"
-                    type="password"
-                    onChange={evt => this.handleChange('password', evt)}
-                    value={password}
-                    required
-                  />
+                <div className="password-container">
+                  <input className="field" placeholder="New Password" type="password" onChange={evt => this.handleChange('password', evt)} value={password} ref={(input) => { this.passwordInput = input; }} required />
+                  {
+                    password.length>0 && <div className={'validator' + (strength?' '+strength:'')}>{strength}</div>
+                  }                  
                 </div>
                 <div>
                   <input
@@ -86,7 +102,7 @@ class NewPassword extends Component {
                   />
                 </div>
                 <div>
-                  <button className="large form button">Recover</button>
+                  <button onClick={this.validatePasswords} className="large form button">Set new password</button>
                 </div>
                 <div>
                   <NavLink to="/login">Return to login</NavLink>
@@ -110,7 +126,7 @@ const mapStateToProps = ({ auth }) => {
 };
 
 const actions = {
-  recoverPassword,
-};
+  newPassword,
+}
 
-export default connect(mapStateToProps, actions)(NewPassword);
+export default withRouter(connect(mapStateToProps, actions)(NewPassword))

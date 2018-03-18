@@ -130,10 +130,7 @@ const importFields = function*(action) {
 
   data.append('file', action.payload.file);
 
-  yield call(apiRequest, {
-    ...action,
-    payload: { ...action.payload, body: data },
-  });
+  yield call(apiRequest, { ...action, payload: { ...action.payload, body: data }});
 };
 
 const requestDocument = function*(action) {

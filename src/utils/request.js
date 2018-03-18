@@ -27,7 +27,8 @@ export default ({ type, method, url, headers, success, fail, payloadOnSuccess, p
   function*(action) {
     const { body, params, success: successCallback, fail: failCallback } = action.payload || {}
 
-    try {
+    try {      
+      
       yield put({
         type: requestPending(type),
       })
@@ -48,6 +49,7 @@ export default ({ type, method, url, headers, success, fail, payloadOnSuccess, p
         payload: payloadOnSuccess ? payloadOnSuccess(res.data, action) : res.data,
       })
     } catch (err) {
+
       const errRes = get(err, 'response', err)
 
       failCallback && failCallback(errRes)
