@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
-import splitHtmlTextOnPages from '../../../utils/htmlHelper';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
+import _ from "lodash";
+import splitHtmlTextOnPages from "../../../utils/htmlHelper";
 
 class PreviewDocument extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      freezeScroll: false,
+      freezeScroll: false
     };
   }
 
@@ -22,18 +22,18 @@ class PreviewDocument extends Component {
       this.iframe.contentDocument.head.innerHTML = this.renderStyles();
 
       const frameBody = this.iframe.contentDocument.body;
-      const el = document.createElement('div');
+      const el = document.createElement("div");
 
-      frameBody.className = 'html-preview';
+      frameBody.className = "html-preview";
       frameBody.style.cssText = `font-family: 'Times New Roman', serif; font-size: 21.478771699861046px; line-height: 1.25; margin: 0; position: relative; -ms-overflow-style: none; background-color: #104747;`;
       frameBody.appendChild(el);
 
       this.iframe.contentDocument.addEventListener(
-        'scroll',
+        "scroll",
         _.throttle(this.handleScroll, 50)
       );
       this.iframe.contentWindow.addEventListener(
-        'resize',
+        "resize",
         _.debounce(this.renderContentDocument, 100)
       );
 
@@ -85,7 +85,7 @@ class PreviewDocument extends Component {
   };
 
   makeIndex(level) {
-    return level.join('.');
+    return level.join(".");
   }
 
   makeTitle = selection => {
@@ -96,7 +96,7 @@ class PreviewDocument extends Component {
     const date = new Date(parseInt(timestamp, 10));
 
     if (isNaN(date)) {
-      return '';
+      return "";
     }
 
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() - 100}`;
@@ -123,13 +123,13 @@ class PreviewDocument extends Component {
       const value = this.props.document.settings[setting];
 
       textBlock = textBlock.replace(
-        new RegExp(`\\[${setting}\\]`, 'gi'),
+        new RegExp(`\\[${setting}\\]`, "gi"),
         `<span style="background-color: #ecd58c;" data-variable="${setting}" data-value="${value}" class="variable">${value}</span>`
       );
     }
 
     textBlock = textBlock.replace(
-      new RegExp(`(\\[([a-z0-9 _-]+)\\])`, 'gi'),
+      new RegExp(`(\\[([a-z0-9 _-]+)\\])`, "gi"),
       '<span style="background-color: #ecd58c;" data-variable="$2" class="variable">$1</span>'
     );
 
@@ -143,7 +143,7 @@ class PreviewDocument extends Component {
       index: this.makeIndex(selections[key].level),
       textBlocks: selections[key].textBlocks.map(textBlock =>
         this.substituteVariables(textBlock)
-      ),
+      )
     }));
 
     const children = copies.filter(selection =>
@@ -199,20 +199,20 @@ class PreviewDocument extends Component {
 
   buildFullHtml() {
     const filteredSelections = this.sortSelections();
-    let builder = '';
+    let builder = "";
 
     for (let i in filteredSelections) {
       const index = parseInt(i, 10);
       const selection = filteredSelections[index];
-      const header = selection.level.join('.') + ' ' + selection.title;
+      const header = selection.level.join(".") + " " + selection.title;
 
       builder += `<br><p id="selection-header-${
         selection.id
       }"><strong>${header}</strong></p><br>`;
       builder += selection.textBlocks
         .map(this.substituteVariables)
-        .join('<br>');
-      builder += '<br>';
+        .join("<br>");
+      builder += "<br>";
 
       if (
         index < filteredSelections.length - 1 &&
@@ -256,43 +256,43 @@ class PreviewDocument extends Component {
     const ratio = width / pageWidthMm;
 
     const pageStyles = {
-      position: 'relative',
-      backgroundColor: '#fff',
+      position: "relative",
+      backgroundColor: "#fff",
       marginLeft: `${pageLeftMarginPx}px`,
       width: `${width}px`,
       height: `${height}px`,
       padding: `${padding}px`,
-      boxSizing: 'border-box',
-      overflow: 'hidden',
+      boxSizing: "border-box",
+      overflow: "hidden"
     };
 
     const footerStyles = {
-      position: 'absolute',
+      position: "absolute",
       left: `${padding}px`,
       bottom: `${padding}px`,
       fontSize: `${footerFontSize}px`,
-      color: '#afafaf',
-      lineHeight: '2',
-      boxSizing: 'border-box',
+      color: "#afafaf",
+      lineHeight: "2",
+      boxSizing: "border-box"
     };
 
     const pageNumberStyles = {
-      textAlign: 'center',
-      position: 'absolute',
+      textAlign: "center",
+      position: "absolute",
       bottom: `${padding - footerFontSize * 2}px`,
-      left: '0',
-      right: '0',
+      left: "0",
+      right: "0"
     };
 
     const firstPageStyles = {
-      margin: '60px 0 0',
-      display: 'flex',
-      flexDirection: 'row',
+      margin: "60px 0 0",
+      display: "flex",
+      flexDirection: "row"
     };
     const subsequentPageStyles = {
-      margin: '10px 0 0',
-      display: 'flex',
-      flexDirection: 'row',
+      margin: "10px 0 0",
+      display: "flex",
+      flexDirection: "row"
     };
     const { document } = this.props;
     const dueDate = this.formatDate(document.dueDate);
@@ -315,32 +315,34 @@ class PreviewDocument extends Component {
       <React.Fragment>
         <div
           style={{
-            position: 'absolute',
-            left: '0',
-            right: '20px',
-            height: '60px',
-            top: '-60px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingLeft: '140px',
-            paddingRight: '150px',
-            fontSize: '10px',
-            lineHeight: '1.3',
+            position: "absolute",
+            left: "0",
+            right: "20px",
+            height: "60px",
+            top: "-60px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingLeft: "140px",
+            paddingRight: "150px",
+            fontSize: "10px",
+            lineHeight: "1.3",
             fontFamily: "'Open Sans', Arial, sans-serif",
-            color: '#5e9090',
+            color: "#5e9090"
           }}
           onMouseMove={this.handleMouseMove}
           onMouseUp={this.handleMouseUp}
         >
-          <div style={{ textAlign: 'center' }}>
-            Preview mode is designed to represent a document's appearance in
-            Microsoft Word but may result in formatting that is different in
-            appearance when exported.
-          </div>
+          {!this.props.hideDisclaimer && (
+            <div style={{ textAlign: "center" }}>
+              Preview mode is designed to represent a document's appearance in
+              Microsoft Word but may result in formatting that is different in
+              appearance when exported.
+            </div>
+          )}
         </div>
         <div
-          style={{ marginBottom: '60px' }}
+          style={{ marginBottom: "60px" }}
           onMouseMove={this.handleMouseMove}
           onMouseUp={this.handleMouseUp}
         >
@@ -356,7 +358,7 @@ class PreviewDocument extends Component {
                     {document.title}
                     {dueDate && ` | Due Date: ${dueDate}`}
                   </p>
-                  <p style={{ fontStyle: 'italic' }}>
+                  <p style={{ fontStyle: "italic" }}>
                     Use or disclosure of data contained on this page is subject
                     to the restriction on the cover sheet of this proposal.
                   </p>
@@ -376,11 +378,11 @@ class PreviewDocument extends Component {
       <iframe
         frameBorder="0"
         style={{
-          display: 'block',
-          width: '100%',
-          height: '100%',
-          position: 'relative',
-          overflow: 'hidden',
+          display: "block",
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          overflow: "hidden"
         }}
         title="preview-document"
       />
@@ -398,7 +400,7 @@ PreviewDocument.propTypes = {
   scrollPercent: PropTypes.number,
   onScroll: PropTypes.func,
   onMouseMove: PropTypes.func,
-  onPageCountComplete: PropTypes.func,
+  onPageCountComplete: PropTypes.func
 };
 
 export default PreviewDocument;

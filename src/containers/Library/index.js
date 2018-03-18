@@ -13,7 +13,10 @@ import DeleteModal from "./DeleteModal";
 import Wrapper from "./Wrapper";
 
 class Library extends Component {
-  state = {};
+  state = {
+    currentPage: 0,
+    totalPages: 0
+  };
 
   componentWillMount() {
     this.props.getTemplates();
@@ -163,7 +166,7 @@ class Library extends Component {
               <div
                 className="template-preview preview-page"
                 style={{
-                  display: "flex",
+                  display: document ? "flex" : "none",
                   flex: "1 1 0%",
                   position: "relative",
                   overflowX: "hidden",
@@ -182,6 +185,7 @@ class Library extends Component {
                   }}
                 >
                   <PreviewDocument
+                    hideDisclaimer
                     document={document}
                     anchor={anchor}
                     scrollPercent={iframeScrollPercent}
