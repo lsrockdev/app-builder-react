@@ -249,13 +249,13 @@ class PreviewDocument extends Component {
           scrollbarIndentPx) ||
       100;
 
-    if (this.props.pagesPerRow && this.props.pagesPerRow > 0) {
+    if (this.props.pagesPerRow && this.props.pagesPerRow >= 2) {
       width =
         (!_.isEmpty(this.iframe.contentDocument) &&
-          this.iframe.contentDocument.scrollingElement.clientWidth /
-            this.props.pagesPerRow -
-            (pageLeftMarginPx + pageRightMarginPx)) ||
-        100;
+          (this.iframe.contentDocument.scrollingElement.clientWidth -
+            (pageLeftMarginPx + pageRightMarginPx)) /
+            this.props.pagesPerRow) -
+          (15 * this.props.pagesPerRow - 1) || 100;
     }
     const height = width / pageWidthMm * pageHeightMm;
     const padding = width / pageWidthMm * pagePaddingMm;
