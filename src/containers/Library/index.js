@@ -23,21 +23,27 @@ class Library extends Component {
   }
   updateScroll = (mouseY, scrollbarOffset) => {
     if (this.scrollbar) {
-      const position = Math.max(0, Math.min(this.scrollbar.clientHeight, mouseY - scrollbarOffset));
-      const scrollbarPercent = Math.max(0, Math.min(100, (position / this.scrollbar.clientHeight) * 100));
+      const position = Math.max(
+        0,
+        Math.min(this.scrollbar.clientHeight, mouseY - scrollbarOffset)
+      );
+      const scrollbarPercent = Math.max(
+        0,
+        Math.min(100, position / this.scrollbar.clientHeight * 100)
+      );
       const iframeScrollPercent = scrollbarPercent;
-      this.setState({scrollbarPercent, iframeScrollPercent});
+      this.setState({ scrollbarPercent, iframeScrollPercent });
     }
-  }
-  handleScroll = (scrollbarPercent) => {
-    this.setState({scrollbarPercent});
-  }
-  handleIframeMouseMove = (mouseY) => {
+  };
+  handleScroll = scrollbarPercent => {
+    this.setState({ scrollbarPercent });
+  };
+  handleIframeMouseMove = mouseY => {
     if (this.state.scrolling) {
       this.updateScroll(mouseY, this.state.scrollbarOffset);
     }
-  }
-  startScroll = (e) => {
+  };
+  startScroll = e => {
     if (this.scrollbar) {
       let scrollbarOffset = this.scrollbar.offsetTop;
       let offsetParent = this.scrollbar.offsetParent;
@@ -48,26 +54,29 @@ class Library extends Component {
         offsetParent = offsetParent.offsetParent;
       }
 
-      this.setState({ scrolling: true, scrollbarOffset, anchor: '' }, this.updateScroll(mouseY, scrollbarOffset));
+      this.setState(
+        { scrolling: true, scrollbarOffset, anchor: "" },
+        this.updateScroll(mouseY, scrollbarOffset)
+      );
     }
-  }
-  stopScroll = (e) => {
+  };
+  stopScroll = e => {
     if (this.state.scrolling) {
       this.setState({ scrolling: false });
     }
-  }
-  handleMouseMove = (e) => {
-      if (this.state.scrolling) {
-        this.updateScroll(e.clientY, this.state.scrollbarOffset);
-      }
+  };
+  handleMouseMove = e => {
+    if (this.state.scrolling) {
+      this.updateScroll(e.clientY, this.state.scrollbarOffset);
     }
-  handlePageCount = (totalPages) => {
-    this.setState({totalPages});
-  }
+  };
+  handlePageCount = totalPages => {
+    this.setState({ totalPages });
+  };
   showDialog = (kind, item) => this.setState({ dialog: { kind, item } });
   hideDialog = () => this.setState({ dialog: null });
-  showPreviewTemplate = (info) => {
-    !info.folder && this.setState({previewTemplate: {show:true, info}})
+  showPreviewTemplate = info => {
+    !info.folder && this.setState({ previewTemplate: { show: true, info } });
   };
 
   showAddFolderDialog = parentId => {
@@ -179,7 +188,10 @@ class Library extends Component {
       <Fragment>
         {!reuse && <Header />}
         <Wrapper reuse={reuse} className="main hbox space-between">
-          <Resizable defaultSize={{ width: 356 }} minWidth="356">
+          <Resizable
+            defaultSize={{ width: 356 }}
+            minWidth="356"
+          >
             <Templates
               onSelect={node =>
                 this.setState({ document: this.createFromNode(node) })
@@ -215,6 +227,7 @@ class Library extends Component {
                   flex: "1 1 0%",
                   position: "relative",
                   overflowX: "hidden",
+                  overflowY: "hidden",
                   backgroundColor: "rgb(16, 71, 71)"
                 }}
               >
