@@ -3,8 +3,8 @@
 * Slight edits have been made to prevent css preprocessor errors.
 */
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300, 300i, 400, 600, 700');
-@import url('./icons.scss');
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300, 300i, 400, 600, 700");
+@import url("./icons.scss");
 
 body,
 button,
@@ -65,8 +65,8 @@ button {
   font-family: inherit;
 }
 
-input[type='button'],
-input[type='submit'],
+input[type="button"],
+input[type="submit"],
 button {
   border-radius: 0;
 }
@@ -150,7 +150,7 @@ body {
   width: 100%;
   height: 100%;
   font-size: 1rem;
-  font-family: 'Open Sans', Arial, sans-serif;
+  font-family: "Open Sans", Arial, sans-serif;
 }
 
 .rotate-270 {
@@ -251,8 +251,18 @@ a.variable:hover {
 }
 
 .bottom-navigation-button {
-  background-image: -webkit-gradient(linear, left top, right top, from(#376d72), to(rgba(55, 109, 114, 0.6)));
-  background-image: -webkit-linear-gradient(left, #376d72, rgba(55, 109, 114, 0.6));
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(#376d72),
+    to(rgba(55, 109, 114, 0.6))
+  );
+  background-image: -webkit-linear-gradient(
+    left,
+    #376d72,
+    rgba(55, 109, 114, 0.6)
+  );
   background-image: -o-linear-gradient(left, #376d72, rgba(55, 109, 114, 0.6));
   background-image: linear-gradient(to right, #376d72, rgba(55, 109, 114, 0.6));
   color: #fff;
@@ -264,10 +274,24 @@ a.variable:hover {
 }
 
 .bottom-navigation-button.disabled {
-  background-image: -webkit-gradient(linear, left top, right top, from(#6e6e6e), to(rgba(110, 110, 110, 0.6)));
-  background-image: -webkit-linear-gradient(left, #6e6e6e, rgba(110, 110, 110, 0.6));
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(#6e6e6e),
+    to(rgba(110, 110, 110, 0.6))
+  );
+  background-image: -webkit-linear-gradient(
+    left,
+    #6e6e6e,
+    rgba(110, 110, 110, 0.6)
+  );
   background-image: -o-linear-gradient(left, #6e6e6e, rgba(110, 110, 110, 0.6));
-  background-image: linear-gradient(to right, #6e6e6e, rgba(110, 110, 110, 0.6));
+  background-image: linear-gradient(
+    to right,
+    #6e6e6e,
+    rgba(110, 110, 110, 0.6)
+  );
 }
 
 .search-container {
@@ -425,11 +449,15 @@ a.variable:hover {
   border: none;
 }
 @font-face {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 400;
-  src: local('Montserrat-Regular'), url(https://fonts.gstatic.com/s/montserrat/v7/zhcz-_WihjSQC0oHJ9TCYPk_vArhqVIZ0nv9q090hN8.woff2) format('woff2');
-  unicode-range: U+0000-00ff, U+0131, U+0152-0153, U+02c6, U+02da, U+02dc, U+2000-206f, U+2074, U+20ac, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+  src: local("Montserrat-Regular"),
+    url(https://fonts.gstatic.com/s/montserrat/v7/zhcz-_WihjSQC0oHJ9TCYPk_vArhqVIZ0nv9q090hN8.woff2)
+      format("woff2");
+  unicode-range: U + 0000-00ff, U + 0131, U + 0152-0153, U + 02c6, U + 02da,
+    U + 02dc, U + 2000-206f, U + 2074, U + 20ac, U + 2212, U + 2215, U + E0FF,
+    U + EFFD, U + F000;
 }
 .app-bar {
   position: relative;
@@ -523,7 +551,11 @@ button.large.isolated.button {
 .home-content {
   flex: 1;
   position: relative;
-  background-image: -webkit-radial-gradient(circle, rgba(16, 71, 71, 0.9), #104747);
+  background-image: -webkit-radial-gradient(
+    circle,
+    rgba(16, 71, 71, 0.9),
+    #104747
+  );
   background-image: -o-radial-gradient(circle, rgba(16, 71, 71, 0.9), #104747);
   background-image: radial-gradient(circle, rgba(16, 71, 71, 0.9), #104747);
 }
@@ -666,7 +698,7 @@ input.field:-ms-input-placeholder {
   top: 12px !important;
 }
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   color: #376d72;
   font-weight: normal;
   font-style: normal;
@@ -678,7 +710,7 @@ input.field:-ms-input-placeholder {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  -webkit-font-feature-settings: 'liga';
+  -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
 }
 .viewport {
