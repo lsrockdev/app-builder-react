@@ -10,7 +10,8 @@ export const requestFail = type => `${type}/fail`
 
 const defaultHeaders = () => {
   const token = JSON.parse(localStorage.getItem('token'))
-  axios.defaults.baseURL = process.env.API_ROOT + '/'
+  // axios.defaults.baseURL = process.env.API_ROOT + '/'
+    axios.defaults.baseURL = '/'
   let headers = {
     Accept: 'application/json',
     'Content-Type': 'application/x-www-form-urlencoded',
