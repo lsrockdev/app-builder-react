@@ -41,7 +41,6 @@ export default ({
       yield put({
         type: requestPending(type)
       });
-      console.warn("Request", method, url);
       const res = yield call(axios.request, {
         url,
         method: method.toLowerCase(),

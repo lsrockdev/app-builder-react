@@ -10,8 +10,8 @@ class NewPassword extends Component {
   constructor(props) {
     super(props)
     
-    const token = new URLSearchParams(this.props.location.search).get('token')
-
+    var search = window.location.href.split("?");
+    const token = new URLSearchParams(search.length > 1 ? search[1] : "").get("token");
     this.state = {
       password: '',
       confirmPassword: '',
