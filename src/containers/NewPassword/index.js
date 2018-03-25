@@ -57,7 +57,7 @@ class NewPassword extends Component {
     const { newPassword } = this.props
     const { password, token } = this.state
     
-    newPassword({ body: { password, token }, success: () => {this.props.history.push("/login");} } )
+    newPassword({ body: { password, token }, success: () => {window.location.href = "/#/login";  } } )
   }
 
   render() {
@@ -105,7 +105,7 @@ class NewPassword extends Component {
                   <button onClick={this.validatePasswords} className="large form button">Set new password</button>
                 </div>
                 <div>
-                  <NavLink to="/login">Return to login</NavLink>
+                  <a href="javascript:void" onClick={()=>{window.location.href = "/#/login";}}>Return to login</a>
                 </div>
               </form>
             </div>
