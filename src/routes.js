@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import Library from "containers/Library";
 import Documents from "containers/Documents";
 import Builder from "containers/Builder";
@@ -14,7 +14,6 @@ import { userIsAuthenticatedRedir } from "utils/authHelper";
 
 const rootRoute = () => (
   <div>
-    {console.log()}
     {window.location.href.indexOf("token") > -1 && (
       <Route exact path="/" component={NewPassword} />
     )}

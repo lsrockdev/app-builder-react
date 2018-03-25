@@ -49,7 +49,6 @@ export default ({
         data: body,
         params
       });
-      console.warn("Request Success", body, headers, method);
 
       successCallback && successCallback(res);
       success && success(res, action);
@@ -61,7 +60,6 @@ export default ({
           : res.data
       });
     } catch (err) {
-      console.warn("Request Failure", err, body, headers, method);
 
       const errRes = get(err, "response", err);
       failCallback && failCallback(errRes);

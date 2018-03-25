@@ -37,13 +37,9 @@ class Preview extends Component {
       const { documentFormat } = this.state;
       this.setState({ documentFormat: "" }, () => {
         if (documentFormat === "autofill") {
-          window.location.href = `${
-            process.env.API_ROOT
-          }/autofill/export?token=${nextProps.documentToken}`;
+          window.location.href = `/autofill/export?token=${nextProps.documentToken}`;
         } else {
-          window.location.href = `${
-            process.env.API_ROOT
-          }/export/document/${documentFormat}?token=${nextProps.documentToken}`;
+          window.location.href = `/export/document/${documentFormat}?token=${nextProps.documentToken}`;
         }
       });
     }
