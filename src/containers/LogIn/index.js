@@ -21,12 +21,30 @@ class LogIn extends Component {
   }
 
   componentDidMount() {
+    if (window.location.href.indexOf("?token") >= 0) {
+      var newurl =
+        window.location.protocol +
+        "//" +
+        window.location.host +
+        "#/login";
+
+      window.history.pushState({ path: newurl }, "", newurl);
+    }
     if(this.props.state.auth.token) {
       this.props.history.push('/');
     }
   }
 
   componentWillReceiveProps(newProps) {
+    if (window.location.href.indexOf("?token") >= 0) {
+      var newurl =
+        window.location.protocol +
+        "//" +
+        window.location.host +
+        "#/login";
+
+      window.history.pushState({ path: newurl }, "", newurl);
+    }
     if(newProps.state.auth.token) {
       newProps.history.push('/');
     }
